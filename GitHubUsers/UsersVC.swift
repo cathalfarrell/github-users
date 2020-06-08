@@ -14,6 +14,8 @@ class UsersVC: UICollectionViewController {
 
     var users = User.getTestUsers()
 
+    var isListView = true
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -53,5 +55,28 @@ extension UsersVC  {
         }
 
         return cell
+    }
+}
+extension UsersVC: UICollectionViewDelegateFlowLayout {
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = view.frame.width
+        if isListView {
+            return CGSize(width: width - 15, height: 120)
+        }else {
+            return CGSize(width: (width - 15)/2, height: (width - 15)/2)
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
 }
