@@ -15,6 +15,7 @@ class UsersVC: UICollectionViewController {
     var users = User.getTestUsers()
 
     var isListView = true
+    var toggleButton = UIBarButtonItem()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,28 @@ class UsersVC: UICollectionViewController {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
 
+        //Set up bar button item toggle
+        toggleButton = UIBarButtonItem(title: "Grid", style: .plain, target: self,
+                                       action: #selector(gridListButtonTapped(sender:)))
+        self.navigationItem.setRightBarButton(toggleButton, animated: true)
+
+    }
+
+    @objc func gridListButtonTapped(sender: UIBarButtonItem) {
+        if isListView {
+            toggleButton = UIBarButtonItem(title: "List", style: .plain, target: self,
+                                           action: #selector(gridListButtonTapped(sender:)))
+            isListView = false
+        }else {
+            toggleButton = UIBarButtonItem(title: "Grid", style: .plain, target: self,
+                                           action: #selector(gridListButtonTapped(sender:)))
+            isListView = true
+        }
+
+        DispatchQueue.main.async {
+            self.navigationItem.setRightBarButton(self.toggleButton, animated: true)
+            self.collectionView?.reloadData()
+        }
     }
 
 }
