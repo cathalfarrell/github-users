@@ -11,6 +11,21 @@ import UIKit
 class UserCell: UICollectionViewCell {
 
     @IBOutlet weak var userName: UILabel!
+    @IBOutlet weak var checkmarkLabel: UILabel!
+
+    var isInEditingMode: Bool = false {
+        didSet {
+            checkmarkLabel.isHidden = !isInEditingMode
+        }
+    }
+
+    override var isSelected: Bool {
+        didSet {
+            if isInEditingMode {
+                checkmarkLabel.text = isSelected ? "✓" : ""
+            }
+        }
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -19,5 +34,12 @@ class UserCell: UICollectionViewCell {
 
     func configureCell(user: User){
         self.userName.text = user.userName
+    }
+
+    override func prepareForReuse() {
+        self.checkmarkLabel.text = ""
+        self.userName.text = ""
+        self.isInEditingMode = false
+        self.isSelected = false
     }
 }

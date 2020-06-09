@@ -22,15 +22,28 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yEo-2c-DE7">
+                        <rect key="frame" x="70" y="0.0" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="4ys-Nz-V8q"/>
+                            <constraint firstAttribute="width" constant="30" id="wks-Jr-psG"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </view>
             <color key="backgroundColor" red="0.01176470588" green="0.12549019610000001" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="oWb-au-dH5" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="BqR-MZ-QMG"/>
                 <constraint firstItem="oWb-au-dH5" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="NeF-jY-K3U"/>
+                <constraint firstAttribute="trailing" secondItem="yEo-2c-DE7" secondAttribute="trailing" id="gHj-wh-i8d"/>
+                <constraint firstItem="yEo-2c-DE7" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="uWO-WE-5nW"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <connections>
+                <outlet property="checkmarkLabel" destination="yEo-2c-DE7" id="Jnd-n6-eIu"/>
                 <outlet property="userName" destination="oWb-au-dH5" id="oae-z0-EUQ"/>
             </connections>
             <point key="canvasLocation" x="137.68115942028987" y="127.90178571428571"/>
