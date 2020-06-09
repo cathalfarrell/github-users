@@ -26,12 +26,16 @@ class UsersVC: UICollectionViewController {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
 
+        //Drag & Drop
+        self.collectionView.dragDelegate = self
+        self.collectionView.dropDelegate = self
+
         setupNavigationBar()
     }
 
     fileprivate func setupNavigationBar() {
-        //Set up Edit button & Delete Button
 
+        //Set up Edit button & Delete Button
         deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self,
                                        action: #selector(deleteItem))
         navigationItem.leftBarButtonItems = [deleteButton, editButtonItem]
@@ -77,12 +81,15 @@ class UsersVC: UICollectionViewController {
         }
     }
 
-    // MARK:- Editing i.e. To Delete Items
+    // MARK:- Editing i.e. To Delete Items Or Re-Order
+
+    // Called when EDIT button tapped -> Enable Drag & Drop and Selection
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
+        self.collectionView.dragInteractionEnabled = editing
+        self.collectionView.allowsMultipleSelection = editing
 
-        collectionView.allowsMultipleSelection = editing
         let indexPaths = collectionView.indexPathsForVisibleItems
         for indexPath in indexPaths {
             if let cell = collectionView.cellForItem(at: indexPath) as? UserCell {
@@ -104,6 +111,25 @@ class UsersVC: UICollectionViewController {
             collectionView.deleteItems(at: selectedCells)
         }
     }
+
+    // MARK:- Drag/Drop Helpers
+
+    func moveUser(at sourceIndex: Int, to destinationIndex: Int) {
+      guard sourceIndex != destinationIndex else { return }
+
+      let user = users[sourceIndex]
+      users.remove(at: sourceIndex)
+      users.insert(user, at: destinationIndex)
+    }
+
+    func dragItems(for indexPath: IndexPath) -> [UIDragItem] {
+        let item = self.users[indexPath.item]
+        let itemProvider = NSItemProvider(object: item.fullName as NSString)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = item
+        return [dragItem]
+    }
+
 }
 extension UsersVC  {
 
@@ -177,5 +203,72 @@ extension UsersVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+    }
+}
+extension UsersVC: UICollectionViewDragDelegate {
+
+    // MARK: UICollectionViewDragDelegate
+
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let dragCoordinator = UserDragCoordinator(sourceIndexPath: indexPath)
+        session.localContext = dragCoordinator
+        return self.dragItems(for: indexPath)
+    }
+}
+extension UsersVC: UICollectionViewDropDelegate {
+
+    // MARK: UICollectionViewDropDelegate
+
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+
+        guard session.items.count == 1 else {
+          return UICollectionViewDropProposal(operation: .cancel)
+        }
+
+        if collectionView.hasActiveDrag {
+          return UICollectionViewDropProposal(operation: .move,
+                                              intent: .insertAtDestinationIndexPath)
+        } else {
+          return UICollectionViewDropProposal(operation: .copy,
+                                              intent: .insertAtDestinationIndexPath)
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+
+        // Get the datasource for this collection view
+        let destinationIndexPath: IndexPath
+        if let indexPath = coordinator.destinationIndexPath {
+          destinationIndexPath = indexPath
+        } else {
+          // Drop first item at the end of the collection view
+          destinationIndexPath =
+            IndexPath(item: collectionView.numberOfItems(inSection: 0), section: 0)
+        }
+        let item = coordinator.items[0]
+
+        switch coordinator.proposal.operation {
+        case .move:
+          guard let dragCoordinator =
+            coordinator.session.localDragSession?.localContext as? UserDragCoordinator
+            else { return }
+          // Save information to calculate reordering
+          if let sourceIndexPath = item.sourceIndexPath {
+            print("Moving within the same collection view...")
+            dragCoordinator.isReordering = true
+            // Update datasource and collection view
+            collectionView.performBatchUpdates({
+              self.moveUser(at: sourceIndexPath.item, to: destinationIndexPath.item)
+              collectionView.deleteItems(at: [sourceIndexPath])
+              collectionView.insertItems(at: [destinationIndexPath])
+            })
+          }
+
+          // Set flag to indicate drag completed
+          dragCoordinator.dragCompleted = true
+          coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+        default:
+          return
+        }
     }
 }

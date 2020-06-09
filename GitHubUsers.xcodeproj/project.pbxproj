@@ -17,6 +17,7 @@
 		8C640F50248E8FF9003EA22C /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F4E248E8FF9003EA22C /* UserCell.swift */; };
 		8C640F52248E9E36003EA22C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F51248E9E36003EA22C /* User.swift */; };
 		8C640F56248EA873003EA22C /* UsersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F55248EA873003EA22C /* UsersVC.swift */; };
+		8C640F58248F9CF5003EA22C /* UserDragCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		8C640F4E248E8FF9003EA22C /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		8C640F51248E9E36003EA22C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8C640F55248EA873003EA22C /* UsersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersVC.swift; sourceTree = "<group>"; };
+		8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDragCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				8C640F55248EA873003EA22C /* UsersVC.swift */,
+				8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */,
 				8C640F32248E8DC4003EA22C /* AppDelegate.swift */,
 				8C640F34248E8DC4003EA22C /* SceneDelegate.swift */,
 				8C640F38248E8DC4003EA22C /* Main.storyboard */,
@@ -153,6 +156,7 @@
 			files = (
 				8C640F3D248E8DC4003EA22C /* GitHubUsers.xcdatamodeld in Sources */,
 				8C640F52248E9E36003EA22C /* User.swift in Sources */,
+				8C640F58248F9CF5003EA22C /* UserDragCoordinator.swift in Sources */,
 				8C640F56248EA873003EA22C /* UsersVC.swift in Sources */,
 				8C640F33248E8DC4003EA22C /* AppDelegate.swift in Sources */,
 				8C640F50248E8FF9003EA22C /* UserCell.swift in Sources */,
