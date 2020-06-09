@@ -26,6 +26,10 @@ class UsersVC: UICollectionViewController {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
 
+        setupNavigationBar()
+    }
+
+    fileprivate func setupNavigationBar() {
         //Set up Edit button & Delete Button
 
         deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self,
@@ -38,7 +42,6 @@ class UsersVC: UICollectionViewController {
         toggleButton = UIBarButtonItem(title: "Grid", style: .plain, target: self,
                                        action: #selector(gridListButtonTapped(sender:)))
         self.navigationItem.setRightBarButton(toggleButton, animated: true)
-
     }
 
     // MARK: - Grid/List Toggle
@@ -64,7 +67,11 @@ class UsersVC: UICollectionViewController {
 
     func clearSelectedCells() {
         setEditing(false, animated: false)
-        let cells = collectionView.visibleCells as! [UserCell]
+
+        guard let cells = collectionView.visibleCells as? [UserCell] else {
+            return
+        }
+
         for cell in cells {
             cell.isInEditingMode = false
         }
@@ -78,8 +85,9 @@ class UsersVC: UICollectionViewController {
         collectionView.allowsMultipleSelection = editing
         let indexPaths = collectionView.indexPathsForVisibleItems
         for indexPath in indexPaths {
-            let cell = collectionView.cellForItem(at: indexPath) as! UserCell
-            cell.isInEditingMode = editing
+            if let cell = collectionView.cellForItem(at: indexPath) as? UserCell {
+                cell.isInEditingMode = editing
+            }
         }
 
         if !editing {
@@ -131,24 +139,17 @@ extension UsersVC {
     // MARK: - UICollectionViewDelegate
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let selectedCells = collectionView.indexPathsForSelectedItems {
-            let items = selectedCells.map { $0.item }.sorted().reversed()
-            if items.count > 0 && isEditing {
-                deleteButton.isEnabled = true
-            } else {
-                deleteButton.isEnabled = false
-            }
-        }
+        toggleDeleteButton(collectionView)
     }
 
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        toggleDeleteButton(collectionView)
+    }
+
+    fileprivate func toggleDeleteButton(_ collectionView: UICollectionView) {
         if let selectedCells = collectionView.indexPathsForSelectedItems {
-            let items = selectedCells.map { $0.item }.sorted().reversed()
-            if items.count > 0 && isEditing {
-                deleteButton.isEnabled = true
-            } else {
-                deleteButton.isEnabled = false
-            }
+            let enableButton = selectedCells.count > 0 && isEditing
+            deleteButton.isEnabled = enableButton
         }
     }
 }
