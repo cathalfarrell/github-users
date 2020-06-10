@@ -12,7 +12,8 @@ private let reuseIdentifier = "UserCell"
 
 class UsersVC: UICollectionViewController {
 
-    var users = User.getTestUsers()
+    var users = [User]()
+
     var isListView = true
     var toggleButton = UIBarButtonItem()
     var deleteButton = UIBarButtonItem()
@@ -31,6 +32,20 @@ class UsersVC: UICollectionViewController {
         self.collectionView.dropDelegate = self
 
         setupNavigationBar()
+
+        let searchTerm = "tom" //hard-coded for now but searchbar later
+
+        var parameters = JSONDICTIONARY()
+        parameters["q"] = searchTerm
+
+
+        //Pagination
+        let nextPage = Users.shared.getNextPage()
+        if  nextPage > 0 {
+            parameters["page"] = "\(nextPage)"
+        }
+
+        loadUsers(parameters)
     }
 
     fileprivate func setupNavigationBar() {
@@ -46,6 +61,33 @@ class UsersVC: UICollectionViewController {
         toggleButton = UIBarButtonItem(title: "Grid", style: .plain, target: self,
                                        action: #selector(gridListButtonTapped(sender:)))
         self.navigationItem.setRightBarButton(toggleButton, animated: true)
+    }
+
+    // MARK:- Get Users
+
+    fileprivate func loadUsers(_ parameters: JSONDICTIONARY) {
+
+        //Load Users - this method returns on Main Thread
+
+        Users.shared.downloadUsersFromNetwork(with: parameters, success: { (users) in
+            self.displayResults(users: users)
+        }) { (errorString) in
+            self.displayError(message: errorString)
+        }
+
+        //Get users from Persistency Manager later if time
+    }
+
+    // MARK: - Update UI
+
+    func displayError(message: String) {
+        print("🛑 Error: \(message)")
+    }
+
+    func displayResults(users: [User]) {
+        self.users = users
+        print("✅ Response: \(users.count) Users FOUND")
+        self.collectionView.reloadData()
     }
 
     // MARK: - Grid/List Toggle
@@ -124,7 +166,7 @@ class UsersVC: UICollectionViewController {
 
     func dragItems(for indexPath: IndexPath) -> [UIDragItem] {
         let item = self.users[indexPath.item]
-        let itemProvider = NSItemProvider(object: item.fullName as NSString)
+        let itemProvider = NSItemProvider(object: item.login as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = item
         return [dragItem]

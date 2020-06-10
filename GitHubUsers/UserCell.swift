@@ -33,7 +33,7 @@ class UserCell: UICollectionViewCell {
     }
 
     func configureCell(user: User){
-        self.userName.text = user.userName
+        self.userName.text = user.login
     }
 
     override func prepareForReuse() {
