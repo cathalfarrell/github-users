@@ -8,15 +8,15 @@
 
 import Foundation
 
-struct User: Codable {
+struct User {
     var login: String
     var avatarUrl: String
-    var name: String
-
-    enum CodingKeys: String, CodingKey {
-        case login, name
-        case avatarUrl = "avatar_url"
-    }
+    var name = ""
+    var publicRepos = 0
+    var publicGists = 0
+    var followers = 0
+    var following = 0
+    var location: String?
 }
 extension User {
 
@@ -25,7 +25,13 @@ extension User {
     static func sampleUser() -> User {
         let user = User(login: "cathalfarrell",
                         avatarUrl: "https://avatars2.githubusercontent.com/u/1584591?v=4",
-                        name: "Cathal Farrell")
+                        name: "Cathal Farrell",
+                        publicRepos: 10,
+                        publicGists: 9,
+                        followers: 8,
+                        following: 7,
+                        location: "Dublin, Ireland"
+        )
         return user
     }
 }

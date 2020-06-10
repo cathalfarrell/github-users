@@ -40,6 +40,38 @@ struct UserDetailView: View {
                         Text("\(user.name)")
                             .font(.subheadline)
                     }
+                    HStack {
+                        Text("Location:")
+                        Spacer()
+                        Text("\(user.location ?? "")")
+                            .font(.subheadline)
+                    }
+                }
+                Section() {
+                    HStack {
+                        Text("Public Repositories:")
+                        Spacer()
+                        Text("\(user.publicRepos)")
+                            .font(.subheadline)
+                    }
+                    HStack {
+                        Text("Public Gists:")
+                        Spacer()
+                        Text("\(user.publicGists)")
+                            .font(.subheadline)
+                    }
+                    HStack {
+                        Text("Followers:")
+                        Spacer()
+                        Text("\(user.followers)")
+                            .font(.subheadline)
+                    }
+                    HStack {
+                        Text("Following:")
+                        Spacer()
+                        Text("\(user.following)")
+                            .font(.subheadline)
+                    }
                 }
             }
         }

@@ -47,7 +47,8 @@ class Users {
                         var users = [User]()
 
                         for item in userItems {
-                            let user = User(login: item.login, avatarUrl: item.avatarUrl, name: "")
+                            //Only have limited User Details here...
+                            let user = User(login: item.login, avatarUrl: item.avatarUrl)
                             users.append(user)
                         }
 
@@ -107,7 +108,15 @@ class Users {
                 case .success(let resp):
 
                     //Convert Network Response to User Model
-                    let user = User(login: resp.login, avatarUrl: resp.avatarUrl, name: resp.name)
+                    let user = User(login: resp.login,
+                                    avatarUrl: resp.avatarUrl,
+                                    name: resp.name,
+                                    publicRepos: resp.publicRepos,
+                                    publicGists: resp.publicGists,
+                                    followers: resp.followers,
+                                    following: resp.following,
+                                    location: resp.location)
+
                     success(user)
 
                 case .failure(let err):

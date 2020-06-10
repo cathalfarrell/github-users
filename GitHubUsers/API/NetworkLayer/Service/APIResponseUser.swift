@@ -17,10 +17,11 @@ struct APIResponseUser: Codable {
     var publicGists: Int
     var followers: Int
     var following: Int
-    var location: String
+    var location: String! //As this can be nil sometimes
 
     enum CodingKeys: String, CodingKey {
-        case login, name, followers, following, location
+        case login, name, followers, following
+        case location
         case avatarUrl = "avatar_url"
         case publicRepos = "public_repos"
         case publicGists = "public_gists"
