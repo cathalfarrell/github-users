@@ -12,6 +12,7 @@ import struct Kingfisher.KFImage
 struct UserDetailView: View {
 
     @State var user: User
+    @State var errorString: String = ""
 
     var body: some View {
         VStack {
@@ -43,12 +44,24 @@ struct UserDetailView: View {
             }
         }
 
-        .navigationBarTitle("User Details")
+        .navigationBarTitle("User Details", displayMode: .inline)
         .onAppear(perform: loadUser)
     }
 
-    func loadUser() {
-        print("Loading User...")
+   // MARK:- Get Users
+
+    fileprivate func loadUser() {
+
+        print("Loading user: \(user.login)")
+
+        //Load Users - this method returns on Main Thread
+        Users.shared.downloadUserDetailFromNetwork(with: user.login, success: { (user) in
+            self.user = user
+        }) { (errorString) in
+            self.errorString = errorString
+        }
+
+        //Get user from Persistency Manager later if time
     }
 }
 

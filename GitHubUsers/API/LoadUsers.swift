@@ -18,6 +18,8 @@ class Users {
     private var currentPage = 0
     private var nextPage = 0
 
+    // MARK: - Get Users
+
     func downloadUsersFromNetwork(with parameters: JSONDictionary,
                          success succ: @escaping ([User]) -> Void,
                          failure fail: @escaping (String) -> Void) {
@@ -40,6 +42,7 @@ class Users {
 
                     Users.shared.handlePagination(nextPage: resp.nextPage)
 
+                    //Convert Network Response to User Model
                     if let userItems = resp.items {
                         var users = [User]()
 
@@ -80,5 +83,38 @@ class Users {
 
     func getNextPage() -> Int {
         return nextPage
+    }
+
+    // MARK: - Get User Detail
+
+    func downloadUserDetailFromNetwork(with userName: String,
+                         success succ: @escaping (User) -> Void,
+                         failure fail: @escaping (String) -> Void) {
+
+        //Returning response on the main thread
+        let success: (User) -> Void = { user in
+            DispatchQueue.main.async { succ(user) }
+        }
+        let failure: (String) -> Void = { error in
+            DispatchQueue.main.async { fail(String(describing: error)) }
+        }
+
+        //Async on background
+        DispatchQueue.global(qos: .background).async {
+
+            UserService.shared.getUser(userName) { (resp) in
+                switch resp {
+                case .success(let resp):
+
+                    //Convert Network Response to User Model
+                    let user = User(login: resp.login, avatarUrl: resp.avatarUrl, name: resp.name)
+                    success(user)
+
+                case .failure(let err):
+
+                    failure(err.localizedDescription)
+                }
+            }
+        }
     }
 }
