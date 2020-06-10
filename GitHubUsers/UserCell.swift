@@ -10,6 +10,7 @@ import UIKit
 
 class UserCell: UICollectionViewCell {
 
+    @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var checkmarkLabel: UILabel!
 

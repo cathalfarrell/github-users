@@ -6,6 +6,7 @@
 //  Copyright © 2020 Cathal Farrell. All rights reserved.
 //
 
+import Kingfisher
 import SwiftUI
 import UIKit
 
@@ -173,6 +174,36 @@ class UsersVC: UICollectionViewController {
         return [dragItem]
     }
 
+    // MARK:- Image Download into cells
+
+    fileprivate func downloadAvatarImage(_ user: User, _ cell: UserCell) {
+
+        // Using Kingfisher to asynchronously download and cache avatar
+
+        let url = URL(string: user.avatarUrl)
+        let processor = DownsamplingImageProcessor(size: cell.avatarImageView.bounds.size)
+            |> RoundCornerImageProcessor(cornerRadius: 20)
+        cell.avatarImageView.kf.indicatorType = .activity
+        cell.avatarImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "placeholderImage"),
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ])
+        {
+            result in
+            switch result {
+            case .success(let value):
+                print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
+            case .failure(let error):
+                print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
+            }
+        }
+    }
+
 }
 extension UsersVC  {
 
@@ -196,8 +227,11 @@ extension UsersVC  {
         }
 
         // Configure the cell
+        let user = self.users[indexPath.row]
+
         DispatchQueue.main.async {
-            cell.configureCell(user: self.users[indexPath.row])
+            cell.configureCell(user: user)
+            self.downloadAvatarImage(user, cell)
         }
 
         return cell
