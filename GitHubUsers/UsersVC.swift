@@ -35,7 +35,7 @@ class UsersVC: UICollectionViewController {
 
         let searchTerm = "tom" //hard-coded for now but searchbar later
 
-        var parameters = JSONDICTIONARY()
+        var parameters = JSONDictionary()
         parameters["q"] = searchTerm
 
 
@@ -65,7 +65,7 @@ class UsersVC: UICollectionViewController {
 
     // MARK:- Get Users
 
-    fileprivate func loadUsers(_ parameters: JSONDICTIONARY) {
+    fileprivate func loadUsers(_ parameters: JSONDictionary) {
 
         //Load Users - this method returns on Main Thread
 

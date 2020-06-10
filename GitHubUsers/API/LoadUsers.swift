@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias JSONDICTIONARY = [String: Any]
+typealias JSONDictionary = [String: Any]
 
 class Users {
     
@@ -18,7 +18,7 @@ class Users {
     private var currentPage = 0
     private var nextPage = 0
 
-    func downloadUsersFromNetwork(with parameters: JSONDICTIONARY,
+    func downloadUsersFromNetwork(with parameters: JSONDictionary,
                          success succ: @escaping ([User]) -> Void,
                          failure fail: @escaping (String) -> Void) {
 
