@@ -7,34 +7,48 @@
 //
 
 import SwiftUI
+import struct Kingfisher.KFImage
 
 struct UserDetailView: View {
+
     @State var user: User
 
     var body: some View {
-        Form {
-            Section(header: Text("User Details")) {
-                HStack {
-                    Text("Username:")
-                    Spacer()
-                    Text("\(user.login)")
-                        .font(.subheadline)
-                }
-                HStack {
-                    Text("Name:")
-                    Spacer()
-                    Text("\(user.name)")
-                        .font(.subheadline)
+        VStack {
+            HStack(spacing: 0){
+                Spacer()
+                KFImage(URL(string: user.avatarUrl))
+                .resizable()
+                .frame(width: 128, height: 128)
+                .cornerRadius(10)
+                .shadow(radius: 5)
+                .padding()
+                 Spacer()
+            }
+            Form {
+                Section() {
+                    HStack {
+                        Text("Username:")
+                        Spacer()
+                        Text("\(user.login)")
+                            .font(.subheadline)
+                    }
+                    HStack {
+                        Text("Name:")
+                        Spacer()
+                        Text("\(user.name)")
+                            .font(.subheadline)
+                    }
                 }
             }
-            .font(.headline)
         }
-        .navigationBarTitle("User Detail")
+
+        .navigationBarTitle("User Details")
         .onAppear(perform: loadUser)
     }
 
     func loadUser() {
-        print("Loading User")
+        print("Loading User...")
     }
 }
 
