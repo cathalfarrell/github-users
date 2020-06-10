@@ -6,6 +6,7 @@
 //  Copyright © 2020 Cathal Farrell. All rights reserved.
 //
 
+import SwiftUI
 import UIKit
 
 private let reuseIdentifier = "UserCell"
@@ -207,11 +208,22 @@ extension UsersVC {
     // MARK: - UICollectionViewDelegate
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        toggleDeleteButton(collectionView)
+        if isEditing {
+            toggleDeleteButton(collectionView)
+        } else {
+            // Just a normal tap to launch to Detail Screen
+            let selectedUser = self.users[indexPath.row]
+            let view = UserDetailView(user: selectedUser)
+            let hostVC = UIHostingController(rootView: view)
+            navigationController?.pushViewController(hostVC, animated: true)
+        }
     }
 
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        toggleDeleteButton(collectionView)
+
+        if isEditing {
+            toggleDeleteButton(collectionView)
+        }
     }
 
     fileprivate func toggleDeleteButton(_ collectionView: UICollectionView) {

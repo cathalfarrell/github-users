@@ -18,3 +18,14 @@ struct User: Codable {
         case avatarUrl = "avatar_url"
     }
 }
+extension User {
+
+    // Sample User for Development - e.g. in SwiftUI View Previews
+
+    static func sampleUser() -> User {
+        let user = User(login: "cathalfarrell",
+                        avatarUrl: "https://avatars2.githubusercontent.com/u/1584591?v=4",
+                        name: "Cathal Farrell")
+        return user
+    }
+}

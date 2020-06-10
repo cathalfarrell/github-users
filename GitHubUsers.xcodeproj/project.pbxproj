@@ -32,6 +32,7 @@
 		8CA62A5D2490F79000455B9F /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A5C2490F79000455B9F /* URLExtensions.swift */; };
 		8CA62A6224910C5500455B9F /* LoadUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A6124910C5500455B9F /* LoadUsers.swift */; };
 		8CA62A6424910FFB00455B9F /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A6324910FFB00455B9F /* DataExtensions.swift */; };
+		8CA62A662491220300455B9F /* UserDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A652491220300455B9F /* UserDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		8CA62A5C2490F79000455B9F /* URLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
 		8CA62A6124910C5500455B9F /* LoadUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadUsers.swift; sourceTree = "<group>"; };
 		8CA62A6324910FFB00455B9F /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
+		8CA62A652491220300455B9F /* UserDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 			children = (
 				8CA62A6024910A7B00455B9F /* API */,
 				8C640F55248EA873003EA22C /* UsersVC.swift */,
+				8CA62A652491220300455B9F /* UserDetailView.swift */,
 				8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */,
 				8C640F32248E8DC4003EA22C /* AppDelegate.swift */,
 				8C640F34248E8DC4003EA22C /* SceneDelegate.swift */,
@@ -254,6 +257,7 @@
 				8C640F58248F9CF5003EA22C /* UserDragCoordinator.swift in Sources */,
 				8CA62A592490D1D100455B9F /* APIResponseUser.swift in Sources */,
 				8C640F6C249000B4003EA22C /* URLEncoder.swift in Sources */,
+				8CA62A662491220300455B9F /* UserDetailView.swift in Sources */,
 				8C640F56248EA873003EA22C /* UsersVC.swift in Sources */,
 				8CA62A6424910FFB00455B9F /* DataExtensions.swift in Sources */,
 				8C640F7A24900108003EA22C /* APIResponseSearchUsers.swift in Sources */,
