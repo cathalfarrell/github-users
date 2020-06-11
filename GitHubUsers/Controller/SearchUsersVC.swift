@@ -18,14 +18,14 @@ class SearchUsersVC: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
 
-    var users = [User]()
+    private var users = [User]()
 
-    var isListView = true
-    var toggleButton = UIBarButtonItem()
+    private var isListView = true
+    private var toggleButton = UIBarButtonItem()
 
-    var deleteButton = UIBarButtonItem()
+    private var deleteButton = UIBarButtonItem()
 
-    var searchText: String?
+    private var searchText: String?
     private var lastSearchedQuery = ""
     private var parameters = JSONDictionary()
 
@@ -96,11 +96,22 @@ class SearchUsersVC: UIViewController {
     func displayResults(users: [User]) {
 
         if let lastquery = parameters["q"] as? String {
-            self.lastSearchedQuery = lastquery
+
+            if lastquery != lastSearchedQuery {
+                //New search so replace all results
+                print("🔥 New Search Term")
+                self.lastSearchedQuery = lastquery
+                self.users = users
+            } else {
+                // Pagination so append results
+                print("🔥 Pagination")
+                self.users.append(contentsOf: users)
+            }
         }
 
-        self.users = users //replaced for now - will paginate later
-        print("✅ Response: \(users.count) Users FOUND")
+        print("✅ Response: \(users.count) Users Returned")
+        print("✅ Users Count: \(self.users.count)")
+
         self.collectionView.reloadData()
     }
 
@@ -311,6 +322,21 @@ extension SearchUsersVC: UICollectionViewDataSource  {
         //Fallback
         return UICollectionViewCell()
     }
+
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+
+        // Pagination Call when last item is reached and we know that there is another page
+        if collectionView.isLast(for: indexPath) {
+            print("🔥 Is last item......")
+
+            let nextPage = Users.shared.getNextPage()
+            if  nextPage > 0 {
+                parameters["page"] = "\(nextPage)"
+                loadUsers(parameters)
+            }
+        }
+    }
 }
 extension SearchUsersVC: UICollectionViewDelegate {
 
@@ -462,15 +488,6 @@ extension SearchUsersVC {
             parameters["q"] = searchText
 
             if lastSearchedQuery != searchText {
-
-                //Pagination
-                /*
-                let nextPage = Users.shared.getNextPage()
-                if  nextPage > 0 {
-                    parameters["page"] = "\(nextPage)"
-                }
-                */
-
                 loadUsers(parameters)
             } else {
                 print("No point making same network call for same search query as last time")
@@ -480,6 +497,10 @@ extension SearchUsersVC {
 
     func hideSearchKeyboard() {
         view.endEditing(true)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        hideSearchKeyboard()
     }
 }
 extension SearchUsersVC: UISearchBarDelegate {

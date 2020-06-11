@@ -15,7 +15,6 @@ class Users {
     static let shared = Users()
     let session = URLSession(configuration: .default)
 
-    private var currentPage = 0
     private var nextPage = 0
 
     // MARK: - Get Users
@@ -65,8 +64,6 @@ class Users {
 
     func handlePagination(nextPage: Int!) {
 
-        self.currentPage += 1
-
         if nextPage != nil {
             self.nextPage = nextPage
         } else {
@@ -74,12 +71,7 @@ class Users {
             self.nextPage = 0
         }
 
-        print("⬆️ Current Page: \(self.currentPage)")
         print("➡️ Next Page: \(self.nextPage)")
-    }
-
-    func getCurrentPage() -> Int {
-        return currentPage
     }
 
     func getNextPage() -> Int {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		83CE02434966DC88EDC33B46 /* Pods_GitHubUsers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4707421213D244EDD4776069 /* Pods_GitHubUsers.framework */; };
+		8C09591524925AB40074CA59 /* UICollectionViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C09591424925AB40074CA59 /* UICollectionViewExtensions.swift */; };
 		8C640F33248E8DC4003EA22C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F32248E8DC4003EA22C /* AppDelegate.swift */; };
 		8C640F35248E8DC4003EA22C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F34248E8DC4003EA22C /* SceneDelegate.swift */; };
 		8C640F3A248E8DC4003EA22C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C640F38248E8DC4003EA22C /* Main.storyboard */; };
@@ -41,6 +42,7 @@
 /* Begin PBXFileReference section */
 		3DD86876BB732951A8A5BA0C /* Pods-GitHubUsers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitHubUsers.release.xcconfig"; path = "Target Support Files/Pods-GitHubUsers/Pods-GitHubUsers.release.xcconfig"; sourceTree = "<group>"; };
 		4707421213D244EDD4776069 /* Pods_GitHubUsers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GitHubUsers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C09591424925AB40074CA59 /* UICollectionViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewExtensions.swift; sourceTree = "<group>"; };
 		8C640F2F248E8DC4003EA22C /* GitHubUsers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHubUsers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C640F32248E8DC4003EA22C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8C640F34248E8DC4003EA22C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 			children = (
 				8CA62A5C2490F79000455B9F /* URLExtensions.swift */,
 				8CA62A6324910FFB00455B9F /* DataExtensions.swift */,
+				8C09591424925AB40074CA59 /* UICollectionViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -370,6 +373,7 @@
 				8CA62A6224910C5500455B9F /* LoadUsers.swift in Sources */,
 				8C656F762492406C003D8723 /* SearchUsersVC.swift in Sources */,
 				8C640F33248E8DC4003EA22C /* AppDelegate.swift in Sources */,
+				8C09591524925AB40074CA59 /* UICollectionViewExtensions.swift in Sources */,
 				8C640F50248E8FF9003EA22C /* UserListCell.swift in Sources */,
 				8C640F6B249000B4003EA22C /* Result.swift in Sources */,
 				8C640F72249000D5003EA22C /* HTTPMethod.swift in Sources */,
