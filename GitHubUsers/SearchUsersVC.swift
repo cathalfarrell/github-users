@@ -1,8 +1,8 @@
 //
-//  UsersVC.swift
+//  SearchUsersVC.swift
 //  GitHubUsers
 //
-//  Created by Cathal Farrell on 08/06/2020.
+//  Created by Cathal Farrell on 11/06/2020.
 //  Copyright © 2020 Cathal Farrell. All rights reserved.
 //
 
@@ -13,7 +13,10 @@ import UIKit
 private let reuseIdentifierList = "UserListCell"
 private let reuseIdentifierGrid = "UserGridCell"
 
-class UsersVC: UICollectionViewController {
+class SearchUsersVC: UIViewController {
+
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var collectionView: UICollectionView!
 
     var users = [User]()
 
@@ -25,6 +28,8 @@ class UsersVC: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupNavigationBar()
+
         // Register cell classes
         let userCellNib = UINib(nibName: reuseIdentifierList, bundle: nil)
         let userCellGridNib = UINib(nibName: reuseIdentifierGrid, bundle: nil)
@@ -33,11 +38,10 @@ class UsersVC: UICollectionViewController {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
 
+
         //Drag & Drop
         self.collectionView.dragDelegate = self
         self.collectionView.dropDelegate = self
-
-        setupNavigationBar()
 
         let searchTerm = "tom" //hard-coded for now but searchbar later
 
@@ -52,6 +56,7 @@ class UsersVC: UICollectionViewController {
         }
 
         loadUsers(parameters)
+
     }
 
     fileprivate func setupNavigationBar() {
@@ -241,20 +246,21 @@ class UsersVC: UICollectionViewController {
              }
          }
     }
+
 }
-extension UsersVC  {
+extension SearchUsersVC: UICollectionViewDataSource  {
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return users.count
     }
 
-    override func collectionView(_ collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
                                  cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let user = self.users[indexPath.row]
@@ -291,11 +297,11 @@ extension UsersVC  {
         return UICollectionViewCell()
     }
 }
-extension UsersVC {
+extension SearchUsersVC: UICollectionViewDelegate {
 
     // MARK: - UICollectionViewDelegate
 
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
         if isEditing {
             toggleDeleteButton(collectionView)
@@ -308,7 +314,7 @@ extension UsersVC {
         }
     }
 
-    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
 
         if isEditing {
             toggleDeleteButton(collectionView)
@@ -323,7 +329,7 @@ extension UsersVC {
         }
     }
 }
-extension UsersVC: UICollectionViewDelegateFlowLayout {
+extension SearchUsersVC: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -349,7 +355,7 @@ extension UsersVC: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
 }
-extension UsersVC: UICollectionViewDragDelegate {
+extension SearchUsersVC: UICollectionViewDragDelegate {
 
     // MARK: UICollectionViewDragDelegate
 
@@ -361,7 +367,7 @@ extension UsersVC: UICollectionViewDragDelegate {
         return self.dragItems(for: indexPath)
     }
 }
-extension UsersVC: UICollectionViewDropDelegate {
+extension SearchUsersVC: UICollectionViewDropDelegate {
 
     // MARK: UICollectionViewDropDelegate
 

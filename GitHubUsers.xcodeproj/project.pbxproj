@@ -17,7 +17,6 @@
 		8C640F4F248E8FF9003EA22C /* UserListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C640F4D248E8FF9003EA22C /* UserListCell.xib */; };
 		8C640F50248E8FF9003EA22C /* UserListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F4E248E8FF9003EA22C /* UserListCell.swift */; };
 		8C640F52248E9E36003EA22C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F51248E9E36003EA22C /* User.swift */; };
-		8C640F56248EA873003EA22C /* UsersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F55248EA873003EA22C /* UsersVC.swift */; };
 		8C640F58248F9CF5003EA22C /* UserDragCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */; };
 		8C640F6B249000B4003EA22C /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F69249000B4003EA22C /* Result.swift */; };
 		8C640F6C249000B4003EA22C /* URLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F6A249000B4003EA22C /* URLEncoder.swift */; };
@@ -30,6 +29,7 @@
 		8C640F7A24900108003EA22C /* APIResponseSearchUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F7824900108003EA22C /* APIResponseSearchUsers.swift */; };
 		8C656F732492311A003D8723 /* UserGridCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C656F712492311A003D8723 /* UserGridCell.xib */; };
 		8C656F742492311A003D8723 /* UserGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C656F722492311A003D8723 /* UserGridCell.swift */; };
+		8C656F762492406C003D8723 /* SearchUsersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C656F752492406C003D8723 /* SearchUsersVC.swift */; };
 		8CA62A572490CDEE00455B9F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A562490CDEE00455B9F /* UserService.swift */; };
 		8CA62A592490D1D100455B9F /* APIResponseUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A582490D1D100455B9F /* APIResponseUser.swift */; };
 		8CA62A5D2490F79000455B9F /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A5C2490F79000455B9F /* URLExtensions.swift */; };
@@ -52,7 +52,6 @@
 		8C640F4D248E8FF9003EA22C /* UserListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserListCell.xib; sourceTree = "<group>"; };
 		8C640F4E248E8FF9003EA22C /* UserListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListCell.swift; sourceTree = "<group>"; };
 		8C640F51248E9E36003EA22C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		8C640F55248EA873003EA22C /* UsersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersVC.swift; sourceTree = "<group>"; };
 		8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDragCoordinator.swift; sourceTree = "<group>"; };
 		8C640F69249000B4003EA22C /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		8C640F6A249000B4003EA22C /* URLEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLEncoder.swift; sourceTree = "<group>"; };
@@ -65,6 +64,7 @@
 		8C640F7824900108003EA22C /* APIResponseSearchUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIResponseSearchUsers.swift; sourceTree = "<group>"; };
 		8C656F712492311A003D8723 /* UserGridCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserGridCell.xib; sourceTree = "<group>"; };
 		8C656F722492311A003D8723 /* UserGridCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserGridCell.swift; sourceTree = "<group>"; };
+		8C656F752492406C003D8723 /* SearchUsersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersVC.swift; sourceTree = "<group>"; };
 		8CA62A562490CDEE00455B9F /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		8CA62A582490D1D100455B9F /* APIResponseUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponseUser.swift; sourceTree = "<group>"; };
 		8CA62A5C2490F79000455B9F /* URLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
@@ -108,12 +108,12 @@
 			isa = PBXGroup;
 			children = (
 				8CA62A6024910A7B00455B9F /* API */,
-				8C640F55248EA873003EA22C /* UsersVC.swift */,
 				8CA62A652491220300455B9F /* UserDetailView.swift */,
 				8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */,
 				8C640F32248E8DC4003EA22C /* AppDelegate.swift */,
 				8C640F34248E8DC4003EA22C /* SceneDelegate.swift */,
 				8C640F38248E8DC4003EA22C /* Main.storyboard */,
+				8C656F752492406C003D8723 /* SearchUsersVC.swift */,
 				8C640F3E248E8DC5003EA22C /* Assets.xcassets */,
 				8C640F40248E8DC5003EA22C /* LaunchScreen.storyboard */,
 				8C640F43248E8DC5003EA22C /* Info.plist */,
@@ -333,10 +333,10 @@
 				8CA62A592490D1D100455B9F /* APIResponseUser.swift in Sources */,
 				8C640F6C249000B4003EA22C /* URLEncoder.swift in Sources */,
 				8CA62A662491220300455B9F /* UserDetailView.swift in Sources */,
-				8C640F56248EA873003EA22C /* UsersVC.swift in Sources */,
 				8CA62A6424910FFB00455B9F /* DataExtensions.swift in Sources */,
 				8C640F7A24900108003EA22C /* APIResponseSearchUsers.swift in Sources */,
 				8CA62A6224910C5500455B9F /* LoadUsers.swift in Sources */,
+				8C656F762492406C003D8723 /* SearchUsersVC.swift in Sources */,
 				8C640F33248E8DC4003EA22C /* AppDelegate.swift in Sources */,
 				8C640F50248E8FF9003EA22C /* UserListCell.swift in Sources */,
 				8C640F6B249000B4003EA22C /* Result.swift in Sources */,
