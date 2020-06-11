@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -28,6 +28,8 @@
 		8C640F76249000D5003EA22C /* HTTPNetworkRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F71249000D5003EA22C /* HTTPNetworkRoute.swift */; };
 		8C640F7924900108003EA22C /* SearchUsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F7724900108003EA22C /* SearchUsersService.swift */; };
 		8C640F7A24900108003EA22C /* APIResponseSearchUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F7824900108003EA22C /* APIResponseSearchUsers.swift */; };
+		8C656F732492311A003D8723 /* UserGridCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C656F712492311A003D8723 /* UserGridCell.xib */; };
+		8C656F742492311A003D8723 /* UserGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C656F722492311A003D8723 /* UserGridCell.swift */; };
 		8CA62A572490CDEE00455B9F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A562490CDEE00455B9F /* UserService.swift */; };
 		8CA62A592490D1D100455B9F /* APIResponseUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A582490D1D100455B9F /* APIResponseUser.swift */; };
 		8CA62A5D2490F79000455B9F /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A5C2490F79000455B9F /* URLExtensions.swift */; };
@@ -61,6 +63,8 @@
 		8C640F71249000D5003EA22C /* HTTPNetworkRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPNetworkRoute.swift; sourceTree = "<group>"; };
 		8C640F7724900108003EA22C /* SearchUsersService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchUsersService.swift; sourceTree = "<group>"; };
 		8C640F7824900108003EA22C /* APIResponseSearchUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIResponseSearchUsers.swift; sourceTree = "<group>"; };
+		8C656F712492311A003D8723 /* UserGridCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserGridCell.xib; sourceTree = "<group>"; };
+		8C656F722492311A003D8723 /* UserGridCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserGridCell.swift; sourceTree = "<group>"; };
 		8CA62A562490CDEE00455B9F /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		8CA62A582490D1D100455B9F /* APIResponseUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponseUser.swift; sourceTree = "<group>"; };
 		8CA62A5C2490F79000455B9F /* URLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
@@ -116,6 +120,8 @@
 				8C640F3B248E8DC4003EA22C /* GitHubUsers.xcdatamodeld */,
 				8C640F51248E9E36003EA22C /* User.swift */,
 				8C640F4D248E8FF9003EA22C /* UserCell.xib */,
+				8C656F722492311A003D8723 /* UserGridCell.swift */,
+				8C656F712492311A003D8723 /* UserGridCell.xib */,
 				8C640F4E248E8FF9003EA22C /* UserCell.swift */,
 			);
 			path = GitHubUsers;
@@ -196,7 +202,6 @@
 				CE099A9C3AA7D9F241C694BE /* Pods-GitHubUsers.debug.xcconfig */,
 				3DD86876BB732951A8A5BA0C /* Pods-GitHubUsers.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -261,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C640F4F248E8FF9003EA22C /* UserCell.xib in Resources */,
+				8C656F732492311A003D8723 /* UserGridCell.xib in Resources */,
 				8C640F42248E8DC5003EA22C /* LaunchScreen.storyboard in Resources */,
 				8C640F3F248E8DC5003EA22C /* Assets.xcassets in Resources */,
 				8C640F3A248E8DC4003EA22C /* Main.storyboard in Resources */,
@@ -335,6 +341,7 @@
 				8C640F50248E8FF9003EA22C /* UserCell.swift in Sources */,
 				8C640F6B249000B4003EA22C /* Result.swift in Sources */,
 				8C640F72249000D5003EA22C /* HTTPMethod.swift in Sources */,
+				8C656F742492311A003D8723 /* UserGridCell.swift in Sources */,
 				8CA62A5D2490F79000455B9F /* URLExtensions.swift in Sources */,
 				8C640F73249000D5003EA22C /* HTTPNetworkRequest.swift in Sources */,
 				8C640F35248E8DC4003EA22C /* SceneDelegate.swift in Sources */,

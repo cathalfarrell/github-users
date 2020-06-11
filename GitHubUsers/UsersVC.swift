@@ -10,7 +10,8 @@ import Kingfisher
 import SwiftUI
 import UIKit
 
-private let reuseIdentifier = "UserCell"
+private let reuseIdentifierList = "UserCell"
+private let reuseIdentifierGrid = "UserGridCell"
 
 class UsersVC: UICollectionViewController {
 
@@ -18,14 +19,17 @@ class UsersVC: UICollectionViewController {
 
     var isListView = true
     var toggleButton = UIBarButtonItem()
+
     var deleteButton = UIBarButtonItem()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Register cell classes
-        let userCellNib = UINib(nibName: reuseIdentifier, bundle: nil)
-        self.collectionView.register(userCellNib, forCellWithReuseIdentifier: reuseIdentifier)
+        let userCellNib = UINib(nibName: reuseIdentifierList, bundle: nil)
+        let userCellGridNib = UINib(nibName: reuseIdentifierGrid, bundle: nil)
+        self.collectionView.register(userCellNib, forCellWithReuseIdentifier: reuseIdentifierList)
+        self.collectionView.register(userCellGridNib, forCellWithReuseIdentifier: reuseIdentifierGrid)
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
 
@@ -138,6 +142,8 @@ class UsersVC: UICollectionViewController {
         for indexPath in indexPaths {
             if let cell = collectionView.cellForItem(at: indexPath) as? UserCell {
                 cell.isInEditingMode = editing
+            } else if let cell = collectionView.cellForItem(at: indexPath) as? UserGridCell {
+                cell.isInEditingMode = editing
             }
         }
 
@@ -204,6 +210,34 @@ class UsersVC: UICollectionViewController {
         }
     }
 
+    fileprivate func downloadAvatarImage(_ user: User, _ cell: UserGridCell) {
+
+        // Using Kingfisher to asynchronously download and cache avatar
+
+        let url = URL(string: user.avatarUrl)
+        let processor = DownsamplingImageProcessor(size: cell.avatarImageView.bounds.size)
+            |> RoundCornerImageProcessor(cornerRadius: 20)
+        cell.avatarImageView.kf.indicatorType = .activity
+        cell.avatarImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "placeholderImage"),
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ])
+        {
+            result in
+            switch result {
+            case .success(let value):
+                print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
+            case .failure(let error):
+                print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
+            }
+        }
+    }
+
 }
 extension UsersVC  {
 
@@ -220,21 +254,41 @@ extension UsersVC  {
     override func collectionView(_ collectionView: UICollectionView,
                                  cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
-                                                            for: indexPath) as? UserCell
-        else {
-            return UICollectionViewCell()
+        if isListView {
+
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierList,
+                                                                for: indexPath) as? UserCell
+            else {
+                return UICollectionViewCell()
+            }
+
+            // Configure the cell
+            let user = self.users[indexPath.row]
+
+            DispatchQueue.main.async {
+                cell.configureCell(user: user)
+                self.downloadAvatarImage(user, cell)
+            }
+
+            return cell
+
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierGrid,
+                                                                for: indexPath) as? UserGridCell
+            else {
+                return UICollectionViewCell()
+            }
+
+            // Configure the cell
+            let user = self.users[indexPath.row]
+
+            DispatchQueue.main.async {
+                cell.configureCell(user: user)
+                self.downloadAvatarImage(user, cell)
+            }
+
+            return cell
         }
-
-        // Configure the cell
-        let user = self.users[indexPath.row]
-
-        DispatchQueue.main.async {
-            cell.configureCell(user: user)
-            self.downloadAvatarImage(user, cell)
-        }
-
-        return cell
     }
 }
 extension UsersVC {
@@ -273,7 +327,7 @@ extension UsersVC: UICollectionViewDelegateFlowLayout {
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = view.frame.width
         if isListView {
-            return CGSize(width: width - 15, height: 120)
+            return CGSize(width: width - 15, height: 80)
         }else {
             return CGSize(width: (width - 15)/2, height: (width - 15)/2)
         }
