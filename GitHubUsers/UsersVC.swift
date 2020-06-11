@@ -10,7 +10,7 @@ import Kingfisher
 import SwiftUI
 import UIKit
 
-private let reuseIdentifierList = "UserCell"
+private let reuseIdentifierList = "UserListCell"
 private let reuseIdentifierGrid = "UserGridCell"
 
 class UsersVC: UICollectionViewController {
@@ -120,12 +120,16 @@ class UsersVC: UICollectionViewController {
     func clearSelectedCells() {
         setEditing(false, animated: false)
 
-        guard let cells = collectionView.visibleCells as? [UserCell] else {
-            return
+        if let cells = collectionView.visibleCells as? [UserListCell] {
+            for cell in cells {
+                cell.isInEditingMode = false
+            }
         }
 
-        for cell in cells {
-            cell.isInEditingMode = false
+        if let cells = collectionView.visibleCells as? [UserGridCell] {
+            for cell in cells {
+                cell.isInEditingMode = false
+            }
         }
     }
 
@@ -140,7 +144,7 @@ class UsersVC: UICollectionViewController {
 
         let indexPaths = collectionView.indexPathsForVisibleItems
         for indexPath in indexPaths {
-            if let cell = collectionView.cellForItem(at: indexPath) as? UserCell {
+            if let cell = collectionView.cellForItem(at: indexPath) as? UserListCell {
                 cell.isInEditingMode = editing
             } else if let cell = collectionView.cellForItem(at: indexPath) as? UserGridCell {
                 cell.isInEditingMode = editing
@@ -182,62 +186,61 @@ class UsersVC: UICollectionViewController {
 
     // MARK:- Image Download into cells
 
-    fileprivate func downloadAvatarImage(_ user: User, _ cell: UserCell) {
+    fileprivate func downloadAvatarImage(_ user: User, _ cell: UICollectionViewCell) {
 
         // Using Kingfisher to asynchronously download and cache avatar
-
         let url = URL(string: user.avatarUrl)
-        let processor = DownsamplingImageProcessor(size: cell.avatarImageView.bounds.size)
-            |> RoundCornerImageProcessor(cornerRadius: 20)
-        cell.avatarImageView.kf.indicatorType = .activity
-        cell.avatarImageView.kf.setImage(
-            with: url,
-            placeholder: UIImage(named: "placeholderImage"),
-            options: [
-                .processor(processor),
-                .scaleFactor(UIScreen.main.scale),
-                .transition(.fade(1)),
-                .cacheOriginalImage
-            ])
-        {
-            result in
-            switch result {
-            case .success(let value):
-                print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
-            case .failure(let error):
-                print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
+
+        if let cell = cell as? UserListCell {
+
+            let processor = DownsamplingImageProcessor(size: cell.avatarImageView.bounds.size)
+                |> RoundCornerImageProcessor(cornerRadius: 20)
+            cell.avatarImageView.kf.indicatorType = .activity
+            cell.avatarImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage(named: "placeholderImage"),
+                options: [
+                    .processor(processor),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ])
+            {
+                result in
+                switch result {
+                case .success(let value):
+                    print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
+                case .failure(let error):
+                    print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
+                }
             }
         }
+
+        if let cell = cell as? UserGridCell {
+
+             let processor = DownsamplingImageProcessor(size: cell.avatarImageView.bounds.size)
+                 |> RoundCornerImageProcessor(cornerRadius: 20)
+             cell.avatarImageView.kf.indicatorType = .activity
+             cell.avatarImageView.kf.setImage(
+                 with: url,
+                 placeholder: UIImage(named: "placeholderImage"),
+                 options: [
+                     .processor(processor),
+                     .scaleFactor(UIScreen.main.scale),
+                     .transition(.fade(1)),
+                     .cacheOriginalImage
+                 ])
+             {
+                 result in
+                 switch result {
+                 case .success(let value):
+                     print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
+                 case .failure(let error):
+                     print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
+                 }
+             }
+         }
     }
-
-    fileprivate func downloadAvatarImage(_ user: User, _ cell: UserGridCell) {
-
-        // Using Kingfisher to asynchronously download and cache avatar
-
-        let url = URL(string: user.avatarUrl)
-        let processor = DownsamplingImageProcessor(size: cell.avatarImageView.bounds.size)
-            |> RoundCornerImageProcessor(cornerRadius: 20)
-        cell.avatarImageView.kf.indicatorType = .activity
-        cell.avatarImageView.kf.setImage(
-            with: url,
-            placeholder: UIImage(named: "placeholderImage"),
-            options: [
-                .processor(processor),
-                .scaleFactor(UIScreen.main.scale),
-                .transition(.fade(1)),
-                .cacheOriginalImage
-            ])
-        {
-            result in
-            switch result {
-            case .success(let value):
-                print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
-            case .failure(let error):
-                print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
-            }
-        }
-    }
-
 }
 extension UsersVC  {
 
@@ -254,41 +257,38 @@ extension UsersVC  {
     override func collectionView(_ collectionView: UICollectionView,
                                  cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
+        let user = self.users[indexPath.row]
+
         if isListView {
 
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierList,
-                                                                for: indexPath) as? UserCell
-            else {
-                return UICollectionViewCell()
+            if let listCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierList,
+                                                             for: indexPath) as? UserListCell {
+                // Configure the List cell
+                DispatchQueue.main.async {
+                    listCell.configureCell(user: user)
+                    self.downloadAvatarImage(user, listCell)
+                }
+
+                return listCell
             }
-
-            // Configure the cell
-            let user = self.users[indexPath.row]
-
-            DispatchQueue.main.async {
-                cell.configureCell(user: user)
-                self.downloadAvatarImage(user, cell)
-            }
-
-            return cell
 
         } else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierGrid,
-                                                                for: indexPath) as? UserGridCell
-            else {
-                return UICollectionViewCell()
+
+            if let gridCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierGrid,
+                                                             for: indexPath) as? UserGridCell {
+                // Configure the Grid cell
+                DispatchQueue.main.async {
+                    gridCell.configureCell(user: user)
+                    self.downloadAvatarImage(user, gridCell)
+                }
+
+                return gridCell
             }
 
-            // Configure the cell
-            let user = self.users[indexPath.row]
-
-            DispatchQueue.main.async {
-                cell.configureCell(user: user)
-                self.downloadAvatarImage(user, cell)
-            }
-
-            return cell
         }
+
+        //Fallback
+        return UICollectionViewCell()
     }
 }
 extension UsersVC {
@@ -296,6 +296,7 @@ extension UsersVC {
     // MARK: - UICollectionViewDelegate
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
         if isEditing {
             toggleDeleteButton(collectionView)
         } else {
@@ -315,6 +316,7 @@ extension UsersVC {
     }
 
     fileprivate func toggleDeleteButton(_ collectionView: UICollectionView) {
+
         if let selectedCells = collectionView.indexPathsForSelectedItems {
             let enableButton = selectedCells.count > 0 && isEditing
             deleteButton.isEnabled = enableButton
@@ -351,7 +353,9 @@ extension UsersVC: UICollectionViewDragDelegate {
 
     // MARK: UICollectionViewDragDelegate
 
-    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession,
+                        at indexPath: IndexPath) -> [UIDragItem] {
+
         let dragCoordinator = UserDragCoordinator(sourceIndexPath: indexPath)
         session.localContext = dragCoordinator
         return self.dragItems(for: indexPath)
@@ -361,7 +365,8 @@ extension UsersVC: UICollectionViewDropDelegate {
 
     // MARK: UICollectionViewDropDelegate
 
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession,
+                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
 
         guard session.items.count == 1 else {
           return UICollectionViewDropProposal(operation: .cancel)
@@ -376,7 +381,8 @@ extension UsersVC: UICollectionViewDropDelegate {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+    func collectionView(_ collectionView: UICollectionView,
+                        performDropWith coordinator: UICollectionViewDropCoordinator) {
 
         // Get the datasource for this collection view
         let destinationIndexPath: IndexPath

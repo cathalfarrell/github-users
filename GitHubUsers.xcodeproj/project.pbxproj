@@ -14,8 +14,8 @@
 		8C640F3D248E8DC4003EA22C /* GitHubUsers.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F3B248E8DC4003EA22C /* GitHubUsers.xcdatamodeld */; };
 		8C640F3F248E8DC5003EA22C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C640F3E248E8DC5003EA22C /* Assets.xcassets */; };
 		8C640F42248E8DC5003EA22C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C640F40248E8DC5003EA22C /* LaunchScreen.storyboard */; };
-		8C640F4F248E8FF9003EA22C /* UserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C640F4D248E8FF9003EA22C /* UserCell.xib */; };
-		8C640F50248E8FF9003EA22C /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F4E248E8FF9003EA22C /* UserCell.swift */; };
+		8C640F4F248E8FF9003EA22C /* UserListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C640F4D248E8FF9003EA22C /* UserListCell.xib */; };
+		8C640F50248E8FF9003EA22C /* UserListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F4E248E8FF9003EA22C /* UserListCell.swift */; };
 		8C640F52248E9E36003EA22C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F51248E9E36003EA22C /* User.swift */; };
 		8C640F56248EA873003EA22C /* UsersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F55248EA873003EA22C /* UsersVC.swift */; };
 		8C640F58248F9CF5003EA22C /* UserDragCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */; };
@@ -49,8 +49,8 @@
 		8C640F3E248E8DC5003EA22C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8C640F41248E8DC5003EA22C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8C640F43248E8DC5003EA22C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8C640F4D248E8FF9003EA22C /* UserCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserCell.xib; sourceTree = "<group>"; };
-		8C640F4E248E8FF9003EA22C /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
+		8C640F4D248E8FF9003EA22C /* UserListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserListCell.xib; sourceTree = "<group>"; };
+		8C640F4E248E8FF9003EA22C /* UserListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListCell.swift; sourceTree = "<group>"; };
 		8C640F51248E9E36003EA22C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8C640F55248EA873003EA22C /* UsersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersVC.swift; sourceTree = "<group>"; };
 		8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDragCoordinator.swift; sourceTree = "<group>"; };
@@ -119,10 +119,10 @@
 				8C640F43248E8DC5003EA22C /* Info.plist */,
 				8C640F3B248E8DC4003EA22C /* GitHubUsers.xcdatamodeld */,
 				8C640F51248E9E36003EA22C /* User.swift */,
-				8C640F4D248E8FF9003EA22C /* UserCell.xib */,
+				8C640F4D248E8FF9003EA22C /* UserListCell.xib */,
 				8C656F722492311A003D8723 /* UserGridCell.swift */,
 				8C656F712492311A003D8723 /* UserGridCell.xib */,
-				8C640F4E248E8FF9003EA22C /* UserCell.swift */,
+				8C640F4E248E8FF9003EA22C /* UserListCell.swift */,
 			);
 			path = GitHubUsers;
 			sourceTree = "<group>";
@@ -265,7 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C640F4F248E8FF9003EA22C /* UserCell.xib in Resources */,
+				8C640F4F248E8FF9003EA22C /* UserListCell.xib in Resources */,
 				8C656F732492311A003D8723 /* UserGridCell.xib in Resources */,
 				8C640F42248E8DC5003EA22C /* LaunchScreen.storyboard in Resources */,
 				8C640F3F248E8DC5003EA22C /* Assets.xcassets in Resources */,
@@ -338,7 +338,7 @@
 				8C640F7A24900108003EA22C /* APIResponseSearchUsers.swift in Sources */,
 				8CA62A6224910C5500455B9F /* LoadUsers.swift in Sources */,
 				8C640F33248E8DC4003EA22C /* AppDelegate.swift in Sources */,
-				8C640F50248E8FF9003EA22C /* UserCell.swift in Sources */,
+				8C640F50248E8FF9003EA22C /* UserListCell.swift in Sources */,
 				8C640F6B249000B4003EA22C /* Result.swift in Sources */,
 				8C640F72249000D5003EA22C /* HTTPMethod.swift in Sources */,
 				8C656F742492311A003D8723 /* UserGridCell.swift in Sources */,
