@@ -108,21 +108,18 @@
 			isa = PBXGroup;
 			children = (
 				8CA62A6024910A7B00455B9F /* API */,
-				8CA62A652491220300455B9F /* UserDetailView.swift */,
-				8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */,
+				8C656F7A2492454C003D8723 /* Helpers */,
+				8CA62A5B2490F77C00455B9F /* Extensions */,
+				8C656F77249244D3003D8723 /* Model */,
+				8C656F78249244DF003D8723 /* View */,
+				8C656F79249244EE003D8723 /* Controller */,
 				8C640F32248E8DC4003EA22C /* AppDelegate.swift */,
 				8C640F34248E8DC4003EA22C /* SceneDelegate.swift */,
 				8C640F38248E8DC4003EA22C /* Main.storyboard */,
-				8C656F752492406C003D8723 /* SearchUsersVC.swift */,
 				8C640F3E248E8DC5003EA22C /* Assets.xcassets */,
 				8C640F40248E8DC5003EA22C /* LaunchScreen.storyboard */,
 				8C640F43248E8DC5003EA22C /* Info.plist */,
 				8C640F3B248E8DC4003EA22C /* GitHubUsers.xcdatamodeld */,
-				8C640F51248E9E36003EA22C /* User.swift */,
-				8C640F4D248E8FF9003EA22C /* UserListCell.xib */,
-				8C656F722492311A003D8723 /* UserGridCell.swift */,
-				8C656F712492311A003D8723 /* UserGridCell.xib */,
-				8C640F4E248E8FF9003EA22C /* UserListCell.swift */,
 			);
 			path = GitHubUsers;
 			sourceTree = "<group>";
@@ -169,6 +166,42 @@
 			path = Encoding;
 			sourceTree = "<group>";
 		};
+		8C656F77249244D3003D8723 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8C640F51248E9E36003EA22C /* User.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		8C656F78249244DF003D8723 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8CA62A652491220300455B9F /* UserDetailView.swift */,
+				8C640F4D248E8FF9003EA22C /* UserListCell.xib */,
+				8C656F722492311A003D8723 /* UserGridCell.swift */,
+				8C656F712492311A003D8723 /* UserGridCell.xib */,
+				8C640F4E248E8FF9003EA22C /* UserListCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8C656F79249244EE003D8723 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				8C656F752492406C003D8723 /* SearchUsersVC.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		8C656F7A2492454C003D8723 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		8CA62A5B2490F77C00455B9F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,7 +215,6 @@
 			isa = PBXGroup;
 			children = (
 				8CA62A6124910C5500455B9F /* LoadUsers.swift */,
-				8CA62A5B2490F77C00455B9F /* Extensions */,
 				8C640F65248FFFD7003EA22C /* NetworkLayer */,
 			);
 			path = API;
