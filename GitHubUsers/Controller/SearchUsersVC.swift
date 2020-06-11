@@ -25,38 +25,36 @@ class SearchUsersVC: UIViewController {
 
     var deleteButton = UIBarButtonItem()
 
+    var searchText: String?
+    private var lastSearchedQuery = ""
+    private var parameters = JSONDictionary()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupNavigationBar()
+        setupSearchBar()
+        setupCollection()
+    }
+
+    fileprivate func setupSearchBar() {
+        searchBar.placeholder = "Find a GitHub User"
+        searchBar.delegate = self
+    }
+
+    fileprivate func setupCollection() {
 
         // Register cell classes
-        let userCellNib = UINib(nibName: reuseIdentifierList, bundle: nil)
-        let userCellGridNib = UINib(nibName: reuseIdentifierGrid, bundle: nil)
-        self.collectionView.register(userCellNib, forCellWithReuseIdentifier: reuseIdentifierList)
-        self.collectionView.register(userCellGridNib, forCellWithReuseIdentifier: reuseIdentifierGrid)
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
+       let userCellNib = UINib(nibName: reuseIdentifierList, bundle: nil)
+       let userCellGridNib = UINib(nibName: reuseIdentifierGrid, bundle: nil)
+       self.collectionView.register(userCellNib, forCellWithReuseIdentifier: reuseIdentifierList)
+       self.collectionView.register(userCellGridNib, forCellWithReuseIdentifier: reuseIdentifierGrid)
+       self.collectionView.delegate = self
+       self.collectionView.dataSource = self
 
-
-        //Drag & Drop
-        self.collectionView.dragDelegate = self
-        self.collectionView.dropDelegate = self
-
-        let searchTerm = "tom" //hard-coded for now but searchbar later
-
-        var parameters = JSONDictionary()
-        parameters["q"] = searchTerm
-
-
-        //Pagination
-        let nextPage = Users.shared.getNextPage()
-        if  nextPage > 0 {
-            parameters["page"] = "\(nextPage)"
-        }
-
-        loadUsers(parameters)
-
+       //Drag & Drop
+       self.collectionView.dragDelegate = self
+       self.collectionView.dropDelegate = self
     }
 
     fileprivate func setupNavigationBar() {
@@ -96,7 +94,12 @@ class SearchUsersVC: UIViewController {
     }
 
     func displayResults(users: [User]) {
-        self.users = users
+
+        if let lastquery = parameters["q"] as? String {
+            self.lastSearchedQuery = lastquery
+        }
+
+        self.users = users //replaced for now - will paginate later
         print("✅ Response: \(users.count) Users FOUND")
         self.collectionView.reloadData()
     }
@@ -104,6 +107,9 @@ class SearchUsersVC: UIViewController {
     // MARK: - Grid/List Toggle
 
     @objc func gridListButtonTapped(sender: UIBarButtonItem) {
+
+        hideSearchKeyboard()
+
         if isListView {
             toggleButton = UIBarButtonItem(title: "List", style: .plain, target: self,
                                            action: #selector(gridListButtonTapped(sender:)))
@@ -143,6 +149,9 @@ class SearchUsersVC: UIViewController {
     // Called when EDIT button tapped -> Enable Drag & Drop and Selection
 
     override func setEditing(_ editing: Bool, animated: Bool) {
+
+        hideSearchKeyboard()
+
         super.setEditing(editing, animated: animated)
         self.collectionView.dragInteractionEnabled = editing
         self.collectionView.allowsMultipleSelection = editing
@@ -162,6 +171,9 @@ class SearchUsersVC: UIViewController {
     }
 
     @objc func deleteItem() {
+
+        hideSearchKeyboard()
+
         if let selectedCells = collectionView.indexPathsForSelectedItems {
             let items = selectedCells.map { $0.item }.sorted().reversed()
             for item in items {
@@ -174,6 +186,9 @@ class SearchUsersVC: UIViewController {
     // MARK:- Drag/Drop Helpers
 
     func moveUser(at sourceIndex: Int, to destinationIndex: Int) {
+
+      hideSearchKeyboard()
+
       guard sourceIndex != destinationIndex else { return }
 
       let user = users[sourceIndex]
@@ -303,6 +318,8 @@ extension SearchUsersVC: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
+        hideSearchKeyboard()
+
         if isEditing {
             toggleDeleteButton(collectionView)
         } else {
@@ -315,6 +332,8 @@ extension SearchUsersVC: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+
+        hideSearchKeyboard()
 
         if isEditing {
             toggleDeleteButton(collectionView)
@@ -424,5 +443,57 @@ extension SearchUsersVC: UICollectionViewDropDelegate {
         default:
           return
         }
+    }
+}
+extension SearchUsersVC {
+
+    // MARK: - Search Functionality
+
+    func searchFor(_ searchText: String?) {
+        guard let searchText = searchText else {
+          print("No search text found")
+          return
+        }
+
+        if searchText != "" {
+            print("Search for this: \(searchText)")
+            hideSearchKeyboard()
+
+            parameters["q"] = searchText
+
+            if lastSearchedQuery != searchText {
+
+                //Pagination
+                /*
+                let nextPage = Users.shared.getNextPage()
+                if  nextPage > 0 {
+                    parameters["page"] = "\(nextPage)"
+                }
+                */
+
+                loadUsers(parameters)
+            } else {
+                print("No point making same network call for same search query as last time")
+            }
+        }
+    }
+
+    func hideSearchKeyboard() {
+        view.endEditing(true)
+    }
+}
+extension SearchUsersVC: UISearchBarDelegate {
+
+    // MARK: - UISearchBarDelegate
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.searchText = searchText
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchFor(searchText)
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
     }
 }
