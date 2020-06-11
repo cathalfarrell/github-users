@@ -49,6 +49,11 @@ class Users {
                             //Only have limited User Details here...
                             let user = User(login: item.login, avatarUrl: item.avatarUrl)
                             users.append(user)
+
+                            //Store each to Persistence Manager
+                            DispatchQueue.main.async {
+                                PersistencyService.shared.addUser(user: user)
+                            }
                         }
 
                         success(users)
@@ -76,6 +81,16 @@ class Users {
 
     func getNextPage() -> Int {
         return nextPage
+    }
+
+
+    // Set by persistency manager from stored search parameters when app restored
+    
+    func restoreNextPage(page: String) {
+        if let intFromString = Int(page) {
+            nextPage = intFromString
+            print("➡️ Next Page Restored from defaults: \(self.nextPage)")
+        }
     }
 
     // MARK: - Get User Detail

@@ -29,12 +29,21 @@ class SearchUsersVC: UIViewController {
     private var lastSearchedQuery = ""
     private var parameters = JSONDictionary()
 
+    private var isNewSearch: Bool {
+        if let searchText = searchBar.text {
+            return (searchText != lastSearchedQuery)
+        }
+        return true
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupNavigationBar()
         setupSearchBar()
         setupCollection()
+
+        restoreAppState()
     }
 
     fileprivate func setupSearchBar() {
@@ -84,7 +93,48 @@ class SearchUsersVC: UIViewController {
             self.displayError(message: errorString)
         }
 
+        saveSearchParameters(parameters)
+
+    }
+
+    // MARK: - Persistency
+
+    fileprivate func saveSearchParameters(_ parameters: JSONDictionary) {
+        //Store parameters for persistance
+        if let searchTerm = parameters["q"] as? String {
+            UserDefaults.standard.set(searchTerm, forKey: "searchTerm")
+        }
+
+        if let nextPage = parameters["page"] as? String {
+            UserDefaults.standard.set(nextPage, forKey: "nextPage")
+        }
+    }
+
+    // Restore last search term and results returned
+
+    fileprivate func restoreAppState() {
+
+        //Restore app state by checking for any previously stored users & search parameters
+
+        if let searchTerm = UserDefaults.standard.string(forKey: "searchTerm") {
+            lastSearchedQuery = searchTerm
+            self.searchBar.text = searchTerm
+            parameters["q"] = searchTerm
+        }
+
+        if let nextPage = UserDefaults.standard.string(forKey: "nextPage") {
+            Users.shared.restoreNextPage(page: nextPage)
+        }
+
         //Get users from Persistency Manager later if time
+
+        if let storedUsers = PersistencyService.shared.fetchUsers(), storedUsers.count > 0 {
+            self.displayResults(users: storedUsers)
+        } else {
+            print("🔥 No fetched users to restore found.")
+        }
+
+        print("🔥 PARAMS restored: \(parameters)")
     }
 
     // MARK: - Update UI
@@ -95,19 +145,27 @@ class SearchUsersVC: UIViewController {
 
     func displayResults(users: [User]) {
 
-        if let lastquery = parameters["q"] as? String {
+        // If new results then we must replace all existing data (including stored data)
+        // but if paginating just append to the existing data.
 
-            if lastquery != lastSearchedQuery {
-                //New search so replace all results
-                print("🔥 New Search Term")
+        if isNewSearch {
+
+            print("🔥 New Search Term")
+            print("🔥 isNewSearch: \(isNewSearch)")
+
+            if let lastquery = parameters["q"] as? String {
                 self.lastSearchedQuery = lastquery
-                self.users = users
-            } else {
-                // Pagination so append results
-                print("🔥 Pagination")
-                self.users.append(contentsOf: users)
             }
+
+            self.users = users
+
+        } else {
+            print("🔥 Pagination")
+            print("🔥 isNewSearch: \(isNewSearch)")
+
+            self.users.append(contentsOf: users)
         }
+
 
         print("✅ Response: \(users.count) Users Returned")
         print("✅ Users Count: \(self.users.count)")
@@ -488,6 +546,7 @@ extension SearchUsersVC {
             parameters["q"] = searchText
 
             if lastSearchedQuery != searchText {
+                PersistencyService.shared.deleteAllUsers() //remove last results from data store
                 loadUsers(parameters)
             } else {
                 print("No point making same network call for same search query as last time")

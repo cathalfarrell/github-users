@@ -31,6 +31,9 @@
 		8C656F732492311A003D8723 /* UserGridCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C656F712492311A003D8723 /* UserGridCell.xib */; };
 		8C656F742492311A003D8723 /* UserGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C656F722492311A003D8723 /* UserGridCell.swift */; };
 		8C656F762492406C003D8723 /* SearchUsersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C656F752492406C003D8723 /* SearchUsersVC.swift */; };
+		8C8174E22492AA5C00789AD3 /* CDUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8174E02492AA5C00789AD3 /* CDUser+CoreDataClass.swift */; };
+		8C8174E32492AA5C00789AD3 /* CDUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8174E12492AA5C00789AD3 /* CDUser+CoreDataProperties.swift */; };
+		8C8174E52492AC7500789AD3 /* PersistencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8174E42492AC7500789AD3 /* PersistencyService.swift */; };
 		8CA62A572490CDEE00455B9F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A562490CDEE00455B9F /* UserService.swift */; };
 		8CA62A592490D1D100455B9F /* APIResponseUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A582490D1D100455B9F /* APIResponseUser.swift */; };
 		8CA62A5D2490F79000455B9F /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A5C2490F79000455B9F /* URLExtensions.swift */; };
@@ -67,6 +70,9 @@
 		8C656F712492311A003D8723 /* UserGridCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserGridCell.xib; sourceTree = "<group>"; };
 		8C656F722492311A003D8723 /* UserGridCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserGridCell.swift; sourceTree = "<group>"; };
 		8C656F752492406C003D8723 /* SearchUsersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersVC.swift; sourceTree = "<group>"; };
+		8C8174E02492AA5C00789AD3 /* CDUser+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDUser+CoreDataClass.swift"; sourceTree = "<group>"; };
+		8C8174E12492AA5C00789AD3 /* CDUser+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDUser+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		8C8174E42492AC7500789AD3 /* PersistencyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistencyService.swift; sourceTree = "<group>"; };
 		8CA62A562490CDEE00455B9F /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		8CA62A582490D1D100455B9F /* APIResponseUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponseUser.swift; sourceTree = "<group>"; };
 		8CA62A5C2490F79000455B9F /* URLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
@@ -109,6 +115,7 @@
 		8C640F31248E8DC4003EA22C /* GitHubUsers */ = {
 			isa = PBXGroup;
 			children = (
+				8C8174DF2492AA3F00789AD3 /* CoreData */,
 				8CA62A6024910A7B00455B9F /* API */,
 				8C656F7A2492454C003D8723 /* Helpers */,
 				8CA62A5B2490F77C00455B9F /* Extensions */,
@@ -202,6 +209,16 @@
 				8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		8C8174DF2492AA3F00789AD3 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				8C8174E42492AC7500789AD3 /* PersistencyService.swift */,
+				8C8174E02492AA5C00789AD3 /* CDUser+CoreDataClass.swift */,
+				8C8174E12492AA5C00789AD3 /* CDUser+CoreDataProperties.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		8CA62A5B2490F77C00455B9F /* Extensions */ = {
@@ -364,6 +381,7 @@
 				8C640F52248E9E36003EA22C /* User.swift in Sources */,
 				8C640F75249000D5003EA22C /* HTTPNetworkResponse.swift in Sources */,
 				8CA62A572490CDEE00455B9F /* UserService.swift in Sources */,
+				8C8174E22492AA5C00789AD3 /* CDUser+CoreDataClass.swift in Sources */,
 				8C640F58248F9CF5003EA22C /* UserDragCoordinator.swift in Sources */,
 				8CA62A592490D1D100455B9F /* APIResponseUser.swift in Sources */,
 				8C640F6C249000B4003EA22C /* URLEncoder.swift in Sources */,
@@ -375,9 +393,11 @@
 				8C640F33248E8DC4003EA22C /* AppDelegate.swift in Sources */,
 				8C09591524925AB40074CA59 /* UICollectionViewExtensions.swift in Sources */,
 				8C640F50248E8FF9003EA22C /* UserListCell.swift in Sources */,
+				8C8174E32492AA5C00789AD3 /* CDUser+CoreDataProperties.swift in Sources */,
 				8C640F6B249000B4003EA22C /* Result.swift in Sources */,
 				8C640F72249000D5003EA22C /* HTTPMethod.swift in Sources */,
 				8C656F742492311A003D8723 /* UserGridCell.swift in Sources */,
+				8C8174E52492AC7500789AD3 /* PersistencyService.swift in Sources */,
 				8CA62A5D2490F79000455B9F /* URLExtensions.swift in Sources */,
 				8C640F73249000D5003EA22C /* HTTPNetworkRequest.swift in Sources */,
 				8C640F35248E8DC4003EA22C /* SceneDelegate.swift in Sources */,
