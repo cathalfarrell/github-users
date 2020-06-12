@@ -31,6 +31,8 @@ class UserGridCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.avatarImageView.layer.cornerRadius = 20
+        self.avatarImageView.clipsToBounds = true
     }
 
     func configureCell(user: User){

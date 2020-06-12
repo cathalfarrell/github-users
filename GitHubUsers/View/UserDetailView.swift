@@ -22,6 +22,9 @@ struct UserDetailView: View {
                 HStack(spacing: 0){
                     Spacer()
                     KFImage(URL(string: user.avatarUrl))
+                        .placeholder({
+                            Image("placeholderImage")
+                        })
                     .resizable()
                     .frame(width: 128, height: 128)
                     .cornerRadius(10)
