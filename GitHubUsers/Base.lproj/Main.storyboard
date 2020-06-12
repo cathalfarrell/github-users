@@ -20,7 +20,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="i7H-t4-dvd">
-                                <rect key="frame" x="0.0" y="144" width="414" height="718"/>
+                                <rect key="frame" x="0.0" y="248" width="414" height="614"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="UTK-a4-D8b">
                                     <size key="itemSize" width="128" height="128"/>
@@ -30,29 +30,53 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                             </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eGA-jV-sMv">
+                                <rect key="frame" x="8" y="144" width="398" height="100"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VZx-pW-ciP">
+                                        <rect key="frame" x="16" y="0.0" width="366" height="100"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="VZx-pW-ciP" secondAttribute="bottom" id="Cbd-kH-gjp"/>
+                                    <constraint firstItem="VZx-pW-ciP" firstAttribute="top" secondItem="eGA-jV-sMv" secondAttribute="top" id="SRm-Vz-5CK"/>
+                                    <constraint firstAttribute="trailing" secondItem="VZx-pW-ciP" secondAttribute="trailing" constant="16" id="cEu-eZ-71Y"/>
+                                    <constraint firstItem="VZx-pW-ciP" firstAttribute="leading" secondItem="eGA-jV-sMv" secondAttribute="leading" constant="16" id="wry-Nj-2vF"/>
+                                    <constraint firstAttribute="height" constant="100" id="wy0-Ff-AcH"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="i7H-t4-dvd" firstAttribute="top" secondItem="cuM-2m-KH9" secondAttribute="bottom" id="3ZP-5p-1oL"/>
+                            <constraint firstItem="HMy-1Q-J3v" firstAttribute="trailing" secondItem="eGA-jV-sMv" secondAttribute="trailing" constant="8" id="4Ht-L4-cdB"/>
+                            <constraint firstItem="eGA-jV-sMv" firstAttribute="leading" secondItem="HMy-1Q-J3v" secondAttribute="leading" constant="8" id="6eb-AH-c29"/>
                             <constraint firstItem="i7H-t4-dvd" firstAttribute="leading" secondItem="HMy-1Q-J3v" secondAttribute="leading" id="Ba1-tL-HW6"/>
                             <constraint firstItem="cuM-2m-KH9" firstAttribute="trailing" secondItem="HMy-1Q-J3v" secondAttribute="trailing" id="H7a-78-ww4"/>
                             <constraint firstItem="cuM-2m-KH9" firstAttribute="leading" secondItem="HMy-1Q-J3v" secondAttribute="leading" id="TnK-7k-otr"/>
                             <constraint firstItem="HMy-1Q-J3v" firstAttribute="bottom" secondItem="i7H-t4-dvd" secondAttribute="bottom" id="WW0-ai-i6s"/>
-                            <constraint firstItem="i7H-t4-dvd" firstAttribute="top" secondItem="cuM-2m-KH9" secondAttribute="bottom" id="Yke-G3-Nqc"/>
                             <constraint firstItem="cuM-2m-KH9" firstAttribute="top" secondItem="HMy-1Q-J3v" secondAttribute="top" id="myn-2H-kRr"/>
                             <constraint firstItem="HMy-1Q-J3v" firstAttribute="trailing" secondItem="i7H-t4-dvd" secondAttribute="trailing" id="oAG-85-vF4"/>
+                            <constraint firstItem="eGA-jV-sMv" firstAttribute="top" secondItem="cuM-2m-KH9" secondAttribute="bottom" id="xFI-F0-0yp"/>
+                            <constraint firstItem="i7H-t4-dvd" firstAttribute="top" secondItem="eGA-jV-sMv" secondAttribute="bottom" constant="4" id="xMG-Bb-5lp"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="HMy-1Q-J3v"/>
                     </view>
                     <navigationItem key="navigationItem" id="Ppr-CB-1wG"/>
                     <connections>
                         <outlet property="collectionView" destination="i7H-t4-dvd" id="ta0-YU-O09"/>
+                        <outlet property="errorView" destination="eGA-jV-sMv" id="3Yz-SZ-KNC"/>
+                        <outlet property="errorViewHeight" destination="wy0-Ff-AcH" id="7dP-B4-bFQ"/>
                         <outlet property="searchBar" destination="cuM-2m-KH9" id="Qo1-jF-0hz"/>
+                        <outlet property="textLabel" destination="VZx-pW-ciP" id="MnX-Hy-1Eh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Uq5-pA-DCe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2731.8840579710145" y="762.72321428571422"/>
+            <point key="canvasLocation" x="2730.434782608696" y="762.72321428571422"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="zUT-cd-A86">

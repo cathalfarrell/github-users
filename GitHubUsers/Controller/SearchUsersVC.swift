@@ -17,6 +17,11 @@ private let reuseIdentifierGrid = "UserGridCell"
 class SearchUsersVC: UIViewController {
 
     @IBOutlet weak var searchBar: UISearchBar!
+
+    @IBOutlet weak var textLabel: UILabel!
+    @IBOutlet weak var errorView: UIView!
+    @IBOutlet weak var errorViewHeight: NSLayoutConstraint!
+
     @IBOutlet weak var collectionView: UICollectionView!
 
     private var users = [User]()
@@ -36,6 +41,13 @@ class SearchUsersVC: UIViewController {
         return true
     }
 
+    private var isShowingError: Bool {
+        if let errorText = self.textLabel.text {
+            return !errorText.isEmpty
+        }
+        return false
+    }
+
     var loadingAnimationView: AnimationView!
 
     override func viewDidLoad() {
@@ -43,6 +55,7 @@ class SearchUsersVC: UIViewController {
 
         setupNavigationBar()
         setupSearchBar()
+        setupErrorLabel()
         setupCollection()
 
         restoreAppState()
@@ -51,6 +64,11 @@ class SearchUsersVC: UIViewController {
     fileprivate func setupSearchBar() {
         searchBar.placeholder = "Find a GitHub User"
         searchBar.delegate = self
+    }
+
+    fileprivate func setupErrorLabel() {
+        //hide until required, i.e. when error displayed
+        self.errorViewHeight.constant = 0
     }
 
     fileprivate func setupCollection() {
@@ -86,6 +104,15 @@ class SearchUsersVC: UIViewController {
     // MARK:- Get Users
 
     fileprivate func loadUsers(_ parameters: JSONDictionary) {
+
+        //Hide any errors showing
+        DispatchQueue.main.async {
+            self.textLabel.text = nil
+
+            UIView.animate(withDuration: 2.0) {
+                self.errorViewHeight.constant = 0
+            }
+        }
 
         startLoadingAnimation()
 
@@ -141,7 +168,12 @@ class SearchUsersVC: UIViewController {
             self.displayResults(users: storedUsers)
         } else {
             print("🔥 No fetched users to restore found.")
-            displayError(message: "No users found.")
+            
+            if !parameters.isEmpty {
+                handleNoUsers()
+            }
+
+            stopLoadingAnimation()
         }
 
         print("🔥 PARAMS restored: \(parameters)")
@@ -153,6 +185,25 @@ class SearchUsersVC: UIViewController {
         print("🛑 Error: \(message)")
 
         stopLoadingAnimation()
+
+        DispatchQueue.main.async {
+            self.textLabel.text = message
+
+            UIView.animate(withDuration: 2.0) {
+                self.errorViewHeight.constant = 100
+            }
+        }
+
+        //Clear parameters out - to assist restore state
+        parameters = JSONDictionary()
+    }
+
+    fileprivate func handleNoUsers() {
+        //Show Error when no users found.
+        if self.users.count == 0 {
+            print("🙄 No users found")
+            displayError(message: "No users found.")
+        }
     }
 
     func displayResults(users: [User]) {
@@ -180,6 +231,8 @@ class SearchUsersVC: UIViewController {
 
         print("✅ Response: \(users.count) Users Returned")
         print("✅ Users Count: \(self.users.count)")
+
+        handleNoUsers()
 
         self.collectionView.reloadData()
     }
@@ -579,6 +632,7 @@ extension SearchUsersVC {
             loadUsers(parameters)
         } else {
             print("No point making same network call for same search query as last time")
+            print("🙄 Is showing error? : \(isShowingError)")
         }
     }
 
