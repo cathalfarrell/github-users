@@ -25,7 +25,6 @@ class SearchUsersVC: UIViewController {
 
     private var deleteButton = UIBarButtonItem()
 
-    private var searchText: String?
     private var lastSearchedQuery = ""
     private var parameters = JSONDictionary()
 
@@ -296,12 +295,14 @@ class SearchUsersVC: UIViewController {
                 ])
             {
                 result in
+                /* //For Debug Purposes
                 switch result {
                 case .success(let value):
                     print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
                 case .failure(let error):
                     print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
                 }
+                */
             }
         }
 
@@ -321,12 +322,15 @@ class SearchUsersVC: UIViewController {
                  ])
              {
                  result in
+
+                 /* //For Debug Purposes
                  switch result {
                  case .success(let value):
                      print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
                  case .failure(let error):
                      print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
                  }
+                 */
              }
          }
     }
@@ -388,10 +392,12 @@ extension SearchUsersVC: UICollectionViewDataSource  {
         if collectionView.isLast(for: indexPath) {
             print("🔥 Is last item......")
 
-            let nextPage = Users.shared.getNextPage()
-            if  nextPage > 0 {
+            if !isNewSearch {
+                let nextPage = Users.shared.getNextPage()
                 parameters["page"] = "\(nextPage)"
-                loadUsers(parameters)
+                if  nextPage > 0 {
+                    loadUsers(parameters)
+                }
             }
         }
     }
@@ -534,23 +540,23 @@ extension SearchUsersVC {
     // MARK: - Search Functionality
 
     func searchFor(_ searchText: String?) {
-        guard let searchText = searchText else {
+        guard let query = searchText, !query.isEmpty else {
           print("No search text found")
           return
         }
 
-        if searchText != "" {
-            print("Search for this: \(searchText)")
-            hideSearchKeyboard()
+        hideSearchKeyboard()
 
-            parameters["q"] = searchText
+        if isNewSearch {
+            parameters["q"] = query
+            parameters.removeValue(forKey: "page")
+            //Prepare for new results, remove last results from data store
+            Users.shared.restoreNextPage(page: "0")
+            PersistencyService.shared.deleteAllUsers()
 
-            if lastSearchedQuery != searchText {
-                PersistencyService.shared.deleteAllUsers() //remove last results from data store
-                loadUsers(parameters)
-            } else {
-                print("No point making same network call for same search query as last time")
-            }
+            loadUsers(parameters)
+        } else {
+            print("No point making same network call for same search query as last time")
         }
     }
 
@@ -566,12 +572,8 @@ extension SearchUsersVC: UISearchBarDelegate {
 
     // MARK: - UISearchBarDelegate
 
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        self.searchText = searchText
-    }
-
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchFor(searchText)
+        searchFor(searchBar.text)
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
