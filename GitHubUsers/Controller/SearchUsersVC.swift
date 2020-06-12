@@ -130,11 +130,15 @@ class SearchUsersVC: UIViewController {
     fileprivate func saveSearchParameters(_ parameters: JSONDictionary) {
         //Store parameters for persistance
         if let searchTerm = parameters["q"] as? String {
-            UserDefaults.standard.set(searchTerm, forKey: "searchTerm")
+            UserDefaults.standard.set(searchTerm, forKey: UserDefaultsKey.searchTerm.rawValue)
+        } else {
+             UserDefaults.standard.removeObject(forKey: UserDefaultsKey.searchTerm.rawValue)
         }
 
         if let nextPage = parameters["page"] as? String {
-            UserDefaults.standard.set(nextPage, forKey: "nextPage")
+            UserDefaults.standard.set(nextPage, forKey: UserDefaultsKey.nextPage.rawValue)
+        } else {
+            UserDefaults.standard.removeObject(forKey: UserDefaultsKey.nextPage.rawValue)
         }
 
         print("🔥 PARAMS Saved: \(parameters)")
@@ -146,13 +150,13 @@ class SearchUsersVC: UIViewController {
 
         //Restore app state by checking for any previously stored users & search parameters
 
-        if let searchTerm = UserDefaults.standard.string(forKey: "searchTerm") {
+        if let searchTerm = UserDefaults.standard.string(forKey: UserDefaultsKey.searchTerm.rawValue) {
             lastSearchedQuery = searchTerm
             self.searchBar.text = searchTerm
             parameters["q"] = searchTerm
         }
 
-        if let nextPage = UserDefaults.standard.string(forKey: "nextPage") {
+        if let nextPage = UserDefaults.standard.string(forKey: UserDefaultsKey.nextPage.rawValue) {
             Users.shared.restoreNextPage(page: nextPage)
             parameters["page"] = nextPage
         }
@@ -247,11 +251,6 @@ class SearchUsersVC: UIViewController {
         handleNoUsers()
 
         storeNextPageDetails()
-
-        //DEBUG
-        for user in users {
-            print(user.login)
-        }
 
         DispatchQueue.main.async {
             self.collectionView.reloadData()

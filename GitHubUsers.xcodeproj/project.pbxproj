@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		83CE02434966DC88EDC33B46 /* Pods_GitHubUsers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4707421213D244EDD4776069 /* Pods_GitHubUsers.framework */; };
 		8C09591524925AB40074CA59 /* UICollectionViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C09591424925AB40074CA59 /* UICollectionViewExtensions.swift */; };
+		8C0ED6192493F6B400DCC857 /* UserDefaultsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0ED6182493F6B400DCC857 /* UserDefaultsExtensions.swift */; };
 		8C4395A3249364EE000659F2 /* CDUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4395A2249364EE000659F2 /* CDUser+CoreDataProperties.swift */; };
 		8C4395A724938A08000659F2 /* 18357-spinner-dots.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C4395A624938A08000659F2 /* 18357-spinner-dots.json */; };
 		8C4395A924939202000659F2 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4395A824939202000659F2 /* LottieView.swift */; };
@@ -48,6 +49,7 @@
 		3DD86876BB732951A8A5BA0C /* Pods-GitHubUsers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GitHubUsers.release.xcconfig"; path = "Target Support Files/Pods-GitHubUsers/Pods-GitHubUsers.release.xcconfig"; sourceTree = "<group>"; };
 		4707421213D244EDD4776069 /* Pods_GitHubUsers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GitHubUsers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C09591424925AB40074CA59 /* UICollectionViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewExtensions.swift; sourceTree = "<group>"; };
+		8C0ED6182493F6B400DCC857 /* UserDefaultsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtensions.swift; sourceTree = "<group>"; };
 		8C4395A2249364EE000659F2 /* CDUser+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDUser+CoreDataProperties.swift"; path = "/Users/cathalfarrell/Documents/Repositories/github-users/GitHubUsers/CoreData/CDUser+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		8C4395A624938A08000659F2 /* 18357-spinner-dots.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "18357-spinner-dots.json"; sourceTree = "<group>"; };
 		8C4395A824939202000659F2 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 				8CA62A5C2490F79000455B9F /* URLExtensions.swift */,
 				8CA62A6324910FFB00455B9F /* DataExtensions.swift */,
 				8C09591424925AB40074CA59 /* UICollectionViewExtensions.swift */,
+				8C0ED6182493F6B400DCC857 /* UserDefaultsExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -398,6 +401,7 @@
 				8CA62A572490CDEE00455B9F /* UserService.swift in Sources */,
 				8C8174E22492AA5C00789AD3 /* CDUser+CoreDataClass.swift in Sources */,
 				8C640F58248F9CF5003EA22C /* UserDragCoordinator.swift in Sources */,
+				8C0ED6192493F6B400DCC857 /* UserDefaultsExtensions.swift in Sources */,
 				8CA62A592490D1D100455B9F /* APIResponseUser.swift in Sources */,
 				8C640F6C249000B4003EA22C /* URLEncoder.swift in Sources */,
 				8C4395A924939202000659F2 /* LottieView.swift in Sources */,
