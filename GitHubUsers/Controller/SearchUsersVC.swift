@@ -114,6 +114,8 @@ class SearchUsersVC: UIViewController {
 
         startLoadingAnimation()
 
+        saveSearchParameters(parameters)
+
         //Load Users - this method returns on Main Thread
 
         Users.shared.loadDataToCoreData(with: parameters, success: { (users) in
@@ -121,9 +123,6 @@ class SearchUsersVC: UIViewController {
         }) { (errorString) in
             self.displayError(message: errorString)
         }
-
-        saveSearchParameters(parameters)
-
     }
 
     // MARK: - Persistency
@@ -145,8 +144,6 @@ class SearchUsersVC: UIViewController {
 
     fileprivate func restoreAppState() {
 
-        startLoadingAnimation()
-
         //Restore app state by checking for any previously stored users & search parameters
 
         if let searchTerm = UserDefaults.standard.string(forKey: "searchTerm") {
@@ -160,21 +157,19 @@ class SearchUsersVC: UIViewController {
             parameters["page"] = nextPage
         }
 
-        //Get users from Persistency Manager later if time
+        //If stored parameters found fetch last results from local database
+        
+        if !parameters.isEmpty {
 
-        if let storedUsers = PersistencyService.shared.fetchUsers(), storedUsers.count > 0 {
-            self.displayResults(users: storedUsers)
-        } else {
-            print("🔥 No fetched users to restore found.")
-            
-            if !parameters.isEmpty {
+            print("🔥 PARAMS restored: \(parameters)")
+
+            if let storedUsers = PersistencyService.shared.fetchUsers(), storedUsers.count > 0 {
+                self.displayResults(users: storedUsers)
+            } else {
+                print("🔥 No fetched users to restore found.")
                 handleNoUsers()
             }
-
-            stopLoadingAnimation()
         }
-
-        print("🔥 PARAMS restored: \(parameters)")
     }
 
     // MARK: - Update UI
@@ -191,9 +186,6 @@ class SearchUsersVC: UIViewController {
                 self.errorViewHeight.constant = 100
             }
         }
-
-        //Clear parameters out - to assist restore state
-        parameters = JSONDictionary()
     }
 
     fileprivate func handleNoUsers() {
@@ -213,6 +205,21 @@ class SearchUsersVC: UIViewController {
         }
     }
 
+    fileprivate func storeNextPageDetails() {
+
+        if let lastquery = parameters["q"] as? String {
+            self.lastSearchedQuery = lastquery
+        }
+
+        let nextPage = Users.shared.getNextPage()
+
+        if  nextPage > 0 {
+            parameters["page"] = "\(nextPage)"
+        }
+
+        saveSearchParameters(parameters)
+    }
+    
     func displayResults(users: [User]) {
 
         // If new results then we must replace all existing data (including stored data)
@@ -224,16 +231,12 @@ class SearchUsersVC: UIViewController {
 
             print("🔥 New Search Term")
 
-            if let lastquery = parameters["q"] as? String {
-                self.lastSearchedQuery = lastquery
-            }
-
             self.users = users
 
             scrollToTopOfList()
 
         } else {
-            print("🔥 Pagination")
+            print("🔥 Pagination Detected")
 
             self.users.append(contentsOf: users)
         }
@@ -243,12 +246,16 @@ class SearchUsersVC: UIViewController {
 
         handleNoUsers()
 
+        storeNextPageDetails()
+
         //DEBUG
         for user in users {
             print(user.login)
         }
 
-        self.collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
 
     // MARK: - Grid/List Toggle
@@ -479,14 +486,8 @@ extension SearchUsersVC: UICollectionViewDataSource  {
         if collectionView.isLast(for: indexPath) {
             print("🔥 Is last item......")
 
-            if !isNewSearch {
-
-                let nextPage = Users.shared.getNextPage()
-
-                if  nextPage > 0 {
-                    parameters["page"] = "\(nextPage)"
-                    loadUsers(parameters)
-                }
+            if !isNewSearch && parameters.count > 1 {
+                loadUsers(parameters)
             }
         }
     }

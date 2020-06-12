@@ -114,7 +114,6 @@ class Users {
     func restoreNextPage(page: String) {
         if let intFromString = Int(page) {
             nextPage = intFromString
-            print("➡️ Next Page Restored from defaults: \(self.nextPage)")
         }
     }
 
