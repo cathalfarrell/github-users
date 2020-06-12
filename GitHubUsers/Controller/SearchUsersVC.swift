@@ -22,6 +22,8 @@ class SearchUsersVC: UIViewController {
     @IBOutlet weak var errorViewHeight: NSLayoutConstraint!
     @IBOutlet weak var collectionView: UICollectionView!
 
+    private let refreshControl = UIRefreshControl()
+
     private var users = [User]()
 
     private var isListView = true
@@ -82,6 +84,11 @@ class SearchUsersVC: UIViewController {
        //Drag & Drop
        self.collectionView.dragDelegate = self
        self.collectionView.dropDelegate = self
+
+       //Pull to refresh
+       self.collectionView.refreshControl = refreshControl
+       self.refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+
     }
 
     fileprivate func setupNavigationBar() {
@@ -122,6 +129,17 @@ class SearchUsersVC: UIViewController {
             self.displayResults(users: users)
         }) { (errorString) in
             self.displayError(message: errorString)
+        }
+    }
+
+    @objc private func refreshData() {
+
+        // Allows pull to refresh to restore failure after error
+
+        if isShowingError {
+            loadUsers(parameters)
+        } else {
+            self.collectionView.refreshControl?.endRefreshing()
         }
     }
 
@@ -707,6 +725,8 @@ extension SearchUsersVC {
             DispatchQueue.main.async {
                 animation.stop()
                 animation.removeFromSuperview()
+
+                self.collectionView.refreshControl?.endRefreshing()
             }
         }
     }
