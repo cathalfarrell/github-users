@@ -13,69 +13,77 @@ struct UserDetailView: View {
 
     @State var user: User
     @State var errorString: String = ""
+    @State var playAnimation = false
 
     var body: some View {
-        VStack {
-            HStack(spacing: 0){
-                Spacer()
-                KFImage(URL(string: user.avatarUrl))
-                .resizable()
-                .frame(width: 128, height: 128)
-                .cornerRadius(10)
-                .shadow(radius: 5)
-                .padding()
-                 Spacer()
+        ZStack {
+
+            VStack {
+                HStack(spacing: 0){
+                    Spacer()
+                    KFImage(URL(string: user.avatarUrl))
+                    .resizable()
+                    .frame(width: 128, height: 128)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                    .padding()
+                     Spacer()
+                }
+                Form {
+                    Section() {
+                        HStack {
+                            Text("Username:")
+                            Spacer()
+                            Text("\(user.login)")
+                                .font(.subheadline)
+                        }
+                        HStack {
+                            Text("Name:")
+                            Spacer()
+                            Text("\(user.name)")
+                                .font(.subheadline)
+                        }
+                        HStack {
+                            Text("Location:")
+                            Spacer()
+                            Text("\(user.location)")
+                                .font(.subheadline)
+                        }
+                    }
+                    Section() {
+                        HStack {
+                            Text("Public Repositories:")
+                            Spacer()
+                            Text("\(user.publicRepos)")
+                                .font(.subheadline)
+                        }
+                        HStack {
+                            Text("Public Gists:")
+                            Spacer()
+                            Text("\(user.publicGists)")
+                                .font(.subheadline)
+                        }
+                        HStack {
+                            Text("Followers:")
+                            Spacer()
+                            Text("\(user.followers)")
+                                .font(.subheadline)
+                        }
+                        HStack {
+                            Text("Following:")
+                            Spacer()
+                            Text("\(user.following)")
+                                .font(.subheadline)
+                        }
+                    }
+                }
             }
-            Form {
-                Section() {
-                    HStack {
-                        Text("Username:")
-                        Spacer()
-                        Text("\(user.login)")
-                            .font(.subheadline)
-                    }
-                    HStack {
-                        Text("Name:")
-                        Spacer()
-                        Text("\(user.name)")
-                            .font(.subheadline)
-                    }
-                    HStack {
-                        Text("Location:")
-                        Spacer()
-                        Text("\(user.location ?? "")")
-                            .font(.subheadline)
-                    }
-                }
-                Section() {
-                    HStack {
-                        Text("Public Repositories:")
-                        Spacer()
-                        Text("\(user.publicRepos)")
-                            .font(.subheadline)
-                    }
-                    HStack {
-                        Text("Public Gists:")
-                        Spacer()
-                        Text("\(user.publicGists)")
-                            .font(.subheadline)
-                    }
-                    HStack {
-                        Text("Followers:")
-                        Spacer()
-                        Text("\(user.followers)")
-                            .font(.subheadline)
-                    }
-                    HStack {
-                        Text("Following:")
-                        Spacer()
-                        Text("\(user.following)")
-                            .font(.subheadline)
-                    }
-                }
+
+            if playAnimation {
+                LottieView(playAnimation: $playAnimation, name: "18357-spinner-dots")
+                .frame(width: 100, height: 100)
             }
         }
-
         .navigationBarTitle("User Details", displayMode: .inline)
         .onAppear(perform: loadUser)
     }
@@ -86,11 +94,15 @@ struct UserDetailView: View {
 
         print("Loading user: \(user.login)")
 
+        self.playAnimation.toggle()
+
         //Load Users - this method returns on Main Thread
         Users.shared.downloadUserDetailFromNetwork(with: user.login, success: { (user) in
             self.user = user
+            self.playAnimation.toggle()
         }) { (errorString) in
             self.errorString = errorString
+            self.playAnimation.toggle()
         }
 
         //Get user from Persistency Manager later if time

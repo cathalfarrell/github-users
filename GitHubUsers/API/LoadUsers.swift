@@ -120,12 +120,12 @@ class Users {
                     let user = User(id: resp.id,
                                     login: resp.login,
                                     avatarUrl: resp.avatarUrl,
-                                    name: resp.name,
+                                    name: resp.name ?? "",
                                     publicRepos: resp.publicRepos,
                                     publicGists: resp.publicGists,
                                     followers: resp.followers,
                                     following: resp.following,
-                                    location: resp.location)
+                                    location: resp.location ?? "")
 
                     //Store each to Persistence Manager
                     DispatchQueue.main.async {

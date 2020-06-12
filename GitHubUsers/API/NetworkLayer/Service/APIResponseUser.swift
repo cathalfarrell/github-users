@@ -13,7 +13,7 @@ struct APIResponseUser: Codable {
     var id: Int
     var login: String
     var avatarUrl: String
-    var name: String
+    var name: String! //As this can be nil sometimes
     var publicRepos: Int
     var publicGists: Int
     var followers: Int

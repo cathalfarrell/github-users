@@ -17,7 +17,7 @@ struct User {
     var publicGists = 0
     var followers = 0
     var following = 0
-    var location: String?
+    var location = ""
 }
 extension User {
 
