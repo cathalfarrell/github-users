@@ -30,6 +30,25 @@ struct UserDetailView: View {
                      Spacer()
                 }
                 Form {
+                    //Error View - If any errors
+                    if !errorString.isEmpty {
+                        VStack(alignment: .center) {
+                            Text(errorString)
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+                                .padding(16)
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .font(.body)
+                                .multilineTextAlignment(.center)
+
+                            Button("Try Again") {
+                                print("Try network again")
+                                self.loadUser()
+                            }
+                            .padding()
+                        }
+                        .padding([.top, .bottom], 16)
+                    }
                     Section() {
                         HStack {
                             Text("Username:")
@@ -93,6 +112,7 @@ struct UserDetailView: View {
     fileprivate func loadUser() {
 
         print("Loading user: \(user.login)")
+        self.errorString = ""
 
         self.playAnimation.toggle()
 
@@ -112,7 +132,7 @@ struct UserDetailView: View {
 struct UserDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            UserDetailView(user: User.sampleUser())
+            UserDetailView(user: User.sampleUser(), errorString: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
         }
     }
 }
