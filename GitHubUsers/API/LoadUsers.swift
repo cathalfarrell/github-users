@@ -127,6 +127,11 @@ class Users {
                                     following: resp.following,
                                     location: resp.location)
 
+                    //Store each to Persistence Manager
+                    DispatchQueue.main.async {
+                        PersistencyService.shared.addUser(user: user)
+                    }
+
                     success(user)
 
                 case .failure(let err):
