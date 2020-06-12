@@ -82,7 +82,8 @@ class PersistencyService {
             print("🔋 CORE DATA USER FETCHED WITH \(result.count) RESULTS")
 
             for item in result {
-                let user = User(login: item.wrappedLogin,
+                let user = User(id: item.wrappedId,
+                                login: item.wrappedLogin,
                                 avatarUrl: item.wrappedAvatarUrl,
                                 name: item.wrappedName,
                                 publicRepos: item.wrappedPublicRepos,

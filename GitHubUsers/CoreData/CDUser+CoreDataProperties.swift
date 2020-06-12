@@ -1,9 +1,8 @@
 //
 //  CDUser+CoreDataProperties.swift
-//  GitHubUsers
+//  
 //
-//  Created by Cathal Farrell on 11/06/2020.
-//  Copyright © 2020 Cathal Farrell. All rights reserved.
+//  Created by Cathal Farrell on 12/06/2020.
 //
 //
 
@@ -17,14 +16,15 @@ extension CDUser {
         return NSFetchRequest<CDUser>(entityName: "CDUser")
     }
 
-    @NSManaged public var login: String?
     @NSManaged public var avatarUrl: String?
-    @NSManaged public var name: String?
-    @NSManaged public var publicRepos: Int16
-    @NSManaged public var publicGists: Int16
     @NSManaged public var followers: Int32
     @NSManaged public var following: Int32
     @NSManaged public var location: String?
+    @NSManaged public var login: String?
+    @NSManaged public var name: String?
+    @NSManaged public var publicGists: Int16
+    @NSManaged public var publicRepos: Int16
+    @NSManaged public var id: Int32
 
     public var wrappedLogin: String {
         login ?? "Unknown login name"
@@ -57,4 +57,9 @@ extension CDUser {
     public var wrappedLocation: String {
         name ?? "Unknown location"
     }
+
+    public var wrappedId: Int {
+        return Int(id)
+    }
+
 }

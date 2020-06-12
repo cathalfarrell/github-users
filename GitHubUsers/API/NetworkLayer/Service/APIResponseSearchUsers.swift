@@ -9,11 +9,12 @@
 import Foundation
 
 struct UserItem: Codable {
+    var id: Int
     var login: String
     var avatarUrl: String
 
     enum CodingKeys: String, CodingKey {
-        case login
+        case id, login
         case avatarUrl = "avatar_url"
     }
 }

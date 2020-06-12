@@ -9,6 +9,7 @@
 import Foundation
 
 struct User {
+    var id: Int
     var login: String
     var avatarUrl: String
     var name = ""
@@ -23,7 +24,8 @@ extension User {
     // Sample User for Development - e.g. in SwiftUI View Previews
 
     static func sampleUser() -> User {
-        let user = User(login: "cathalfarrell",
+        let user = User(id: 123456789,
+                        login: "cathalfarrell",
                         avatarUrl: "https://avatars2.githubusercontent.com/u/1584591?v=4",
                         name: "Cathal Farrell",
                         publicRepos: 10,

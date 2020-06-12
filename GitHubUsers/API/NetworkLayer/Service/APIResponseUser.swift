@@ -10,6 +10,7 @@ import Foundation
 
 struct APIResponseUser: Codable {
 
+    var id: Int
     var login: String
     var avatarUrl: String
     var name: String
@@ -20,7 +21,7 @@ struct APIResponseUser: Codable {
     var location: String! //As this can be nil sometimes
 
     enum CodingKeys: String, CodingKey {
-        case login, name, followers, following
+        case id, login, name, followers, following
         case location
         case avatarUrl = "avatar_url"
         case publicRepos = "public_repos"

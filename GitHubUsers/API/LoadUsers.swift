@@ -47,7 +47,9 @@ class Users {
 
                         for item in userItems {
                             //Only have limited User Details here...
-                            let user = User(login: item.login, avatarUrl: item.avatarUrl)
+                            let user = User(id: item.id,
+                                            login: item.login,
+                                            avatarUrl: item.avatarUrl)
                             users.append(user)
 
                             //Store each to Persistence Manager
@@ -115,7 +117,8 @@ class Users {
                 case .success(let resp):
 
                     //Convert Network Response to User Model
-                    let user = User(login: resp.login,
+                    let user = User(id: resp.id,
+                                    login: resp.login,
                                     avatarUrl: resp.avatarUrl,
                                     name: resp.name,
                                     publicRepos: resp.publicRepos,

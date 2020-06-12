@@ -4,6 +4,7 @@
         <attribute name="avatarUrl" optional="YES" attributeType="String"/>
         <attribute name="followers" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="following" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="location" optional="YES" attributeType="String"/>
         <attribute name="login" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -11,6 +12,6 @@
         <attribute name="publicRepos" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="CDUser" positionX="-63" positionY="-18" width="128" height="28"/>
+        <element name="CDUser" positionX="-63" positionY="-18" width="128" height="178"/>
     </elements>
 </model>
