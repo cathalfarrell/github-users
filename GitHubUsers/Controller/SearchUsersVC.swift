@@ -107,6 +107,8 @@ class SearchUsersVC: UIViewController {
         if let nextPage = parameters["page"] as? String {
             UserDefaults.standard.set(nextPage, forKey: "nextPage")
         }
+
+        print("🔥 PARAMS Saved: \(parameters)")
     }
 
     // Restore last search term and results returned
@@ -123,6 +125,7 @@ class SearchUsersVC: UIViewController {
 
         if let nextPage = UserDefaults.standard.string(forKey: "nextPage") {
             Users.shared.restoreNextPage(page: nextPage)
+            parameters["page"] = nextPage
         }
 
         //Get users from Persistency Manager later if time
@@ -150,7 +153,6 @@ class SearchUsersVC: UIViewController {
         if isNewSearch {
 
             print("🔥 New Search Term")
-            print("🔥 isNewSearch: \(isNewSearch)")
 
             if let lastquery = parameters["q"] as? String {
                 self.lastSearchedQuery = lastquery
@@ -160,11 +162,9 @@ class SearchUsersVC: UIViewController {
 
         } else {
             print("🔥 Pagination")
-            print("🔥 isNewSearch: \(isNewSearch)")
 
             self.users.append(contentsOf: users)
         }
-
 
         print("✅ Response: \(users.count) Users Returned")
         print("✅ Users Count: \(self.users.count)")
@@ -247,7 +247,11 @@ class SearchUsersVC: UIViewController {
             for item in items {
                 users.remove(at: item)
             }
-            collectionView.deleteItems(at: selectedCells)
+
+            DispatchQueue.main.async {
+                self.collectionView.deleteItems(at: selectedCells)
+                PersistencyService.shared.updateUsers(users: self.users)
+            }
         }
     }
 
@@ -255,13 +259,17 @@ class SearchUsersVC: UIViewController {
 
     func moveUser(at sourceIndex: Int, to destinationIndex: Int) {
 
-      hideSearchKeyboard()
+        hideSearchKeyboard()
 
-      guard sourceIndex != destinationIndex else { return }
+        guard sourceIndex != destinationIndex else { return }
 
-      let user = users[sourceIndex]
-      users.remove(at: sourceIndex)
-      users.insert(user, at: destinationIndex)
+        let user = users[sourceIndex]
+        users.remove(at: sourceIndex)
+        users.insert(user, at: destinationIndex)
+
+        DispatchQueue.main.async {
+            PersistencyService.shared.updateUsers(users: self.users)
+        }
     }
 
     func dragItems(for indexPath: IndexPath) -> [UIDragItem] {
@@ -393,9 +401,11 @@ extension SearchUsersVC: UICollectionViewDataSource  {
             print("🔥 Is last item......")
 
             if !isNewSearch {
+
                 let nextPage = Users.shared.getNextPage()
-                parameters["page"] = "\(nextPage)"
+
                 if  nextPage > 0 {
+                    parameters["page"] = "\(nextPage)"
                     loadUsers(parameters)
                 }
             }

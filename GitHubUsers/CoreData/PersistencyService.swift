@@ -103,4 +103,15 @@ class PersistencyService {
 
         return nil
     }
+
+    // Used on Edit Mode - when users have been deleted or re-ordered
+    // I know this is inefficient - but fastest solution at the moment
+
+    func updateUsers(users: [User]) {
+        deleteAllUsers()
+
+        for user in users {
+            addUser(user: user)
+        }
+    }
 }
