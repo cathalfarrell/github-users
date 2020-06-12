@@ -10,6 +10,7 @@
 		83CE02434966DC88EDC33B46 /* Pods_GitHubUsers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4707421213D244EDD4776069 /* Pods_GitHubUsers.framework */; };
 		8C09591524925AB40074CA59 /* UICollectionViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C09591424925AB40074CA59 /* UICollectionViewExtensions.swift */; };
 		8C4395A3249364EE000659F2 /* CDUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4395A2249364EE000659F2 /* CDUser+CoreDataProperties.swift */; };
+		8C4395A724938A08000659F2 /* 18357-spinner-dots.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C4395A624938A08000659F2 /* 18357-spinner-dots.json */; };
 		8C640F33248E8DC4003EA22C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F32248E8DC4003EA22C /* AppDelegate.swift */; };
 		8C640F35248E8DC4003EA22C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F34248E8DC4003EA22C /* SceneDelegate.swift */; };
 		8C640F3A248E8DC4003EA22C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C640F38248E8DC4003EA22C /* Main.storyboard */; };
@@ -47,6 +48,7 @@
 		4707421213D244EDD4776069 /* Pods_GitHubUsers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GitHubUsers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C09591424925AB40074CA59 /* UICollectionViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewExtensions.swift; sourceTree = "<group>"; };
 		8C4395A2249364EE000659F2 /* CDUser+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDUser+CoreDataProperties.swift"; path = "/Users/cathalfarrell/Documents/Repositories/github-users/GitHubUsers/CoreData/CDUser+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		8C4395A624938A08000659F2 /* 18357-spinner-dots.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "18357-spinner-dots.json"; sourceTree = "<group>"; };
 		8C640F2F248E8DC4003EA22C /* GitHubUsers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHubUsers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C640F32248E8DC4003EA22C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8C640F34248E8DC4003EA22C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 		8C640F31248E8DC4003EA22C /* GitHubUsers */ = {
 			isa = PBXGroup;
 			children = (
+				8C4395A624938A08000659F2 /* 18357-spinner-dots.json */,
 				8C8174DF2492AA3F00789AD3 /* CoreData */,
 				8CA62A6024910A7B00455B9F /* API */,
 				8C656F7A2492454C003D8723 /* Helpers */,
@@ -321,6 +324,7 @@
 				8C656F732492311A003D8723 /* UserGridCell.xib in Resources */,
 				8C640F42248E8DC5003EA22C /* LaunchScreen.storyboard in Resources */,
 				8C640F3F248E8DC5003EA22C /* Assets.xcassets in Resources */,
+				8C4395A724938A08000659F2 /* 18357-spinner-dots.json in Resources */,
 				8C640F3A248E8DC4003EA22C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,6 +9,7 @@
 import Kingfisher
 import SwiftUI
 import UIKit
+import Lottie
 
 private let reuseIdentifierList = "UserListCell"
 private let reuseIdentifierGrid = "UserGridCell"
@@ -34,6 +35,8 @@ class SearchUsersVC: UIViewController {
         }
         return true
     }
+
+    var loadingAnimationView: AnimationView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,6 +87,8 @@ class SearchUsersVC: UIViewController {
 
     fileprivate func loadUsers(_ parameters: JSONDictionary) {
 
+        startLoadingAnimation()
+
         //Load Users - this method returns on Main Thread
 
         Users.shared.downloadUsersFromNetwork(with: parameters, success: { (users) in
@@ -115,6 +120,8 @@ class SearchUsersVC: UIViewController {
 
     fileprivate func restoreAppState() {
 
+        startLoadingAnimation()
+
         //Restore app state by checking for any previously stored users & search parameters
 
         if let searchTerm = UserDefaults.standard.string(forKey: "searchTerm") {
@@ -134,6 +141,7 @@ class SearchUsersVC: UIViewController {
             self.displayResults(users: storedUsers)
         } else {
             print("🔥 No fetched users to restore found.")
+            displayError(message: "No users found.")
         }
 
         print("🔥 PARAMS restored: \(parameters)")
@@ -143,12 +151,16 @@ class SearchUsersVC: UIViewController {
 
     func displayError(message: String) {
         print("🛑 Error: \(message)")
+
+        stopLoadingAnimation()
     }
 
     func displayResults(users: [User]) {
 
         // If new results then we must replace all existing data (including stored data)
         // but if paginating just append to the existing data.
+
+        stopLoadingAnimation()
 
         if isNewSearch {
 
@@ -587,5 +599,46 @@ extension SearchUsersVC: UISearchBarDelegate {
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    }
+}
+extension SearchUsersVC {
+
+    // MARK: - Loading Animation from Lottie
+
+    func startLoadingAnimation() {
+
+        let midX = UIScreen.main.bounds.midX
+        let midY = UIScreen.main.bounds.midY
+        let size: CGFloat = 100
+        let offset: CGFloat = size/2
+
+        if loadingAnimationView == nil {
+
+            loadingAnimationView = AnimationView(name: "LoadingAnimation")
+            loadingAnimationView.frame = CGRect(x: midX-offset, y: midY, width: size, height: size)
+            loadingAnimationView.loopMode = .loop
+
+            if let animation = Animation.named("18357-spinner-dots") {
+                loadingAnimationView.animation = animation
+            } else {
+                print("🛑 Animation not found.")
+            }
+        }
+
+        print("🌈 Load animation")
+
+        DispatchQueue.main.async {
+            self.view.addSubview(self.loadingAnimationView)
+            self.loadingAnimationView.play()
+        }
+    }
+
+    func stopLoadingAnimation() {
+        if let animation = loadingAnimationView {
+            DispatchQueue.main.async {
+                animation.stop()
+                animation.removeFromSuperview()
+            }
+        }
     }
 }

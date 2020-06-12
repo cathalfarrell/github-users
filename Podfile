@@ -6,6 +6,7 @@ target 'GitHubUsers' do
   use_frameworks!
   pod 'Kingfisher'
   pod 'Kingfisher/SwiftUI'
+  pod 'lottie-ios'
 
   # Pods for GitHubUsers
 
