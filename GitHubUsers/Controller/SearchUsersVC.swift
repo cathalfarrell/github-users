@@ -11,15 +11,13 @@ import SwiftUI
 import UIKit
 import Lottie
 
-private let reuseIdentifierList = "UserListCell"
-private let reuseIdentifierGrid = "UserGridCell"
-
 class SearchUsersVC: UIViewController {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var errorView: UIView!
     @IBOutlet weak var errorViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var mainTextLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
 
     private let refreshControl = UIRefreshControl()
@@ -50,12 +48,18 @@ class SearchUsersVC: UIViewController {
 
     var loadingAnimationView: AnimationView!
 
+    private let reuseIdentifierList = "UserListCell"
+    private let reuseIdentifierGrid = "UserGridCell"
+    private let welcomeText = "You can search for users of the GitHub API by username. Just enter some text in the above search bar and tap on the search key on the keyboard."
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupNavigationBar()
         setupSearchBar()
         setupErrorLabel()
+
+        self.mainTextLabel.text = welcomeText
         setupCollection()
 
         restoreAppState()
@@ -255,6 +259,7 @@ class SearchUsersVC: UIViewController {
         storeNextPageDetails()
 
         DispatchQueue.main.async {
+            self.mainTextLabel.isHidden = (self.users.count > 0)
             self.collectionView.reloadData()
         }
     }
@@ -491,6 +496,10 @@ extension SearchUsersVC: UICollectionViewDataSource  {
                 loadUsers(parameters)
             }
         }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        return CGSize(width: self.collectionView.bounds.width, height: 100)
     }
 }
 extension SearchUsersVC: UICollectionViewDelegate {
