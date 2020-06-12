@@ -32,7 +32,7 @@ public enum HTTPNetworkError: String, Error {
 //Sets the localized description (ensure you localize these strings before shipping)
 extension HTTPNetworkError: LocalizedError {
     public var errorDescription: String? {
-        let errorString = "🛑 Error Found:"
+        let errorString = "Error Found:"
         switch self {
         case .parametersNil:
             return "\(errorString) Parameters are nil."

@@ -17,11 +17,9 @@ private let reuseIdentifierGrid = "UserGridCell"
 class SearchUsersVC: UIViewController {
 
     @IBOutlet weak var searchBar: UISearchBar!
-
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var errorView: UIView!
     @IBOutlet weak var errorViewHeight: NSLayoutConstraint!
-
     @IBOutlet weak var collectionView: UICollectionView!
 
     private var users = [User]()
@@ -118,7 +116,7 @@ class SearchUsersVC: UIViewController {
 
         //Load Users - this method returns on Main Thread
 
-        Users.shared.downloadUsersFromNetwork(with: parameters, success: { (users) in
+        Users.shared.loadDataToCoreData(with: parameters, success: { (users) in
             self.displayResults(users: users)
         }) { (errorString) in
             self.displayError(message: errorString)
@@ -240,10 +238,15 @@ class SearchUsersVC: UIViewController {
             self.users.append(contentsOf: users)
         }
 
-        print("✅ Response: \(users.count) Users Returned")
-        print("✅ Users Count: \(self.users.count)")
+        print("✅ Response: \(users.count) Users Returned in this response")
+        print("✅ Total Users Count for display: \(self.users.count)")
 
         handleNoUsers()
+
+        //DEBUG
+        for user in users {
+            print(user.login)
+        }
 
         self.collectionView.reloadData()
     }

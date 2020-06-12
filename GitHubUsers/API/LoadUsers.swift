@@ -17,14 +17,53 @@ class Users {
 
     private var nextPage = 0
 
-    // MARK: - Get Users
+    // MARK: - Loads the data into the local Core Data Database for offline use.
 
-    func downloadUsersFromNetwork(with parameters: JSONDictionary,
-                         success succ: @escaping ([User]) -> Void,
-                         failure fail: @escaping (String) -> Void) {
+    func loadDataToCoreData(with parameters: JSONDictionary,
+                                  success succ: @escaping ([User]) -> Void,
+                                  failure fail: @escaping (String) -> Void) {
 
         //Returning response on the main thread
         let success: ([User]) -> Void = { users in
+            DispatchQueue.main.async { succ(users) }
+        }
+        let failure: (String) -> Void = { error in
+            DispatchQueue.main.async { fail(String(describing: error)) }
+        }
+
+        downloadUsersFromNetwork(with: parameters, success: { (userItems) in
+
+            var users = [User]()
+
+            for item in userItems {
+                //Only have limited User Details here...
+                let user = User(id: item.id,
+                                login: item.login,
+                                avatarUrl: item.avatarUrl)
+                users.append(user)
+
+                //Store each to Persistence Manager
+                DispatchQueue.main.async {
+                    PersistencyService.shared.addUser(user: user)
+                }
+            }
+
+            success(users)
+
+        }) { (errorString) in
+
+            failure(errorString)
+        }
+    }
+
+    // MARK: - Get Users from Network
+
+    func downloadUsersFromNetwork(with parameters: JSONDictionary,
+                         success succ: @escaping ([UserItem]) -> Void,
+                         failure fail: @escaping (String) -> Void) {
+
+        //Returning response on the main thread
+        let success: ([UserItem]) -> Void = { users in
             DispatchQueue.main.async { succ(users) }
         }
         let failure: (String) -> Void = { error in
@@ -41,24 +80,8 @@ class Users {
 
                     Users.shared.handlePagination(nextPage: resp.nextPage)
 
-                    //Convert Network Response to User Model
                     if let userItems = resp.items {
-                        var users = [User]()
-
-                        for item in userItems {
-                            //Only have limited User Details here...
-                            let user = User(id: item.id,
-                                            login: item.login,
-                                            avatarUrl: item.avatarUrl)
-                            users.append(user)
-
-                            //Store each to Persistence Manager
-                            DispatchQueue.main.async {
-                                PersistencyService.shared.addUser(user: user)
-                            }
-                        }
-
-                        success(users)
+                        success(userItems)
                     }
 
                 case .failure(let err):
