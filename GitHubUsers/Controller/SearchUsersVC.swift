@@ -121,7 +121,7 @@ class SearchUsersVC: UIViewController {
 
         startLoadingAnimation()
 
-        saveSearchParameters(parameters)
+        UserDefaults.saveSearchParameters(parameters)
 
         //Load Users - this method returns on Main Thread
 
@@ -145,41 +145,25 @@ class SearchUsersVC: UIViewController {
 
     // MARK: - Persistency
 
-    fileprivate func saveSearchParameters(_ parameters: JSONDictionary) {
-        //Store parameters for persistance
-        if let searchTerm = parameters["q"] as? String {
-            UserDefaults.standard.set(searchTerm, forKey: UserDefaultsKey.searchTerm.rawValue)
-        } else {
-             UserDefaults.standard.removeObject(forKey: UserDefaultsKey.searchTerm.rawValue)
-        }
-
-        if let nextPage = parameters["page"] as? String {
-            UserDefaults.standard.set(nextPage, forKey: UserDefaultsKey.nextPage.rawValue)
-        } else {
-            UserDefaults.standard.removeObject(forKey: UserDefaultsKey.nextPage.rawValue)
-        }
-
-        print("🔥 PARAMS Saved: \(parameters)")
-    }
-
     // Restore last search term and results returned
 
     fileprivate func restoreAppState() {
 
         //Restore app state by checking for any previously stored users & search parameters
 
-        if let searchTerm = UserDefaults.standard.string(forKey: UserDefaultsKey.searchTerm.rawValue) {
-            lastSearchedQuery = searchTerm
-            self.searchBar.text = searchTerm
-            parameters["q"] = searchTerm
-        }
+        if let parametersFound = UserDefaults.restoreSearchParameters() {
 
-        if let nextPage = UserDefaults.standard.string(forKey: UserDefaultsKey.nextPage.rawValue) {
-            Users.shared.restoreNextPage(page: nextPage)
-            parameters["page"] = nextPage
-        }
+            self.parameters = parametersFound
 
-        //If stored parameters found fetch last results from local database
+            if let searchTerm = parameters["q"] as? String {
+                self.lastSearchedQuery = searchTerm
+                self.searchBar.text = searchTerm
+            }
+
+            if let nextPage = parameters["page"] as? String {
+                Users.shared.restoreNextPage(page: nextPage)
+            }
+        }
         
         if !parameters.isEmpty {
 
@@ -239,7 +223,7 @@ class SearchUsersVC: UIViewController {
             parameters["page"] = "\(nextPage)"
         }
 
-        saveSearchParameters(parameters)
+        UserDefaults.saveSearchParameters(parameters)
     }
     
     func displayResults(users: [User]) {
