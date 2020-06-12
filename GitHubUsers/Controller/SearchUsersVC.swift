@@ -206,6 +206,15 @@ class SearchUsersVC: UIViewController {
         }
     }
 
+    fileprivate func scrollToTopOfList() {
+
+        //Force scroll to top for any new search
+        let topOffest = CGPoint(x: 0, y: -(self.collectionView?.contentInset.top ?? 0))
+        DispatchQueue.main.async {
+            self.collectionView?.setContentOffset(topOffest, animated: true)
+        }
+    }
+
     func displayResults(users: [User]) {
 
         // If new results then we must replace all existing data (including stored data)
@@ -222,6 +231,8 @@ class SearchUsersVC: UIViewController {
             }
 
             self.users = users
+
+            scrollToTopOfList()
 
         } else {
             print("🔥 Pagination")
@@ -615,12 +626,13 @@ extension SearchUsersVC {
     // MARK: - Search Functionality
 
     func searchFor(_ searchText: String?) {
+
+        hideSearchKeyboard()
+        
         guard let query = searchText, !query.isEmpty else {
           print("No search text found")
           return
         }
-
-        hideSearchKeyboard()
 
         if isNewSearch {
             parameters["q"] = query
