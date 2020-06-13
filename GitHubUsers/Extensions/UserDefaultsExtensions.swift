@@ -14,24 +14,28 @@ enum UserDefaultsKey: String {
     case isListView = "isListView"
 }
 
+let queryKey = "q"
+let pageKey = "page"
+let isListKey = "isListView"
+
 extension UserDefaults {
 
     static func saveSearchParameters(_ parameters: JSONDictionary) {
         
         //Store parameters for persistance
-        if let searchTerm = parameters["q"] as? String {
+        if let searchTerm = parameters[queryKey] as? String {
             UserDefaults.standard.set(searchTerm, forKey: UserDefaultsKey.searchTerm.rawValue)
         } else {
              UserDefaults.standard.removeObject(forKey: UserDefaultsKey.searchTerm.rawValue)
         }
 
-        if let nextPage = parameters["page"] as? String {
+        if let nextPage = parameters[pageKey] as? String {
             UserDefaults.standard.set(nextPage, forKey: UserDefaultsKey.nextPage.rawValue)
         } else {
             UserDefaults.standard.removeObject(forKey: UserDefaultsKey.nextPage.rawValue)
         }
 
-        if let isListView = parameters["isListView"] as? Bool {
+        if let isListView = parameters[isListKey] as? Bool {
             UserDefaults.standard.set(isListView, forKey: UserDefaultsKey.isListView.rawValue)
         } else {
             UserDefaults.standard.removeObject(forKey: UserDefaultsKey.isListView.rawValue)
@@ -45,15 +49,15 @@ extension UserDefaults {
         var parameters = JSONDictionary()
 
         if let searchTerm = UserDefaults.standard.string(forKey: UserDefaultsKey.searchTerm.rawValue) {
-            parameters["q"] = searchTerm
+            parameters[queryKey] = searchTerm
         }
 
         if let nextPage = UserDefaults.standard.string(forKey: UserDefaultsKey.nextPage.rawValue) {
-            parameters["page"] = nextPage
+            parameters[pageKey] = nextPage
         }
 
         let isListView = UserDefaults.standard.bool(forKey: UserDefaultsKey.isListView.rawValue)
-        parameters["isListView"] = isListView
+        parameters[isListKey] = isListView
 
         if parameters.isEmpty {
             return nil

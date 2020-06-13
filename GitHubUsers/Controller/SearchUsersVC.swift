@@ -160,16 +160,16 @@ class SearchUsersVC: UIViewController {
 
             self.parameters = parametersFound
 
-            if let searchTerm = parameters["q"] as? String {
+            if let searchTerm = parameters[queryKey] as? String {
                 self.lastSearchedQuery = searchTerm
                 self.searchBar.text = searchTerm
             }
 
-            if let nextPage = parameters["page"] as? String {
+            if let nextPage = parameters[pageKey] as? String {
                 Users.shared.restoreNextPage(page: nextPage)
             }
 
-            if let isListView = parameters["isListView"] as? Bool {
+            if let isListView = parameters[isListKey] as? Bool {
                 self.isListView = isListView
             }
         }
@@ -211,7 +211,7 @@ class SearchUsersVC: UIViewController {
         // If new results then we must replace all existing data (including stored data)
         // but if paginating just append to the existing data.
 
-        if parameters.contains(where: { (key, value) -> Bool in key == "page"}) {
+        if parameters.contains(where: { (key, value) -> Bool in key == pageKey}) {
             //Paginating
             self.users.append(contentsOf: users)
         } else {
@@ -262,7 +262,7 @@ class SearchUsersVC: UIViewController {
         let nextPage = Users.shared.getNextPage()
 
         if  nextPage > 0 {
-            parameters["page"] = "\(nextPage)"
+            parameters[pageKey] = "\(nextPage)"
         }
 
         UserDefaults.saveSearchParameters(parameters)
@@ -285,7 +285,7 @@ class SearchUsersVC: UIViewController {
         }
 
         // Persist preference
-        parameters["isListView"] = isListView
+        parameters[isListKey] = isListView
         UserDefaults.saveSearchParameters(parameters)
 
         clearSelectedCells() // when we switch layouts its better
@@ -501,7 +501,7 @@ extension SearchUsersVC: UICollectionViewDataSource  {
         if collectionView.isLast(for: indexPath) {
             print("🔥 Reached last item in collection")
 
-            if parameters.contains(where: { (key, value) -> Bool in key == "page"}) {
+            if parameters.contains(where: { (key, value) -> Bool in key == pageKey}) {
                 //Pagination available
                 loadUsers(parameters)
             }
@@ -662,7 +662,7 @@ extension SearchUsersVC {
 
             removeUserData()
 
-            parameters["q"] = query
+            parameters[queryKey] = query
             lastSearchedQuery = query
 
             print("🔥 Making fresh search for users with name: \(query)")
@@ -678,7 +678,7 @@ extension SearchUsersVC {
         // For a fresh request we need to remove last results from data store,
         // reset pagination data and remove previous users, before requesting the new users
 
-        parameters.removeValue(forKey: "page")
+        parameters.removeValue(forKey: pageKey)
         Users.shared.restoreNextPage(page: "0")
         PersistencyService.shared.deleteAllUsers()
     }
