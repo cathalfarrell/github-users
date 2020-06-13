@@ -245,8 +245,8 @@ class SearchUsersVC: UIViewController {
     }
 
     fileprivate func handleNoUsers() {
-        //Show Error when no users found.
-        if self.users.count == 0 {
+        //Show Error when no users found from a search query
+        if self.users.count == 0, parameters.contains(where: { (key, _) -> Bool in key == queryKey}) {
             print("🙄 No users found")
             displayError(message: "No users found.")
 
