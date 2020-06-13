@@ -37,7 +37,8 @@ struct UserDetailView: View {
                     if !errorString.isEmpty {
                         VStack(alignment: .center) {
                             Text(errorString)
-                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0,
+                                       maxHeight: .infinity, alignment: .topLeading)
                                 .padding(16)
                                 .background(Color.red)
                                 .foregroundColor(.white)
@@ -133,9 +134,13 @@ struct UserDetailView: View {
 }
 
 struct UserDetailView_Previews: PreviewProvider {
+
+    static let testError = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+                                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+
     static var previews: some View {
         NavigationView {
-            UserDetailView(user: User.sampleUser(), errorString: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+            UserDetailView(user: User.sampleUser(), errorString: testError)
         }
     }
 }

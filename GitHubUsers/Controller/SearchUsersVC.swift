@@ -50,7 +50,8 @@ class SearchUsersVC: UIViewController {
 
     private let reuseIdentifierList = "UserListCell"
     private let reuseIdentifierGrid = "UserGridCell"
-    private let welcomeText = "You can search for users of the GitHub API by username. Just enter some text in the above search bar and tap on the search key on the keyboard."
+    private let welcomeText = "You can search for users of the GitHub API by username. " +
+                              "Just enter some text in the above search bar and tap on the search key on the keyboard."
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -245,6 +246,10 @@ class SearchUsersVC: UIViewController {
         if self.users.count == 0 {
             print("🙄 No users found")
             displayError(message: "No users found.")
+
+            DispatchQueue.main.async {
+                self.mainTextLabel.text = self.welcomeText
+            }
         }
     }
 
@@ -508,10 +513,6 @@ extension SearchUsersVC: UICollectionViewDataSource  {
             }
         }
     }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: self.collectionView.bounds.width, height: 100)
-    }
 }
 extension SearchUsersVC: UICollectionViewDelegate {
 
@@ -670,7 +671,7 @@ extension SearchUsersVC {
             loadUsers(parameters)
 
         } else {
-            print("No point making same network call for same search query as last time")
+            print("🛑 No point making same network call for same search query as last time")
         }
     }
 
