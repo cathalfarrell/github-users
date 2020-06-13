@@ -5,6 +5,7 @@
 //  Created by Cathal Farrell on 08/06/2020.
 //  Copyright © 2020 Cathal Farrell. All rights reserved.
 //
+//  swiftlint:disable identifier_name
 
 import Foundation
 

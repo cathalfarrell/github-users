@@ -1,0 +1,5 @@
+included:
+  - GitHubUsers
+
+excluded:
+  - Pods

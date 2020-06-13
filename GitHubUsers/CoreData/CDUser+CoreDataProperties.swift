@@ -4,11 +4,10 @@
 //
 //  Created by Cathal Farrell on 12/06/2020.
 //
-//
+//  swiftlint:disable identifier_name
 
 import Foundation
 import CoreData
-
 
 extension CDUser {
 

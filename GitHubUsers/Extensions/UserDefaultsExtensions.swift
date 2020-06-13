@@ -9,9 +9,9 @@
 import Foundation
 
 enum UserDefaultsKey: String {
-    case searchTerm = "searchTerm"
-    case nextPage = "nextPage"
-    case isListView = "isListView"
+    case searchTerm
+    case nextPage
+    case isListView
 }
 
 let queryKey = "q"
@@ -21,7 +21,7 @@ let isListKey = "isListView"
 extension UserDefaults {
 
     static func saveSearchParameters(_ parameters: JSONDictionary) {
-        
+
         //Store parameters for persistance
         if let searchTerm = parameters[queryKey] as? String {
             UserDefaults.standard.set(searchTerm, forKey: UserDefaultsKey.searchTerm.rawValue)

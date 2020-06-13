@@ -36,7 +36,7 @@ class UserListCell: UICollectionViewCell {
 
     }
 
-    func configureCell(user: User){
+    func configureCell(user: User) {
         self.userName.text = user.login
     }
 

@@ -5,13 +5,14 @@
 //  Created by Cathal Farrell on 10/06/2020.
 //  Copyright © 2020 Cathal Farrell. All rights reserved.
 //
+//  swiftlint:disable multiple_closures_with_trailing_closure
 
 import Foundation
 
 typealias JSONDictionary = [String: Any]
 
 class Users {
-    
+
     static let shared = Users()
     let session = URLSession(configuration: .default)
 
@@ -20,8 +21,8 @@ class Users {
     // MARK: - Loads the data into the local Core Data Database for offline use.
 
     func loadDataToCoreData(with parameters: JSONDictionary,
-                                  success succ: @escaping ([User]) -> Void,
-                                  failure fail: @escaping (String) -> Void) {
+                            success succ: @escaping ([User]) -> Void,
+                            failure fail: @escaping (String) -> Void) {
 
         //Returning response on the main thread
         let success: ([User]) -> Void = { users in
@@ -59,8 +60,8 @@ class Users {
     // MARK: - Get Users from Network
 
     func downloadUsersFromNetwork(with parameters: JSONDictionary,
-                         success succ: @escaping ([UserItem]) -> Void,
-                         failure fail: @escaping (String) -> Void) {
+                                  success succ: @escaping ([UserItem]) -> Void,
+                                  fail: @escaping (String) -> Void) {
 
         //Returning response on the main thread
         let success: ([UserItem]) -> Void = { users in
@@ -108,9 +109,8 @@ class Users {
         return nextPage
     }
 
-
     // Set by persistency manager from stored search parameters when app restored
-    
+
     func restoreNextPage(page: String) {
         if let intFromString = Int(page) {
             nextPage = intFromString
@@ -120,8 +120,8 @@ class Users {
     // MARK: - Get User Detail
 
     func downloadUserDetailFromNetwork(with userName: String,
-                         success succ: @escaping (User) -> Void,
-                         failure fail: @escaping (String) -> Void) {
+                                       success succ: @escaping (User) -> Void,
+                                       failure fail: @escaping (String) -> Void) {
 
         //Returning response on the main thread
         let success: (User) -> Void = { user in

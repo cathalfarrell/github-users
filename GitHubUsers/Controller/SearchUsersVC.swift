@@ -5,6 +5,10 @@
 //  Created by Cathal Farrell on 11/06/2020.
 //  Copyright © 2020 Cathal Farrell. All rights reserved.
 //
+//  swiftlint:disable type_body_length
+//  swiftlint:disable unused_closure_parameter
+//  swiftlint:disable multiple_closures_with_trailing_closure
+//  swiftlint:disable file_length
 
 import Kingfisher
 import SwiftUI
@@ -112,7 +116,7 @@ class SearchUsersVC: UIViewController {
         self.navigationItem.setRightBarButton(toggleButton, animated: true)
     }
 
-    // MARK:- Get Users
+    // MARK: - Get Users
 
     fileprivate func loadUsers(_ parameters: JSONDictionary) {
 
@@ -176,7 +180,6 @@ class SearchUsersVC: UIViewController {
         }
     }
 
-
     func restoreUsers() {
         if !self.parameters.isEmpty {
 
@@ -212,7 +215,7 @@ class SearchUsersVC: UIViewController {
         // If new results then we must replace all existing data (including stored data)
         // but if paginating just append to the existing data.
 
-        if parameters.contains(where: { (key, value) -> Bool in key == pageKey}) {
+        if parameters.contains(where: { (key, _) -> Bool in key == pageKey}) {
             //Paginating
             self.users.append(contentsOf: users)
         } else {
@@ -283,7 +286,7 @@ class SearchUsersVC: UIViewController {
             toggleButton = UIBarButtonItem(title: "List", style: .plain, target: self,
                                            action: #selector(gridListButtonTapped(sender:)))
             isListView = false
-        }else {
+        } else {
             toggleButton = UIBarButtonItem(title: "Grid", style: .plain, target: self,
                                            action: #selector(gridListButtonTapped(sender:)))
             isListView = true
@@ -317,7 +320,7 @@ class SearchUsersVC: UIViewController {
         }
     }
 
-    // MARK:- Editing i.e. To Delete Items Or Re-Order
+    // MARK: - Editing i.e. To Delete Items Or Re-Order
 
     // Called when EDIT button tapped -> Enable Drag & Drop and Selection
 
@@ -361,7 +364,7 @@ class SearchUsersVC: UIViewController {
         }
     }
 
-    // MARK:- Drag/Drop Helpers
+    // MARK: - Drag/Drop Helpers
 
     func moveUser(at sourceIndex: Int, to destinationIndex: Int) {
 
@@ -386,7 +389,7 @@ class SearchUsersVC: UIViewController {
         return [dragItem]
     }
 
-    // MARK:- Image Download into cells
+    // MARK: - Image Download into cells
 
     fileprivate func downloadAvatarImage(_ user: User, _ cell: UICollectionViewCell) {
 
@@ -406,17 +409,15 @@ class SearchUsersVC: UIViewController {
                     .scaleFactor(UIScreen.main.scale),
                     .transition(.fade(1)),
                     .cacheOriginalImage
-                ])
-            {
-                result in
-                /* //For Debug Purposes
-                switch result {
-                case .success(let value):
-                    print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
-                case .failure(let error):
-                    print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
-                }
-                */
+                ]) { result in
+                    /* //For Debug Purposes
+                    switch result {
+                    case .success(let value):
+                        print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
+                    case .failure(let error):
+                        print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
+                    }
+                    */
             }
         }
 
@@ -433,9 +434,7 @@ class SearchUsersVC: UIViewController {
                      .scaleFactor(UIScreen.main.scale),
                      .transition(.fade(1)),
                      .cacheOriginalImage
-                 ])
-             {
-                 result in
+                 ]) { result in
 
                  /* //For Debug Purposes
                  switch result {
@@ -450,7 +449,7 @@ class SearchUsersVC: UIViewController {
     }
 
 }
-extension SearchUsersVC: UICollectionViewDataSource  {
+extension SearchUsersVC: UICollectionViewDataSource {
 
     // MARK: UICollectionViewDataSource
 
@@ -463,7 +462,7 @@ extension SearchUsersVC: UICollectionViewDataSource  {
     }
 
     func collectionView(_ collectionView: UICollectionView,
-                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let user = self.users[indexPath.row]
 
@@ -507,7 +506,7 @@ extension SearchUsersVC: UICollectionViewDataSource  {
         if collectionView.isLast(for: indexPath) {
             print("🔥 Reached last item in collection")
 
-            if parameters.contains(where: { (key, value) -> Bool in key == pageKey}) {
+            if parameters.contains(where: { (key, _) -> Bool in key == pageKey}) {
                 //Pagination available
                 loadUsers(parameters)
             }
@@ -557,7 +556,7 @@ extension SearchUsersVC: UICollectionViewDelegateFlowLayout {
         let width = view.frame.width
         if isListView {
             return CGSize(width: width - 15, height: 80)
-        }else {
+        } else {
             return CGSize(width: (width - 15)/2, height: (width - 15)/2)
         }
     }
@@ -567,7 +566,9 @@ extension SearchUsersVC: UICollectionViewDelegateFlowLayout {
         return 5
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 5
     }
 
@@ -654,7 +655,7 @@ extension SearchUsersVC {
     func searchFor(_ searchText: String?) {
 
         hideSearchKeyboard()
-        
+
         guard let query = searchText, !query.isEmpty else {
           print("No search text found")
           return

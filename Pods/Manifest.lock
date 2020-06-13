@@ -5,21 +5,25 @@ PODS:
   - Kingfisher/SwiftUI (5.14.0):
     - Kingfisher/Core
   - lottie-ios (3.1.6)
+  - SwiftLint (0.39.1)
 
 DEPENDENCIES:
   - Kingfisher
   - Kingfisher/SwiftUI
   - lottie-ios
+  - SwiftLint
 
 SPEC REPOS:
   trunk:
     - Kingfisher
     - lottie-ios
+    - SwiftLint
 
 SPEC CHECKSUMS:
   Kingfisher: 7b64389a43139c903ec434788344c288217c792d
   lottie-ios: 85ce835dd8c53e02509f20729fc7d6a4e6645a0a
+  SwiftLint: 55e96a4a4d537d4a3156859fc1c54bd24851a046
 
-PODFILE CHECKSUM: 84e2ac68a05667e5a31df84397d6e9872ab16c4c
+PODFILE CHECKSUM: 314ca887d65140448efdf6f1b0841bea8b6535de
 
 COCOAPODS: 1.9.0

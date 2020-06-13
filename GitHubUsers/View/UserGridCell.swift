@@ -35,7 +35,7 @@ class UserGridCell: UICollectionViewCell {
         self.avatarImageView.clipsToBounds = true
     }
 
-    func configureCell(user: User){
+    func configureCell(user: User) {
         self.userName.text = user.login
     }
 

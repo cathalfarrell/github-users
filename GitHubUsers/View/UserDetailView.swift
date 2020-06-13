@@ -5,6 +5,7 @@
 //  Created by Cathal Farrell on 10/06/2020.
 //  Copyright © 2020 Cathal Farrell. All rights reserved.
 //
+//  swiftlint:disable multiple_closures_with_trailing_closure
 
 import SwiftUI
 import struct Kingfisher.KFImage
@@ -19,7 +20,7 @@ struct UserDetailView: View {
         ZStack {
 
             VStack {
-                HStack(spacing: 0){
+                HStack(spacing: 0) {
                     Spacer()
                     KFImage(URL(string: user.avatarUrl))
                         .placeholder({
@@ -53,7 +54,7 @@ struct UserDetailView: View {
                         }
                         .padding([.top, .bottom], 16)
                     }
-                    Section() {
+                    Section {
                         HStack {
                             Text("Username:")
                             Spacer()
@@ -73,7 +74,7 @@ struct UserDetailView: View {
                                 .font(.subheadline)
                         }
                     }
-                    Section() {
+                    Section {
                         HStack {
                             Text("Public Repositories:")
                             Spacer()
@@ -111,7 +112,7 @@ struct UserDetailView: View {
         .onAppear(perform: loadUser)
     }
 
-   // MARK:- Get Users
+   // MARK: - Get Users
 
     fileprivate func loadUser() {
 

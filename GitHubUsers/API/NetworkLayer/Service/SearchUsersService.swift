@@ -89,7 +89,7 @@ struct SearchUsersService {
 
             var dictionary: [String: String] = [:]
             links.forEach({
-                let components = $0.components(separatedBy:"; ")
+                let components = $0.components(separatedBy: "; ")
                 let cleanPath = components[0].trimmingCharacters(in: CharacterSet(charactersIn: "<>"))
                 dictionary[components[1]] = cleanPath
             })
