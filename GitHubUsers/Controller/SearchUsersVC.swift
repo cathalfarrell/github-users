@@ -351,6 +351,7 @@ class SearchUsersVC: UIViewController {
             DispatchQueue.main.async {
                 self.collectionView.deleteItems(at: selectedCells)
                 PersistencyService.shared.updateUsers(users: self.users)
+                self.handleNoUsers()
             }
         }
     }
