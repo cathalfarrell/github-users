@@ -55,6 +55,8 @@ class SearchUsersVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        restoreAppState()
+
         setupNavigationBar()
         setupSearchBar()
         setupErrorLabel()
@@ -62,7 +64,7 @@ class SearchUsersVC: UIViewController {
         self.mainTextLabel.text = welcomeText
         setupCollection()
 
-        restoreAppState()
+        restoreUsers()
     }
 
     fileprivate func setupSearchBar() {
@@ -103,9 +105,8 @@ class SearchUsersVC: UIViewController {
         navigationItem.leftBarButtonItems = [deleteButton, editButtonItem]
         deleteButton.isEnabled = false
 
-
         //Set up bar button item toggle
-        toggleButton = UIBarButtonItem(title: "Grid", style: .plain, target: self,
+        toggleButton = UIBarButtonItem(title: isListView ? "Grid" : "List", style: .plain, target: self,
                                        action: #selector(gridListButtonTapped(sender:)))
         self.navigationItem.setRightBarButton(toggleButton, animated: true)
     }
@@ -167,9 +168,16 @@ class SearchUsersVC: UIViewController {
             if let nextPage = parameters["page"] as? String {
                 Users.shared.restoreNextPage(page: nextPage)
             }
+
+            if let isListView = parameters["isListView"] as? Bool {
+                self.isListView = isListView
+            }
         }
-        
-        if !parameters.isEmpty {
+    }
+
+
+    func restoreUsers() {
+        if !self.parameters.isEmpty {
 
             print("🔥 PARAMS restored: \(parameters)")
 
@@ -275,6 +283,10 @@ class SearchUsersVC: UIViewController {
                                            action: #selector(gridListButtonTapped(sender:)))
             isListView = true
         }
+
+        // Persist preference
+        parameters["isListView"] = isListView
+        UserDefaults.saveSearchParameters(parameters)
 
         clearSelectedCells() // when we switch layouts its better
 

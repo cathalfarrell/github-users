@@ -11,6 +11,7 @@ import Foundation
 enum UserDefaultsKey: String {
     case searchTerm = "searchTerm"
     case nextPage = "nextPage"
+    case isListView = "isListView"
 }
 
 extension UserDefaults {
@@ -30,6 +31,12 @@ extension UserDefaults {
             UserDefaults.standard.removeObject(forKey: UserDefaultsKey.nextPage.rawValue)
         }
 
+        if let isListView = parameters["isListView"] as? Bool {
+            UserDefaults.standard.set(isListView, forKey: UserDefaultsKey.isListView.rawValue)
+        } else {
+            UserDefaults.standard.removeObject(forKey: UserDefaultsKey.isListView.rawValue)
+        }
+
         print("🔥 PARAMS Saved: \(parameters)")
     }
 
@@ -44,6 +51,9 @@ extension UserDefaults {
         if let nextPage = UserDefaults.standard.string(forKey: UserDefaultsKey.nextPage.rawValue) {
             parameters["page"] = nextPage
         }
+
+        let isListView = UserDefaults.standard.bool(forKey: UserDefaultsKey.isListView.rawValue)
+        parameters["isListView"] = isListView
 
         if parameters.isEmpty {
             return nil
