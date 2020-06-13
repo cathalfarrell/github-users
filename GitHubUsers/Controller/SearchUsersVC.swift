@@ -198,6 +198,40 @@ class SearchUsersVC: UIViewController {
         }
     }
 
+    fileprivate func update(_ users: [User]) {
+
+        // If new results then we must replace all existing data (including stored data)
+        // but if paginating just append to the existing data.
+
+        if parameters.contains(where: { (key, value) -> Bool in key == "page"}) {
+            //Paginating
+            self.users.append(contentsOf: users)
+        } else {
+            //New Search
+            self.users = users
+            self.scrollToTopOfList()
+        }
+    }
+
+    func displayResults(users: [User]) {
+
+        stopLoadingAnimation()
+
+        update(users)
+
+        print("✅ Response: \(users.count) Users Returned in this response")
+        print("✅ Total Users Count for display: \(self.users.count)")
+
+        handleNoUsers()
+
+        storeNextPageDetails()
+
+        DispatchQueue.main.async {
+            self.mainTextLabel.isHidden = (self.users.count > 0)
+            self.collectionView.reloadData()
+        }
+    }
+
     fileprivate func handleNoUsers() {
         //Show Error when no users found.
         if self.users.count == 0 {
@@ -217,10 +251,6 @@ class SearchUsersVC: UIViewController {
 
     fileprivate func storeNextPageDetails() {
 
-        if let lastquery = parameters["q"] as? String {
-            self.lastSearchedQuery = lastquery
-        }
-
         let nextPage = Users.shared.getNextPage()
 
         if  nextPage > 0 {
@@ -228,40 +258,6 @@ class SearchUsersVC: UIViewController {
         }
 
         UserDefaults.saveSearchParameters(parameters)
-    }
-    
-    func displayResults(users: [User]) {
-
-        // If new results then we must replace all existing data (including stored data)
-        // but if paginating just append to the existing data.
-
-        stopLoadingAnimation()
-
-        if isNewSearch {
-
-            print("🔥 New Search Term")
-
-            self.users = users
-
-            scrollToTopOfList()
-
-        } else {
-            print("🔥 Pagination Detected")
-
-            self.users.append(contentsOf: users)
-        }
-
-        print("✅ Response: \(users.count) Users Returned in this response")
-        print("✅ Total Users Count for display: \(self.users.count)")
-
-        handleNoUsers()
-
-        storeNextPageDetails()
-
-        DispatchQueue.main.async {
-            self.mainTextLabel.isHidden = (self.users.count > 0)
-            self.collectionView.reloadData()
-        }
     }
 
     // MARK: - Grid/List Toggle
@@ -485,14 +481,16 @@ extension SearchUsersVC: UICollectionViewDataSource  {
         return UICollectionViewCell()
     }
 
+    // MARK: Pagination - Request for next page made here when last row detected
+
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
 
-        // Pagination Call when last item is reached and we know that there is another page
         if collectionView.isLast(for: indexPath) {
-            print("🔥 Is last item......")
+            print("🔥 Reached last item in collection")
 
-            if !isNewSearch && parameters.count > 1 {
+            if parameters.contains(where: { (key, value) -> Bool in key == "page"}) {
+                //Pagination available
                 loadUsers(parameters)
             }
         }
@@ -648,18 +646,29 @@ extension SearchUsersVC {
           return
         }
 
-        if isNewSearch {
-            parameters["q"] = query
-            parameters.removeValue(forKey: "page")
-            //Prepare for new results, remove last results from data store
-            Users.shared.restoreNextPage(page: "0")
-            PersistencyService.shared.deleteAllUsers()
+        if isNewSearch || isShowingError {
 
+            removeUserData()
+
+            parameters["q"] = query
+            lastSearchedQuery = query
+
+            print("🔥 Making fresh search for users with name: \(query)")
             loadUsers(parameters)
+
         } else {
             print("No point making same network call for same search query as last time")
-            print("🙄 Is showing error? : \(isShowingError)")
         }
+    }
+
+    fileprivate func removeUserData() {
+
+        // For a fresh request we need to remove last results from data store,
+        // reset pagination data and remove previous users, before requesting the new users
+
+        parameters.removeValue(forKey: "page")
+        Users.shared.restoreNextPage(page: "0")
+        PersistencyService.shared.deleteAllUsers()
     }
 
     func hideSearchKeyboard() {

@@ -36,7 +36,7 @@ class PersistencyService {
         userToStore.followers = Int32(user.followers)
         userToStore.following = Int32(user.following)
 
-        print("🔋 Saving User to Core Data")
+        //print("🔋 Saving User to Core Data")
         appDelegate!.saveContext()
     }
 
