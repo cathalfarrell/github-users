@@ -7,7 +7,6 @@
 //
 //  swiftlint:disable type_body_length
 //  swiftlint:disable unused_closure_parameter
-//  swiftlint:disable multiple_closures_with_trailing_closure
 //  swiftlint:disable file_length
 
 import Kingfisher
@@ -133,12 +132,14 @@ class SearchUsersVC: UIViewController {
 
         UserDefaults.saveSearchParameters(parameters)
 
-        //Load Users - this method returns on Main Thread
+        Users.shared.loadDataToCoreData(with: parameters) { (result) in
 
-        Users.shared.loadDataToCoreData(with: parameters, success: { (users) in
-            self.displayResults(users: users)
-        }) { (errorString) in
-            self.displayError(message: errorString)
+            switch result {
+            case .success(let users):
+                self.displayResults(users: users)
+            case .failure(let error):
+                self.displayError(message: error.localizedDescription)
+            }
         }
     }
 

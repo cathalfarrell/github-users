@@ -5,7 +5,6 @@
 //  Created by Cathal Farrell on 10/06/2020.
 //  Copyright © 2020 Cathal Farrell. All rights reserved.
 //
-//  swiftlint:disable multiple_closures_with_trailing_closure
 
 import Foundation
 
@@ -21,55 +20,42 @@ class Users {
     // MARK: - Loads the data into the local Core Data Database for offline use.
 
     func loadDataToCoreData(with parameters: JSONDictionary,
-                            success succ: @escaping ([User]) -> Void,
-                            failure fail: @escaping (String) -> Void) {
+                            completion: @escaping (Result<[User]>) -> Void) {
 
-        //Returning response on the main thread
-        let success: ([User]) -> Void = { users in
-            DispatchQueue.main.async { succ(users) }
-        }
-        let failure: (String) -> Void = { error in
-            DispatchQueue.main.async { fail(String(describing: error)) }
-        }
+        downloadUsersFromNetwork(with: parameters) { (result) in
+            switch result {
+            case .success(let userItems):
 
-        downloadUsersFromNetwork(with: parameters, success: { (userItems) in
+                var users = [User]()
 
-            var users = [User]()
+                for item in userItems {
+                    //Only have limited User Details here...
+                    let user = User(id: item.id,
+                                    login: item.login,
+                                    avatarUrl: item.avatarUrl)
+                    users.append(user)
 
-            for item in userItems {
-                //Only have limited User Details here...
-                let user = User(id: item.id,
-                                login: item.login,
-                                avatarUrl: item.avatarUrl)
-                users.append(user)
-
-                //Store each to Persistence Manager
+                    //Store each to Persistence Manager
+                    DispatchQueue.main.async {
+                        PersistencyService.shared.addUser(user: user)
+                    }
+                }
                 DispatchQueue.main.async {
-                    PersistencyService.shared.addUser(user: user)
+                    completion(.success(users))
+                }
+
+            case .failure(let err):
+                DispatchQueue.main.async {
+                    completion(.failure(err))
                 }
             }
-
-            success(users)
-
-        }) { (errorString) in
-
-            failure(errorString)
         }
     }
 
     // MARK: - Get Users from Network
 
     func downloadUsersFromNetwork(with parameters: JSONDictionary,
-                                  success succ: @escaping ([UserItem]) -> Void,
-                                  fail: @escaping (String) -> Void) {
-
-        //Returning response on the main thread
-        let success: ([UserItem]) -> Void = { users in
-            DispatchQueue.main.async { succ(users) }
-        }
-        let failure: (String) -> Void = { error in
-            DispatchQueue.main.async { fail(String(describing: error)) }
-        }
+                                  completion: @escaping (Result<[UserItem]>) -> Void) {
 
         //Async on background
         DispatchQueue.global(qos: .background).async {
@@ -82,12 +68,15 @@ class Users {
                     Users.shared.handlePagination(nextPage: resp.nextPage)
 
                     if let userItems = resp.items {
-                        success(userItems)
+                        DispatchQueue.main.async {
+                            completion(.success(userItems))
+                        }
                     }
 
                 case .failure(let err):
-
-                    failure(err.localizedDescription)
+                    DispatchQueue.main.async {
+                        completion(.failure(err))
+                    }
                 }
             }
         }
