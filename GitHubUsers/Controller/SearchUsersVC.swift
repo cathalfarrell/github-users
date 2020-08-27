@@ -5,7 +5,6 @@
 //  Created by Cathal Farrell on 11/06/2020.
 //  Copyright © 2020 Cathal Farrell. All rights reserved.
 //
-//  swiftlint:disable type_body_length
 //  swiftlint:disable unused_closure_parameter
 //  swiftlint:disable file_length
 
@@ -59,29 +58,55 @@ class SearchUsersVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        restoreAppState()
-
         setupNavigationBar()
         setupSearchBar()
-        setupErrorLabel()
+
+        viewModel.parameters.bind { [weak self] (parameters) in
+            self?.parameters = parameters
+        }
 
         viewModel.mainText.bind { [weak self] text in
             self?.mainTextLabel.text = text
         }
 
-        setupCollection()
+        viewModel.errorText.bind { [weak self] text in
+            self?.textLabel.text = text
+        }
 
-        restoreUsers()
+        viewModel.users.bind { [weak self] users in
+            self?.users = users
+            self?.stopLoadingAnimation()
+            //If a new search then scroll back up to top
+            if !(self?.parameters.contains(where: { (key, _) -> Bool in key == pageKey}) ?? false) {
+                self?.scrollToTopOfList()
+            }
+            self?.collectionView.reloadData()
+        }
+
+        viewModel.errorViewHeight.bind { [weak self] height in
+            UIView.animate(withDuration: 2.0) {
+                self?.errorViewHeight.constant = height
+                if height == 100 {
+                    self?.stopLoadingAnimation()
+                }
+            }
+        }
+
+        viewModel.isListView.bind { [weak self] isListView in
+            self?.isListView = isListView
+        }
+
+        viewModel.searchQuery.bind { [weak self] searchQuery in
+                self?.lastSearchedQuery = searchQuery
+                self?.searchBar.text = searchQuery
+        }
+
+        setupCollection()
     }
 
     fileprivate func setupSearchBar() {
         searchBar.placeholder = "Find a GitHub User"
         searchBar.delegate = self
-    }
-
-    fileprivate func setupErrorLabel() {
-        //hide until required, i.e. when error displayed
-        self.errorViewHeight.constant = 0
     }
 
     fileprivate func setupCollection() {
@@ -118,148 +143,17 @@ class SearchUsersVC: UIViewController {
         self.navigationItem.setRightBarButton(toggleButton, animated: true)
     }
 
-    // MARK: - Get Users
-
-    fileprivate func loadUsers(_ parameters: JSONDictionary) {
-
-        //Hide any errors showing
-        DispatchQueue.main.async {
-            self.textLabel.text = nil
-
-            UIView.animate(withDuration: 2.0) {
-                self.errorViewHeight.constant = 0
-            }
-        }
-
-        startLoadingAnimation()
-
-        UserDefaults.saveSearchParameters(parameters)
-
-        Users.shared.loadDataToCoreData(with: parameters) { (result) in
-
-            switch result {
-            case .success(let users):
-                self.displayResults(users: users)
-            case .failure(let error):
-                self.displayError(message: error.localizedDescription)
-            }
-        }
-    }
-
     @objc private func refreshData() {
 
         // Allows pull to refresh to restore failure after error
 
         if isShowingError {
-            loadUsers(parameters)
+
+            startLoadingAnimation()
+
+            viewModel.loadUsers(parameters)
         } else {
             self.collectionView.refreshControl?.endRefreshing()
-        }
-    }
-
-    // MARK: - Persistency
-
-    // Restore last search term and results returned
-
-    fileprivate func restoreAppState() {
-
-        //Restore app state by checking for any previously stored users & search parameters
-
-        if let parametersFound = UserDefaults.restoreSearchParameters() {
-
-            self.parameters = parametersFound
-
-            if let searchTerm = parameters[queryKey] as? String {
-                self.lastSearchedQuery = searchTerm
-                self.searchBar.text = searchTerm
-            }
-
-            if let nextPage = parameters[pageKey] as? String {
-                Users.shared.restoreNextPage(page: nextPage)
-            }
-
-            if let isListView = parameters[isListKey] as? Bool {
-                self.isListView = isListView
-            }
-        }
-    }
-
-    func restoreUsers() {
-        if !self.parameters.isEmpty {
-
-            print("🔥 PARAMS restored: \(parameters)")
-
-            if let storedUsers = PersistencyService.shared.fetchUsers(), storedUsers.count > 0 {
-                self.displayResults(users: storedUsers)
-            } else {
-                print("🔥 No fetched users to restore found.")
-                handleNoUsers()
-            }
-        }
-    }
-
-    // MARK: - Update UI
-
-    func displayError(message: String) {
-        print("🛑 Error: \(message)")
-
-        stopLoadingAnimation()
-
-        DispatchQueue.main.async {
-            self.textLabel.text = message
-
-            UIView.animate(withDuration: 2.0) {
-                self.errorViewHeight.constant = 100
-            }
-        }
-    }
-
-    fileprivate func update(_ users: [User]) {
-
-        // If new results then we must replace all existing data (including stored data)
-        // but if paginating just append to the existing data.
-
-        if parameters.contains(where: { (key, _) -> Bool in key == pageKey}) {
-            //Paginating
-            self.users.append(contentsOf: users)
-        } else {
-            //New Search
-            self.users = users
-            self.scrollToTopOfList()
-        }
-    }
-
-    func displayResults(users: [User]) {
-
-        stopLoadingAnimation()
-
-        update(users)
-
-        print("✅ Response: \(users.count) Users Returned in this response")
-        print("✅ Total Users Count for display: \(self.users.count)")
-
-        handleNoUsers()
-
-        storeNextPageDetails()
-
-        DispatchQueue.main.async {
-            self.mainTextLabel.isHidden = (self.users.count > 0)
-            self.collectionView.reloadData()
-        }
-    }
-
-    fileprivate func handleNoUsers() {
-        //Show Error when no users found from a search query
-        if self.users.count == 0, parameters.contains(where: { (key, _) -> Bool in key == queryKey}) {
-            print("🙄 No users found")
-            displayError(message: "No users found.")
-
-            DispatchQueue.main.async {
-                    //TODO - remove this once you move users to view model
-                    self.viewModel.mainText.bind { [weak self] text in
-                    self?.mainTextLabel.text = text
-                }
-            }
         }
     }
 
@@ -270,17 +164,6 @@ class SearchUsersVC: UIViewController {
         DispatchQueue.main.async {
             self.collectionView?.setContentOffset(topOffest, animated: true)
         }
-    }
-
-    fileprivate func storeNextPageDetails() {
-
-        let nextPage = Users.shared.getNextPage()
-
-        if  nextPage > 0 {
-            parameters[pageKey] = "\(nextPage)"
-        }
-
-        UserDefaults.saveSearchParameters(parameters)
     }
 
     // MARK: - Grid/List Toggle
@@ -366,7 +249,7 @@ class SearchUsersVC: UIViewController {
             DispatchQueue.main.async {
                 self.collectionView.deleteItems(at: selectedCells)
                 PersistencyService.shared.updateUsers(users: self.users)
-                self.handleNoUsers()
+               // self.handleNoUsers()
             }
         }
     }
@@ -515,7 +398,7 @@ extension SearchUsersVC: UICollectionViewDataSource {
 
             if parameters.contains(where: { (key, _) -> Bool in key == pageKey}) {
                 //Pagination available
-                loadUsers(parameters)
+                viewModel.loadUsers(parameters)
             }
         }
     }
@@ -676,7 +559,8 @@ extension SearchUsersVC {
             lastSearchedQuery = query
 
             print("🔥 Making fresh search for users with name: \(query)")
-            loadUsers(parameters)
+            self.startLoadingAnimation()
+            self.viewModel.loadUsers(parameters)
 
         } else {
             print("🛑 No point making same network call for same search query as last time")
