@@ -60,6 +60,13 @@ class SearchUsersVC: UIViewController {
 
         setupNavigationBar()
         setupSearchBar()
+        setupCollection()
+        setUpViewModel()
+    }
+
+    fileprivate func setUpViewModel() {
+
+        // MARK: - View Model Bindings for UI Updates
 
         viewModel.parameters.bind { [weak self] (parameters) in
             self?.parameters = parameters
@@ -74,13 +81,16 @@ class SearchUsersVC: UIViewController {
         }
 
         viewModel.users.bind { [weak self] users in
-            self?.users = users
-            self?.stopLoadingAnimation()
-            //If a new search then scroll back up to top
-            if !(self?.parameters.contains(where: { (key, _) -> Bool in key == pageKey}) ?? false) {
-                self?.scrollToTopOfList()
+
+            DispatchQueue.main.async {
+                self?.users = users
+                self?.stopLoadingAnimation()
+                //If a new search then scroll back up to top
+                if !(self?.parameters.contains(where: { (key, _) -> Bool in key == pageKey}) ?? false) {
+                    self?.scrollToTopOfList()
+                }
+                self?.collectionView.reloadData()
             }
-            self?.collectionView.reloadData()
         }
 
         viewModel.errorViewHeight.bind { [weak self] height in
@@ -97,11 +107,9 @@ class SearchUsersVC: UIViewController {
         }
 
         viewModel.searchQuery.bind { [weak self] searchQuery in
-                self?.lastSearchedQuery = searchQuery
-                self?.searchBar.text = searchQuery
+            self?.lastSearchedQuery = searchQuery
+            self?.searchBar.text = searchQuery
         }
-
-        setupCollection()
     }
 
     fileprivate func setupSearchBar() {

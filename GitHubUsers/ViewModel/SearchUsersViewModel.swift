@@ -93,8 +93,6 @@ extension SearchUsersViewModel {
 
     // MARK: - Persistence
 
-    // MARK: - Persistency
-
     // Restore last search term and results returned
 
     fileprivate func restoreAppState() {
@@ -119,7 +117,8 @@ extension SearchUsersViewModel {
         }
     }
 
-    func restoreUsers() {
+    fileprivate func restoreUsers() {
+
         if !self.parameters.value.isEmpty {
 
             print("🔥 PARAMS restored: \(parameters.value)")
