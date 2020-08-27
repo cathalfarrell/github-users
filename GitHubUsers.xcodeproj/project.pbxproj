@@ -35,6 +35,8 @@
 		8C656F732492311A003D8723 /* UserGridCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C656F712492311A003D8723 /* UserGridCell.xib */; };
 		8C656F742492311A003D8723 /* UserGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C656F722492311A003D8723 /* UserGridCell.swift */; };
 		8C656F762492406C003D8723 /* SearchUsersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C656F752492406C003D8723 /* SearchUsersVC.swift */; };
+		8C6DCDF124F7D53B00D09581 /* SearchUsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DCDF024F7D53B00D09581 /* SearchUsersViewModel.swift */; };
+		8C6DCDF324F7D55100D09581 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DCDF224F7D55100D09581 /* Box.swift */; };
 		8C8174E22492AA5C00789AD3 /* CDUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8174E02492AA5C00789AD3 /* CDUser+CoreDataClass.swift */; };
 		8C8174E52492AC7500789AD3 /* PersistencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8174E42492AC7500789AD3 /* PersistencyService.swift */; };
 		8CA62A572490CDEE00455B9F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA62A562490CDEE00455B9F /* UserService.swift */; };
@@ -77,6 +79,8 @@
 		8C656F712492311A003D8723 /* UserGridCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserGridCell.xib; sourceTree = "<group>"; };
 		8C656F722492311A003D8723 /* UserGridCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserGridCell.swift; sourceTree = "<group>"; };
 		8C656F752492406C003D8723 /* SearchUsersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersVC.swift; sourceTree = "<group>"; };
+		8C6DCDF024F7D53B00D09581 /* SearchUsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersViewModel.swift; sourceTree = "<group>"; };
+		8C6DCDF224F7D55100D09581 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		8C8174E02492AA5C00789AD3 /* CDUser+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDUser+CoreDataClass.swift"; sourceTree = "<group>"; };
 		8C8174E42492AC7500789AD3 /* PersistencyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistencyService.swift; sourceTree = "<group>"; };
 		8CA62A562490CDEE00455B9F /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 				8C656F7A2492454C003D8723 /* Helpers */,
 				8CA62A5B2490F77C00455B9F /* Extensions */,
 				8C656F77249244D3003D8723 /* Model */,
+				8C6DCDEF24F7D4E500D09581 /* ViewModel */,
 				8C656F78249244DF003D8723 /* View */,
 				8C656F79249244EE003D8723 /* Controller */,
 				8C640F32248E8DC4003EA22C /* AppDelegate.swift */,
@@ -224,6 +229,15 @@
 				8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		8C6DCDEF24F7D4E500D09581 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8C6DCDF224F7D55100D09581 /* Box.swift */,
+				8C6DCDF024F7D53B00D09581 /* SearchUsersViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		8C8174DF2492AA3F00789AD3 /* CoreData */ = {
@@ -424,10 +438,12 @@
 				8CA62A592490D1D100455B9F /* APIResponseUser.swift in Sources */,
 				8C640F6C249000B4003EA22C /* URLEncoder.swift in Sources */,
 				8C4395A924939202000659F2 /* LottieView.swift in Sources */,
+				8C6DCDF324F7D55100D09581 /* Box.swift in Sources */,
 				8CA62A662491220300455B9F /* UserDetailView.swift in Sources */,
 				8CA62A6424910FFB00455B9F /* DataExtensions.swift in Sources */,
 				8C640F7A24900108003EA22C /* APIResponseSearchUsers.swift in Sources */,
 				8CA62A6224910C5500455B9F /* LoadUsers.swift in Sources */,
+				8C6DCDF124F7D53B00D09581 /* SearchUsersViewModel.swift in Sources */,
 				8C656F762492406C003D8723 /* SearchUsersVC.swift in Sources */,
 				8C640F33248E8DC4003EA22C /* AppDelegate.swift in Sources */,
 				8C09591524925AB40074CA59 /* UICollectionViewExtensions.swift in Sources */,

@@ -16,6 +16,8 @@ import Lottie
 
 class SearchUsersVC: UIViewController {
 
+    private let viewModel = SearchUsersViewModel()
+
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var errorView: UIView!
@@ -53,8 +55,6 @@ class SearchUsersVC: UIViewController {
 
     private let reuseIdentifierList = "UserListCell"
     private let reuseIdentifierGrid = "UserGridCell"
-    private let welcomeText = "You can search for users of the GitHub API by username. " +
-                              "Just enter some text in the above search bar and tap on the search key on the keyboard."
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,7 +65,10 @@ class SearchUsersVC: UIViewController {
         setupSearchBar()
         setupErrorLabel()
 
-        self.mainTextLabel.text = welcomeText
+        viewModel.mainText.bind { [weak self] text in
+            self?.mainTextLabel.text = text
+        }
+
         setupCollection()
 
         restoreUsers()
@@ -252,7 +255,10 @@ class SearchUsersVC: UIViewController {
             displayError(message: "No users found.")
 
             DispatchQueue.main.async {
-                self.mainTextLabel.text = self.welcomeText
+                    //TODO - remove this once you move users to view model
+                    self.viewModel.mainText.bind { [weak self] text in
+                    self?.mainTextLabel.text = text
+                }
             }
         }
     }
