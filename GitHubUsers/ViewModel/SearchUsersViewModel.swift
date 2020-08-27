@@ -11,20 +11,15 @@ import UIKit
 
 public class SearchUsersViewModel {
 
-    static let defaultParameters = JSONDictionary()
-
+    // Bindings - As these update - the bound UI updates
+    
     let parameters = Box(JSONDictionary())
-
     let mainText = Box("You can search for users of the GitHub API by username. " +
                               "Just enter some text in the above search bar and tap on the search key on the keyboard.")
     let errorText = Box("")
-
     let users = Box([User]())
-
     let errorViewHeight: Box<CGFloat> = Box(0)
-
     let isListView: Box<Bool> = Box(false)
-
     let searchQuery = Box("")
 
     init() {
