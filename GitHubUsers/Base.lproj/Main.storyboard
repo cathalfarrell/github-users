@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Z8o-UX-pjE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="WP4-dm-NfS">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -7,6 +7,38 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="nwb-UM-RZH">
+            <objects>
+                <viewController id="WP4-dm-NfS" customClass="LoginViewController" customModule="GitHubUsers" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yho-wq-epQ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="2gQ-Eo-WBO">
+                                <rect key="frame" x="16" y="348" width="382" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="M3v-XW-40j"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="TdF-vp-keG" firstAttribute="trailing" secondItem="2gQ-Eo-WBO" secondAttribute="trailing" constant="16" id="NdU-3u-pmD"/>
+                            <constraint firstItem="2gQ-Eo-WBO" firstAttribute="centerY" secondItem="yho-wq-epQ" secondAttribute="centerY" id="cue-yc-7bF"/>
+                            <constraint firstItem="2gQ-Eo-WBO" firstAttribute="centerX" secondItem="yho-wq-epQ" secondAttribute="centerX" id="lHh-vs-hhb"/>
+                            <constraint firstItem="2gQ-Eo-WBO" firstAttribute="leading" secondItem="TdF-vp-keG" secondAttribute="leading" constant="16" id="se9-xS-mFv"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="TdF-vp-keG"/>
+                    </view>
+                    <connections>
+                        <outlet property="loginProviderStackView" destination="2gQ-Eo-WBO" id="dyg-EE-dIF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uVe-Rg-Fni" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1790" y="-70"/>
+        </scene>
         <!--SearchUsersVC-->
         <scene sceneID="H6S-GX-6ym">
             <objects>
