@@ -8,6 +8,7 @@
 //  swiftlint:disable unused_optional_binding
 
 import UIKit
+import AuthenticationServices
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -16,6 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
+
+        checkCredentials()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -43,5 +46,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Save changes in the application's managed object context when the application transitions to the background.
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+    }
+
+    fileprivate func checkCredentials() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        appleIDProvider.getCredentialState(forUserID: KeychainItem.currentUserIdentifier) { (credentialState, error) in
+
+            if let error = error {
+                print("🛑 Sign-In Error: \(error.localizedDescription)")
+            }
+
+            switch credentialState {
+            case .authorized:
+                print("✅ User is authorized so progess to landing screen")
+            // The Apple ID credential is valid.
+            case .revoked, .notFound:
+                print("🛑 User is not authorized - credentialState: \(credentialState.rawValue)")
+                // The Apple ID credential is either revoked or was not found, so show the sign-in UI.
+
+                DispatchQueue.main.async {
+                    self.window?.rootViewController?.showLoginViewController()
+                }
+            default:
+                break
+            }
+        }
     }
 }

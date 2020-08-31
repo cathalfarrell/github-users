@@ -72,22 +72,50 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             print("✅ User Family Name: \(userFamilyName)")
             print("✅ User Email: \(userEmail)")
 
+            //print("Token \(appleIdCredential.identityToken)")
+
             // For demo purposes store details in keychain
             saveUserIdentifier(userIdentifier: userIdentifier)
+
+            //Successful login so hide the login UI
+            self.dismiss(animated: true, completion: nil)
 
         case let passwordCredential as ASPasswordCredential:
             // Sign in using an exisitng iCloud Keychain credential
             // For demo purposes just print
             print("✅ Password Credential User: \(passwordCredential.user)")
             print("✅ Password Credential Password: \(passwordCredential.password)")
+
+            // Sign in using an existing iCloud Keychain credential.
+            let username = passwordCredential.user
+            let password = passwordCredential.password
+
+            // For the purpose of this demo app, show the password credential as an alert.
+            DispatchQueue.main.async {
+                self.showPasswordCredentialAlert(username: username, password: password)
+            }
+
         default:
             break
         }
     }
 
+    private func showPasswordCredentialAlert(username: String, password: String) {
+        let message = "The app has received your selected credential from the keychain. \n\n Username: \(username)\n Password: \(password)"
+        let alertController = UIAlertController(title: "Keychain Credential Received",
+                                                message: message,
+                                                preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+
     func saveUserIdentifier(userIdentifier: String) {
-        // Learn how to save into KeyChain here
-        // Can then be read into App Delegate on future launches
+        // Save into KeyChain here
+        do {
+            try KeychainItem(service: "com.cathalfarrell.GitHubUsers", account: "userIdentifier").saveItem(userIdentifier)
+        } catch {
+            print("Unable to save userIdentifier to keychain.")
+        }
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
@@ -99,5 +127,16 @@ extension LoginViewController: ASAuthorizationControllerPresentationContextProvi
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
 
         return self.view.window!
+    }
+}
+extension UIViewController {
+
+    func showLoginViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let loginViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+            loginViewController.modalPresentationStyle = .formSheet
+            loginViewController.isModalInPresentation = true
+            self.present(loginViewController, animated: true, completion: nil)
+        }
     }
 }
