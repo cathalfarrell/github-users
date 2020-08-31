@@ -9,14 +9,50 @@
 
 import UIKit
 import CoreData
+import AuthenticationServices
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+
+        // For demo purposes store details in keychain
+        if let userIdentifier = readUserIdentiferFromKeyChain() {
+            let appleIDprovider = ASAuthorizationAppleIDProvider()
+            appleIDprovider.getCredentialState(forUserID: userIdentifier) { (credentialState, error) in
+                switch credentialState {
+                case .authorized:
+                    // Apple ID credential is valid
+                    print("✅ User is authorized so progess to landing screen")
+                case .revoked:
+                    // Apple ID credential is revoked, Call exisitng sign-out logic - fall through to show sign-in UI
+                    print("🛑 User is not authorized - revoked")
+                    self.showLoginViewController()
+                case .notFound:
+                    //No credential found, so show the sign in UI
+                    print("🛑 User is not authorized - not found")
+                    self.showLoginViewController()
+                default:
+                    break
+                }
+            }
+        } else {
+            self.showLoginViewController()
+        }
+
         return true
+    }
+
+    func readUserIdentiferFromKeyChain() -> String? {
+        // For demo purposes store details in keychain
+        print("🛑 Write code to make this read here")
+
+        return nil
+    }
+
+    func showLoginViewController() {
+        print("🛑 Write code to show the login screen here")
     }
 
     // MARK: UISceneSession Lifecycle

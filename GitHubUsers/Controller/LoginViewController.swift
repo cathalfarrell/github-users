@@ -20,6 +20,11 @@ class LoginViewController: UIViewController {
         loginProviderStackView.addArrangedSubview(button)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        performExistingAccountSetupFlows()
+    }
+
     @objc
     func handleAuthorizationAppleIDButtonPress() {
         let request = ASAuthorizationAppleIDProvider().createRequest()
@@ -30,10 +35,26 @@ class LoginViewController: UIViewController {
         controller.presentationContextProvider = self
         controller.performRequests()
     }
+
+    // Prompts the user if an existing iCloud Keychain credential or Apple ID credential is found
+    func performExistingAccountSetupFlows() {
+        // prepare requests for both Apple ID and password providers
+        let requests = [ASAuthorizationAppleIDProvider().createRequest(),
+                        ASAuthorizationPasswordProvider().createRequest()
+        ]
+
+        // create an authorization controller with the given requests
+        let controller = ASAuthorizationController(authorizationRequests: requests)
+        controller.delegate = self
+        controller.presentationContextProvider = self
+        controller.performRequests()
+    }
+
 }
 extension LoginViewController: ASAuthorizationControllerDelegate {
 
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    func authorizationController(controller: ASAuthorizationController,
+                                 didCompleteWithAuthorization authorization: ASAuthorization) {
         //handle authorization
 
         switch authorization.credential {
@@ -44,15 +65,29 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             let userFamilyName = userFullName?.familyName ?? "Missing Family Name"
             let userEmail = appleIdCredential.email ?? "Missing email"
 
-            //create an account for your system
-            // for demo purposes store details in keychain
+            // Create an account for your system
+
             print("✅ User Identifier: \(userIdentifier)")
             print("✅ User Given Name: \(userGivenName)")
             print("✅ User Family Name: \(userFamilyName)")
             print("✅ User Email: \(userEmail)")
+
+            // For demo purposes store details in keychain
+            saveUserIdentifier(userIdentifier: userIdentifier)
+
+        case let passwordCredential as ASPasswordCredential:
+            // Sign in using an exisitng iCloud Keychain credential
+            // For demo purposes just print
+            print("✅ Password Credential User: \(passwordCredential.user)")
+            print("✅ Password Credential Password: \(passwordCredential.password)")
         default:
             break
         }
+    }
+
+    func saveUserIdentifier(userIdentifier: String) {
+        // Learn how to save into KeyChain here
+        // Can then be read into App Delegate on future launches
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
