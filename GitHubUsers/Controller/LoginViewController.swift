@@ -22,18 +22,47 @@ class LoginViewController: UIViewController {
 
     @objc
     func handleAuthorizationAppleIDButtonPress() {
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = [.fullName, .email]
 
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.delegate = self
+        controller.presentationContextProvider = self
+        controller.performRequests()
     }
-    
+}
+extension LoginViewController: ASAuthorizationControllerDelegate {
 
-    /*
-    // MARK: - Navigation
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        //handle authorization
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        switch authorization.credential {
+        case let appleIdCredential as ASAuthorizationAppleIDCredential:
+            let userIdentifier = appleIdCredential.user
+            let userFullName = appleIdCredential.fullName
+            let userGivenName = userFullName?.givenName ?? "Missing Given Name"
+            let userFamilyName = userFullName?.familyName ?? "Missing Family Name"
+            let userEmail = appleIdCredential.email ?? "Missing email"
+
+            //create an account for your system
+            // for demo purposes store details in keychain
+            print("✅ User Identifier: \(userIdentifier)")
+            print("✅ User Given Name: \(userGivenName)")
+            print("✅ User Family Name: \(userFamilyName)")
+            print("✅ User Email: \(userEmail)")
+        default:
+            break
+        }
     }
-    */
 
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        //handle error
+    }
+
+}
+extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+
+        return self.view.window!
+    }
 }
