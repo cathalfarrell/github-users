@@ -1,5 +1,5 @@
 //
-//  HTTPNetworkRoute.swift
+//  Result.swift
 //  GitHubUsers
 //
 //  Created by Cathal Farrell on 09/06/2020.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum HTTPNetworkRoute: String {
-    case search = "search/users"
-    case user = "users/:id"
+enum Result<T> {
+    case success(T)
+    case failure(Error)
 }

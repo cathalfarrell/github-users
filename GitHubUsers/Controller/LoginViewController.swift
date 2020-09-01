@@ -101,7 +101,8 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
     }
 
     private func showPasswordCredentialAlert(username: String, password: String) {
-        let message = "The app has received your selected credential from the keychain. \n\n Username: \(username)\n Password: \(password)"
+        let message = "The app has received your selected credential from the keychain. \n\n"
+        + "Username: \(username)\n Password: \(password)"
         let alertController = UIAlertController(title: "Keychain Credential Received",
                                                 message: message,
                                                 preferredStyle: .alert)
@@ -112,7 +113,8 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
     func saveUserIdentifier(userIdentifier: String) {
         // Save into KeyChain here
         do {
-            try KeychainItem(service: "com.cathalfarrell.GitHubUsers", account: "userIdentifier").saveItem(userIdentifier)
+            try KeychainItem(service: "com.cathalfarrell.GitHubUsers",
+                             account: "userIdentifier").saveItem(userIdentifier)
         } catch {
             print("Unable to save userIdentifier to keychain.")
         }
@@ -133,7 +135,8 @@ extension UIViewController {
 
     func showLoginViewController() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let loginViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+        if let loginViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+            as? LoginViewController {
             loginViewController.modalPresentationStyle = .formSheet
             loginViewController.isModalInPresentation = true
             self.present(loginViewController, animated: true, completion: nil)

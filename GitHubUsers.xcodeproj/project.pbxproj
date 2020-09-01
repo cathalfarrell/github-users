@@ -24,12 +24,8 @@
 		8C640F52248E9E36003EA22C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F51248E9E36003EA22C /* User.swift */; };
 		8C640F58248F9CF5003EA22C /* UserDragCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */; };
 		8C640F6B249000B4003EA22C /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F69249000B4003EA22C /* Result.swift */; };
-		8C640F6C249000B4003EA22C /* URLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F6A249000B4003EA22C /* URLEncoder.swift */; };
-		8C640F72249000D5003EA22C /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F6D249000D4003EA22C /* HTTPMethod.swift */; };
-		8C640F73249000D5003EA22C /* HTTPNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F6E249000D5003EA22C /* HTTPNetworkRequest.swift */; };
 		8C640F74249000D5003EA22C /* HTTPNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F6F249000D5003EA22C /* HTTPNetworkError.swift */; };
 		8C640F75249000D5003EA22C /* HTTPNetworkResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F70249000D5003EA22C /* HTTPNetworkResponse.swift */; };
-		8C640F76249000D5003EA22C /* HTTPNetworkRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F71249000D5003EA22C /* HTTPNetworkRoute.swift */; };
 		8C640F7924900108003EA22C /* SearchUsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F7724900108003EA22C /* SearchUsersService.swift */; };
 		8C640F7A24900108003EA22C /* APIResponseSearchUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C640F7824900108003EA22C /* APIResponseSearchUsers.swift */; };
 		8C656F732492311A003D8723 /* UserGridCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C656F712492311A003D8723 /* UserGridCell.xib */; };
@@ -70,12 +66,8 @@
 		8C640F51248E9E36003EA22C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8C640F57248F9CF5003EA22C /* UserDragCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDragCoordinator.swift; sourceTree = "<group>"; };
 		8C640F69249000B4003EA22C /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
-		8C640F6A249000B4003EA22C /* URLEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLEncoder.swift; sourceTree = "<group>"; };
-		8C640F6D249000D4003EA22C /* HTTPMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
-		8C640F6E249000D5003EA22C /* HTTPNetworkRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPNetworkRequest.swift; sourceTree = "<group>"; };
 		8C640F6F249000D5003EA22C /* HTTPNetworkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPNetworkError.swift; sourceTree = "<group>"; };
 		8C640F70249000D5003EA22C /* HTTPNetworkResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPNetworkResponse.swift; sourceTree = "<group>"; };
-		8C640F71249000D5003EA22C /* HTTPNetworkRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPNetworkRoute.swift; sourceTree = "<group>"; };
 		8C640F7724900108003EA22C /* SearchUsersService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchUsersService.swift; sourceTree = "<group>"; };
 		8C640F7824900108003EA22C /* APIResponseSearchUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIResponseSearchUsers.swift; sourceTree = "<group>"; };
 		8C656F712492311A003D8723 /* UserGridCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserGridCell.xib; sourceTree = "<group>"; };
@@ -162,7 +154,6 @@
 		8C640F65248FFFD7003EA22C /* NetworkLayer */ = {
 			isa = PBXGroup;
 			children = (
-				8C640F682490008C003EA22C /* Encoding */,
 				8C640F6724900080003EA22C /* Service */,
 				8C640F6624900069003EA22C /* HTTP */,
 			);
@@ -172,11 +163,8 @@
 		8C640F6624900069003EA22C /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
-				8C640F6D249000D4003EA22C /* HTTPMethod.swift */,
 				8C640F6F249000D5003EA22C /* HTTPNetworkError.swift */,
-				8C640F6E249000D5003EA22C /* HTTPNetworkRequest.swift */,
 				8C640F70249000D5003EA22C /* HTTPNetworkResponse.swift */,
-				8C640F71249000D5003EA22C /* HTTPNetworkRoute.swift */,
 			);
 			path = HTTP;
 			sourceTree = "<group>";
@@ -184,21 +172,13 @@
 		8C640F6724900080003EA22C /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				8C640F69249000B4003EA22C /* Result.swift */,
 				8C640F7824900108003EA22C /* APIResponseSearchUsers.swift */,
 				8CA62A582490D1D100455B9F /* APIResponseUser.swift */,
 				8C640F7724900108003EA22C /* SearchUsersService.swift */,
 				8CA62A562490CDEE00455B9F /* UserService.swift */,
 			);
 			path = Service;
-			sourceTree = "<group>";
-		};
-		8C640F682490008C003EA22C /* Encoding */ = {
-			isa = PBXGroup;
-			children = (
-				8C640F69249000B4003EA22C /* Result.swift */,
-				8C640F6A249000B4003EA22C /* URLEncoder.swift */,
-			);
-			path = Encoding;
 			sourceTree = "<group>";
 		};
 		8C656F77249244D3003D8723 /* Model */ = {
@@ -436,7 +416,6 @@
 				8C640F7924900108003EA22C /* SearchUsersService.swift in Sources */,
 				8C640F3D248E8DC4003EA22C /* GitHubUsers.xcdatamodeld in Sources */,
 				8C640F74249000D5003EA22C /* HTTPNetworkError.swift in Sources */,
-				8C640F76249000D5003EA22C /* HTTPNetworkRoute.swift in Sources */,
 				8C640F52248E9E36003EA22C /* User.swift in Sources */,
 				8C6DCDFE24FD2C7C00D09581 /* KeychainItem.swift in Sources */,
 				8C640F75249000D5003EA22C /* HTTPNetworkResponse.swift in Sources */,
@@ -445,7 +424,6 @@
 				8C640F58248F9CF5003EA22C /* UserDragCoordinator.swift in Sources */,
 				8C0ED6192493F6B400DCC857 /* UserDefaultsExtensions.swift in Sources */,
 				8CA62A592490D1D100455B9F /* APIResponseUser.swift in Sources */,
-				8C640F6C249000B4003EA22C /* URLEncoder.swift in Sources */,
 				8C6DCDFC24FD016500D09581 /* LoginViewController.swift in Sources */,
 				8C4395A924939202000659F2 /* LottieView.swift in Sources */,
 				8C6DCDF324F7D55100D09581 /* Box.swift in Sources */,
@@ -460,11 +438,9 @@
 				8C4395A3249364EE000659F2 /* CDUser+CoreDataProperties.swift in Sources */,
 				8C640F50248E8FF9003EA22C /* UserListCell.swift in Sources */,
 				8C640F6B249000B4003EA22C /* Result.swift in Sources */,
-				8C640F72249000D5003EA22C /* HTTPMethod.swift in Sources */,
 				8C656F742492311A003D8723 /* UserGridCell.swift in Sources */,
 				8C8174E52492AC7500789AD3 /* PersistencyService.swift in Sources */,
 				8CA62A5D2490F79000455B9F /* URLExtensions.swift in Sources */,
-				8C640F73249000D5003EA22C /* HTTPNetworkRequest.swift in Sources */,
 				8C640F35248E8DC4003EA22C /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
