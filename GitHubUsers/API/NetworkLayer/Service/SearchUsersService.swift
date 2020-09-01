@@ -18,7 +18,10 @@ struct SearchUsersService {
 
     func getUsers(_ parameters: [String: Any], completion: @escaping (Result<APIResponseSearchUsers>) -> Void) {
 
-        AF.request("\(baseURL)search/users",
+        let requestPath = "\(baseURL)search/users"
+        print("😀 Requesting Path: \(requestPath)")
+
+        AF.request(requestPath,
             parameters: parameters,
             encoding: URLEncoding.queryString).responseJSON { (response) in
 
