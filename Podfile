@@ -8,6 +8,7 @@ target 'GitHubUsers' do
   pod 'Kingfisher/SwiftUI'
   pod 'lottie-ios'
   pod 'SwiftLint'
+  pod 'Alamofire'
 
   # Pods for GitHubUsers
 
