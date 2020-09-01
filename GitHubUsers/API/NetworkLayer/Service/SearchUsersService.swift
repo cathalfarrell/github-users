@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import Alamofire
+
+let baseURL = "https://api.github.com/"
 
 struct SearchUsersService {
 
@@ -15,68 +18,38 @@ struct SearchUsersService {
 
     func getUsers(_ parameters: [String: Any], completion: @escaping (Result<APIResponseSearchUsers>) -> Void) {
 
-        let baseURL = "https://api.github.com" //Usually set in an Environment Object
+        AF.request("\(baseURL)search/users",
+            parameters: parameters,
+            encoding: URLEncoding.queryString).responseJSON { (response) in
 
-        let headers = HTTPHeaders([
-            "Accept": "application/json",
-            "Content-Type": "application/json"])
+            /*
+            print(response.request)   // original url request
+            print(response.response) // http url response
+            print(response.result)  // response serialization result
+            */
 
-        do {
-            let request = try HTTPNetworkRequest.configureHTTPRequest(baseURL: baseURL,
-                                                                      from: .search,
-                                                                      with: parameters,
-                                                                      includes: headers,
-                                                                      contains: nil,
-                                                                      and: .get)
+            let result = HTTPNetworkResponse.handleNetworkResponse(for: response.response)
+            let paginationNextPage = self.getNextPageFromHeaders(response: response.response)
 
-            print("😀 Making this request: \(request) METHOD:\(request.httpMethod ?? "")")
-            print("😀 HEADERS: \(String(describing: headers))")
+            switch result {
 
-            session.dataTask(with: request) { (data, res, err) in
+            case .success:
 
-                if let response = res as? HTTPURLResponse, let unwrappedData = data {
+                if let unwrappedData = response.data {
+                    do {
+                        var jsonResult = try JSONDecoder().decode(APIResponseSearchUsers.self, from: unwrappedData)
+                        jsonResult.nextPage = paginationNextPage
 
-                    let paginationNextPage = self.getNextPageFromHeaders(response: response)
-
-                    let result = HTTPNetworkResponse.handleNetworkResponse(for: response)
-                    switch result {
-
-                    case .success:
-
-                        do {
-                            var jsonResult = try JSONDecoder().decode(APIResponseSearchUsers.self, from: unwrappedData)
-                            jsonResult.nextPage = paginationNextPage
-
-                            completion(Result.success(jsonResult))
-                        } catch let err {
-                            print("🛑 Unable to parse JSON response: \(err.localizedDescription)")
-
-                            completion(Result.failure(err))
-                        }
-
-                        //Print Response
-
-                        /*
-                        print("✅ HEADER RESPONSE: \(response)")
-                        print("✅ Response for: \(request.url?.absoluteString)")
-                        unwrappedData.printJSONResponse()
-                        */
-
-                    case .failure(let err):
-                        print("🛑 FAILED: \(result) error:\(err)")
+                        completion(Result.success(jsonResult))
+                    } catch let err {
+                        print("🛑 Unable to parse JSON response: \(err.localizedDescription)")
                         completion(Result.failure(err))
                     }
                 }
-
-                if let err = err {
-                    print("🛑 ERROR: \(err.localizedDescription)")
-                    completion(Result.failure(err))
-                }
-
-                }.resume()
-        } catch let err {
-
-            completion(Result.failure(err))
+            case .failure(let err):
+                print("🛑 Unable to parse JSON response: \(err.localizedDescription)")
+                completion(Result.failure(err))
+            }
         }
     }
 
