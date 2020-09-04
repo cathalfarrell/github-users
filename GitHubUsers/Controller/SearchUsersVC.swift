@@ -64,6 +64,13 @@ class SearchUsersVC: UIViewController {
         setUpViewModel()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        // Use long press to detect re-order of cell action
+        let longPressGesture = UILongPressGestureRecognizer(target: self,
+                                                            action: #selector(self.reOrderOfCells(gesture:)))
+        collectionView.addGestureRecognizer(longPressGesture)
+    }
+
     fileprivate func setUpViewModel() {
 
         // MARK: - View Model Bindings for UI Updates
@@ -223,7 +230,7 @@ class SearchUsersVC: UIViewController {
         hideSearchKeyboard()
 
         super.setEditing(editing, animated: animated)
-        self.collectionView.dragInteractionEnabled = editing
+
         self.collectionView.allowsMultipleSelection = editing
 
         let indexPaths = collectionView.indexPathsForVisibleItems
@@ -258,6 +265,26 @@ class SearchUsersVC: UIViewController {
     }
 
     // MARK: - Drag/Drop Helpers
+
+    @objc func reOrderOfCells(gesture: UILongPressGestureRecognizer) {
+
+        if isEditing {
+            switch gesture.state {
+            case .began:
+                guard let selectedIndexPath = collectionView.indexPathForItem(at:
+                    gesture.location(in: collectionView)) else {
+                    break
+                }
+                collectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
+            case .changed:
+                collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view!))
+            case .ended:
+                collectionView.endInteractiveMovement()
+            default:
+                collectionView.cancelInteractiveMovement()
+            }
+        }
+    }
 
     func moveUser(at sourceIndex: Int, to destinationIndex: Int) {
 
@@ -396,6 +423,16 @@ extension SearchUsersVC: UICollectionViewDataSource {
                 viewModel.loadUsers(parameters)
             }
         }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath,
+                        to destinationIndexPath: IndexPath) {
+
+        moveUser(at: sourceIndexPath.row, to: destinationIndexPath.row)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return true
     }
 }
 extension SearchUsersVC: UICollectionViewDelegate {
