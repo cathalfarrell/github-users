@@ -127,10 +127,6 @@ class SearchUsersVC: UIViewController {
        self.collectionView.delegate = self
        self.collectionView.dataSource = self
 
-       //Drag & Drop
-       self.collectionView.dragDelegate = self
-       self.collectionView.dropDelegate = self
-
        //Pull to refresh
        self.collectionView.refreshControl = refreshControl
        self.refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
@@ -257,7 +253,6 @@ class SearchUsersVC: UIViewController {
             DispatchQueue.main.async {
                 self.collectionView.deleteItems(at: selectedCells)
                 PersistencyService.shared.updateUsers(users: self.users)
-               // self.handleNoUsers()
             }
         }
     }
@@ -277,14 +272,6 @@ class SearchUsersVC: UIViewController {
         DispatchQueue.main.async {
             PersistencyService.shared.updateUsers(users: self.users)
         }
-    }
-
-    func dragItems(for indexPath: IndexPath) -> [UIDragItem] {
-        let item = self.users[indexPath.item]
-        let itemProvider = NSItemProvider(object: item.login as NSString)
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = item
-        return [dragItem]
     }
 
     // MARK: - Image Download into cells
@@ -475,77 +462,6 @@ extension SearchUsersVC: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
 }
-extension SearchUsersVC: UICollectionViewDragDelegate {
-
-    // MARK: UICollectionViewDragDelegate
-
-    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession,
-                        at indexPath: IndexPath) -> [UIDragItem] {
-
-        let dragCoordinator = UserDragCoordinator(sourceIndexPath: indexPath)
-        session.localContext = dragCoordinator
-        return self.dragItems(for: indexPath)
-    }
-}
-extension SearchUsersVC: UICollectionViewDropDelegate {
-
-    // MARK: UICollectionViewDropDelegate
-
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession,
-                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-
-        guard session.items.count == 1 else {
-          return UICollectionViewDropProposal(operation: .cancel)
-        }
-
-        if collectionView.hasActiveDrag {
-          return UICollectionViewDropProposal(operation: .move,
-                                              intent: .insertAtDestinationIndexPath)
-        } else {
-          return UICollectionViewDropProposal(operation: .copy,
-                                              intent: .insertAtDestinationIndexPath)
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        performDropWith coordinator: UICollectionViewDropCoordinator) {
-
-        // Get the datasource for this collection view
-        let destinationIndexPath: IndexPath
-        if let indexPath = coordinator.destinationIndexPath {
-          destinationIndexPath = indexPath
-        } else {
-          // Drop first item at the end of the collection view
-          destinationIndexPath =
-            IndexPath(item: collectionView.numberOfItems(inSection: 0), section: 0)
-        }
-        let item = coordinator.items[0]
-
-        switch coordinator.proposal.operation {
-        case .move:
-          guard let dragCoordinator =
-            coordinator.session.localDragSession?.localContext as? UserDragCoordinator
-            else { return }
-          // Save information to calculate reordering
-          if let sourceIndexPath = item.sourceIndexPath {
-            print("Moving within the same collection view...")
-            dragCoordinator.isReordering = true
-            // Update datasource and collection view
-            collectionView.performBatchUpdates({
-              self.moveUser(at: sourceIndexPath.item, to: destinationIndexPath.item)
-              collectionView.deleteItems(at: [sourceIndexPath])
-              collectionView.insertItems(at: [destinationIndexPath])
-            })
-          }
-
-          // Set flag to indicate drag completed
-          dragCoordinator.dragCompleted = true
-          coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
-        default:
-          return
-        }
-    }
-}
 extension SearchUsersVC {
 
     // MARK: - Search Functionality
@@ -641,7 +557,6 @@ extension SearchUsersVC {
             DispatchQueue.main.async {
                 animation.stop()
                 animation.removeFromSuperview()
-
                 self.collectionView.refreshControl?.endRefreshing()
             }
         }

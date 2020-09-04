@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
 
-        checkCredentials()
+        //checkCredentials()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
