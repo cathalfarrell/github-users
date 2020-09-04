@@ -7,7 +7,6 @@
 //
 //  swiftlint:disable file_length
 
-import Kingfisher
 import SwiftUI
 import UIKit
 import Lottie
@@ -125,14 +124,14 @@ class SearchUsersVC: UIViewController {
         // Register cell classes
         let userCellNib = UINib(nibName: UserListCell.reuseIdentifier, bundle: nil)
         let userCellGridNib = UINib(nibName: UserGridCell.reuseIdentifier, bundle: nil)
-       self.collectionView.register(userCellNib, forCellWithReuseIdentifier: UserListCell.reuseIdentifier)
-       self.collectionView.register(userCellGridNib, forCellWithReuseIdentifier: UserGridCell.reuseIdentifier)
-       self.collectionView.delegate = self
-       self.collectionView.dataSource = self
+        self.collectionView.register(userCellNib, forCellWithReuseIdentifier: UserListCell.reuseIdentifier)
+        self.collectionView.register(userCellGridNib, forCellWithReuseIdentifier: UserGridCell.reuseIdentifier)
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
 
-       //Pull to refresh
-       self.collectionView.refreshControl = refreshControl
-       self.refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        //Pull to refresh
+        self.collectionView.refreshControl = refreshControl
+        self.refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
 
     }
 
@@ -269,7 +268,7 @@ class SearchUsersVC: UIViewController {
             case .began:
                 guard let selectedIndexPath = collectionView.indexPathForItem(at:
                     gesture.location(in: collectionView)) else {
-                    break
+                        break
                 }
                 collectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
             case .changed:
@@ -317,7 +316,7 @@ extension SearchUsersVC: UICollectionViewDataSource {
         if isListView {
 
             if let listCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserListCell.reuseIdentifier,
-                                                             for: indexPath) as? UserListCell {
+                                                                 for: indexPath) as? UserListCell {
                 // Configure the List cell
                 DispatchQueue.main.async {
                     listCell.configure(with: user)
@@ -329,7 +328,7 @@ extension SearchUsersVC: UICollectionViewDataSource {
         } else {
 
             if let gridCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserGridCell.reuseIdentifier,
-                                                             for: indexPath) as? UserGridCell {
+                                                                 for: indexPath) as? UserGridCell {
                 // Configure the Grid cell
                 DispatchQueue.main.async {
                     gridCell.configure(with: user)
@@ -442,8 +441,8 @@ extension SearchUsersVC {
         hideSearchKeyboard()
 
         guard let query = searchText, !query.isEmpty else {
-          print("No search text found")
-          return
+            print("No search text found")
+            return
         }
 
         if isNewSearch || isShowingError {
