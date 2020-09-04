@@ -59,11 +59,10 @@ class SearchUsersVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setUpViewModel()
         setupNavigationBar()
         setupSearchBar()
         setupCollection()
-        setUpViewModel()
-        configureCollectionViewDataSource()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -92,13 +91,12 @@ class SearchUsersVC: UIViewController {
         viewModel.users.bind { [weak self] users in
 
             DispatchQueue.main.async {
-                self?.applySnapshot(users: users)
+                self?.applySnapshot(users: users, withAnimation: true)
                 self?.stopLoadingAnimation()
                 //If a new search then scroll back up to top
                 if !(self?.parameters.contains(where: { (key, _) -> Bool in key == pageKey}) ?? false) {
                     self?.scrollToTopOfList()
                 }
-               // self?.collectionView.reloadData()
             }
         }
 
@@ -139,6 +137,11 @@ class SearchUsersVC: UIViewController {
         self.collectionView.refreshControl = refreshControl
         self.refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
 
+        if isListView {
+            configureListCollectionViewDataSource()
+        } else {
+            configureGridCollectionViewDataSource()
+        }
     }
 
     fileprivate func setupNavigationBar() {
@@ -200,10 +203,17 @@ class SearchUsersVC: UIViewController {
 
         clearSelectedCells() // when we switch layouts its better
 
+        if isListView {
+            configureListCollectionViewDataSource()
+        } else {
+            configureGridCollectionViewDataSource()
+        }
+
         DispatchQueue.main.async {
             self.navigationItem.setRightBarButton(self.toggleButton, animated: true)
-            self.collectionView?.reloadData()
         }
+
+        applySnapshot(users: snapshot.itemIdentifiers, withAnimation: false)
     }
 
     func clearSelectedCells() {
@@ -256,7 +266,7 @@ class SearchUsersVC: UIViewController {
             }
 
             snapshot.deleteItems(usersToDelete)
-            applySnapshot(users: self.snapshot.itemIdentifiers)
+            applySnapshot(users: self.snapshot.itemIdentifiers, withAnimation: true)
         }
     }
 
@@ -311,59 +321,6 @@ class SearchUsersVC: UIViewController {
 //        func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
 //            return true
 //        }
-}
-//extension SearchUsersVC: UICollectionViewDataSource {
-
-    // MARK: UICollectionViewDataSource
-
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        return 1
-//    }
-
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return users.count
-//    }
-
-//    func collectionView(_ collectionView: UICollectionView,
-//                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//
-//        let user = self.users[indexPath.row]
-//
-//        if isListView {
-//
-//            if let listCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserListCell.reuseIdentifier,
-//                                                                 for: indexPath) as? UserListCell {
-//                // Configure the List cell
-//                DispatchQueue.main.async {
-//                    listCell.configure(with: user)
-//                }
-//
-//                // Set editing mode on cells
-//                listCell.isInEditingMode = isEditing
-//
-//                return listCell
-//            }
-//
-//        } else {
-//
-//            if let gridCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserGridCell.reuseIdentifier,
-//                                                                 for: indexPath) as? UserGridCell {
-//                // Configure the Grid cell
-//                DispatchQueue.main.async {
-//                    gridCell.configure(with: user)
-//                }
-//
-//                // Set editing mode on cells
-//                gridCell.isInEditingMode = isEditing
-//
-//                return gridCell
-//            }
-//
-//        }
-//
-//        //Fallback
-//        return UICollectionViewCell()
-//    }
 
 //    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath,
 //                        to destinationIndexPath: IndexPath) {
@@ -374,8 +331,7 @@ class SearchUsersVC: UIViewController {
 //    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
 //        return true
 //    }
-//}
-
+}
 extension SearchUsersVC: UICollectionViewDelegate {
 
     // MARK: - UICollectionViewDelegate
@@ -565,7 +521,7 @@ extension SearchUsersVC {
     }
 
     // Diffable Data Source
-    private func configureCollectionViewDataSource() {
+    private func configureGridCollectionViewDataSource() {
 
         dataSource = DataSource(collectionView: collectionView,
                                 cellProvider: { (collectionView, indexPath, user) -> UserGridCell? in
@@ -579,13 +535,27 @@ extension SearchUsersVC {
         })
     }
 
+    private func configureListCollectionViewDataSource() {
+
+          dataSource = DataSource(collectionView: collectionView,
+                                  cellProvider: { (collectionView, indexPath, user) -> UserListCell? in
+
+                                      let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
+                                          UserListCell.reuseIdentifier, for: indexPath) as? UserListCell
+
+                                      cell?.configure(with: user)
+                                      cell?.isInEditingMode = self.isEditing
+                                      return cell
+          })
+      }
+
     // Snapshot
-    private func applySnapshot(users: [User]) {
+    private func applySnapshot(users: [User], withAnimation: Bool) {
 
         snapshot = DataSourceSnapshot()
         snapshot.appendSections([Section.main])
         snapshot.appendItems(users)
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: withAnimation)
 
         PersistencyService.shared.updateUsers(users: users)
     }
