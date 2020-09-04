@@ -52,9 +52,6 @@ class SearchUsersVC: UIViewController {
 
     var loadingAnimationView: AnimationView!
 
-    private let reuseIdentifierList = "UserListCell"
-    private let reuseIdentifierGrid = "UserGridCell"
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -127,10 +124,10 @@ class SearchUsersVC: UIViewController {
     fileprivate func setupCollection() {
 
         // Register cell classes
-       let userCellNib = UINib(nibName: reuseIdentifierList, bundle: nil)
-       let userCellGridNib = UINib(nibName: reuseIdentifierGrid, bundle: nil)
-       self.collectionView.register(userCellNib, forCellWithReuseIdentifier: reuseIdentifierList)
-       self.collectionView.register(userCellGridNib, forCellWithReuseIdentifier: reuseIdentifierGrid)
+        let userCellNib = UINib(nibName: UserListCell.reuseIdentifier, bundle: nil)
+        let userCellGridNib = UINib(nibName: UserGridCell.reuseIdentifier, bundle: nil)
+       self.collectionView.register(userCellNib, forCellWithReuseIdentifier: UserListCell.reuseIdentifier)
+       self.collectionView.register(userCellGridNib, forCellWithReuseIdentifier: UserGridCell.reuseIdentifier)
        self.collectionView.delegate = self
        self.collectionView.dataSource = self
 
@@ -380,7 +377,7 @@ extension SearchUsersVC: UICollectionViewDataSource {
 
         if isListView {
 
-            if let listCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierList,
+            if let listCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserListCell.reuseIdentifier,
                                                              for: indexPath) as? UserListCell {
                 // Configure the List cell
                 DispatchQueue.main.async {
@@ -393,7 +390,7 @@ extension SearchUsersVC: UICollectionViewDataSource {
 
         } else {
 
-            if let gridCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierGrid,
+            if let gridCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserGridCell.reuseIdentifier,
                                                              for: indexPath) as? UserGridCell {
                 // Configure the Grid cell
                 DispatchQueue.main.async {

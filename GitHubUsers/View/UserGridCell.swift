@@ -8,7 +8,8 @@
 
 import UIKit
 
-class UserGridCell: UICollectionViewCell {
+class UserGridCell: UICollectionViewCell, SelfConfiguringCell {
+    static let reuseIdentifier: String = "UserGridCell"
 
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var userName: UILabel!
