@@ -5,7 +5,6 @@
 //  Created by Cathal Farrell on 11/06/2020.
 //  Copyright © 2020 Cathal Farrell. All rights reserved.
 //
-//  swiftlint:disable unused_closure_parameter
 //  swiftlint:disable file_length
 
 import Kingfisher
@@ -297,66 +296,6 @@ class SearchUsersVC: UIViewController {
             PersistencyService.shared.updateUsers(users: self.users)
         }
     }
-
-    // MARK: - Image Download into cells
-
-    fileprivate func downloadAvatarImage(_ user: User, _ cell: UICollectionViewCell) {
-
-        // Using Kingfisher to asynchronously download and cache avatar
-        let url = URL(string: user.avatarUrl)
-
-        if let cell = cell as? UserListCell {
-
-            let processor = DownsamplingImageProcessor(size: cell.avatarImageView.bounds.size)
-                |> RoundCornerImageProcessor(cornerRadius: 20)
-            cell.avatarImageView.kf.indicatorType = .activity
-            cell.avatarImageView.kf.setImage(
-                with: url,
-                placeholder: UIImage(named: "placeholderImage"),
-                options: [
-                    .processor(processor),
-                    .scaleFactor(UIScreen.main.scale),
-                    .transition(.fade(1)),
-                    .cacheOriginalImage
-                ]) { result in
-                    /* //For Debug Purposes
-                    switch result {
-                    case .success(let value):
-                        print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
-                    case .failure(let error):
-                        print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
-                    }
-                    */
-            }
-        }
-
-        if let cell = cell as? UserGridCell {
-
-             let processor = DownsamplingImageProcessor(size: cell.avatarImageView.bounds.size)
-                 |> RoundCornerImageProcessor(cornerRadius: 20)
-             cell.avatarImageView.kf.indicatorType = .activity
-             cell.avatarImageView.kf.setImage(
-                 with: url,
-                 placeholder: UIImage(named: "placeholderImage"),
-                 options: [
-                     .processor(processor),
-                     .scaleFactor(UIScreen.main.scale),
-                     .transition(.fade(1)),
-                     .cacheOriginalImage
-                 ]) { result in
-
-                 /* //For Debug Purposes
-                 switch result {
-                 case .success(let value):
-                     print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
-                 case .failure(let error):
-                     print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
-                 }
-                 */
-             }
-         }
-    }
-
 }
 extension SearchUsersVC: UICollectionViewDataSource {
 
@@ -381,8 +320,7 @@ extension SearchUsersVC: UICollectionViewDataSource {
                                                              for: indexPath) as? UserListCell {
                 // Configure the List cell
                 DispatchQueue.main.async {
-                    listCell.configureCell(user: user)
-                    self.downloadAvatarImage(user, listCell)
+                    listCell.configure(with: user)
                 }
 
                 return listCell
@@ -394,8 +332,7 @@ extension SearchUsersVC: UICollectionViewDataSource {
                                                              for: indexPath) as? UserGridCell {
                 // Configure the Grid cell
                 DispatchQueue.main.async {
-                    gridCell.configureCell(user: user)
-                    self.downloadAvatarImage(user, gridCell)
+                    gridCell.configure(with: user)
                 }
 
                 return gridCell

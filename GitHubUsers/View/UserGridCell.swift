@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class UserGridCell: UICollectionViewCell, SelfConfiguringCell {
     static let reuseIdentifier: String = "UserGridCell"
@@ -36,8 +37,32 @@ class UserGridCell: UICollectionViewCell, SelfConfiguringCell {
         self.avatarImageView.clipsToBounds = true
     }
 
-    func configureCell(user: User) {
-        self.userName.text = user.login
+    func configure(with user: User) {
+
+        let url = URL(string: user.avatarUrl)
+        let processor = DownsamplingImageProcessor(size: avatarImageView.bounds.size)
+            |> RoundCornerImageProcessor(cornerRadius: 20)
+        avatarImageView.kf.indicatorType = .activity
+        avatarImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "placeholderImage"),
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ]) { result in
+                //For Debug Purposes
+                switch result {
+                case .success(let value):
+                    print("✅ KF Image Task done: \(value.source.url?.absoluteString ?? "")")
+                case .failure(let error):
+                    print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
+                }
+
+        }
+
+        userName.text = user.login
     }
 
     override func prepareForReuse() {
