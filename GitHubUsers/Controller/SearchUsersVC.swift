@@ -94,14 +94,14 @@ class SearchUsersVC: UIViewController {
         viewModel.users.bind { [weak self] users in
 
             DispatchQueue.main.async {
-                //self?.users = users
+                self?.users = users
                 self?.applySnapshot(users: users)
                 self?.stopLoadingAnimation()
                 //If a new search then scroll back up to top
                 if !(self?.parameters.contains(where: { (key, _) -> Bool in key == pageKey}) ?? false) {
                     self?.scrollToTopOfList()
                 }
-                self?.collectionView.reloadData()
+               // self?.collectionView.reloadData()
             }
         }
 
@@ -256,7 +256,7 @@ class SearchUsersVC: UIViewController {
             }
 
             DispatchQueue.main.async {
-                self.collectionView.deleteItems(at: selectedCells)
+                self.applySnapshot(users: self.users)
                 PersistencyService.shared.updateUsers(users: self.users)
             }
         }
@@ -298,6 +298,16 @@ class SearchUsersVC: UIViewController {
             PersistencyService.shared.updateUsers(users: self.users)
         }
     }
+
+//        func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath,
+//                            to destinationIndexPath: IndexPath) {
+//    
+//            moveUser(at: sourceIndexPath.row, to: destinationIndexPath.row)
+//        }
+//
+//        func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+//            return true
+//        }
 }
 //extension SearchUsersVC: UICollectionViewDataSource {
 
@@ -362,6 +372,7 @@ class SearchUsersVC: UIViewController {
 //        return true
 //    }
 //}
+
 extension SearchUsersVC: UICollectionViewDelegate {
 
     // MARK: - UICollectionViewDelegate
@@ -374,7 +385,9 @@ extension SearchUsersVC: UICollectionViewDelegate {
             toggleDeleteButton(collectionView)
         } else {
             // Just a normal tap to launch to Detail Screen
-            let selectedUser = self.users[indexPath.row]
+            guard let selectedUser = dataSource.itemIdentifier(for: indexPath) else {
+                return
+            }
             let view = UserDetailView(user: selectedUser)
             let hostVC = UIHostingController(rootView: view)
             navigationController?.pushViewController(hostVC, animated: true)
@@ -558,7 +571,7 @@ extension SearchUsersVC {
                                         UserGridCell.reuseIdentifier, for: indexPath) as? UserGridCell
 
                                     cell?.configure(with: user)
-
+                                    cell?.isInEditingMode = self.isEditing
                                     return cell
         })
     }
