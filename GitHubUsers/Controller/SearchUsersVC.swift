@@ -15,6 +15,14 @@ class SearchUsersVC: UIViewController {
 
     private let viewModel = SearchUsersViewModel()
 
+    // DataSource & DataSourceSnapshot typealias
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, User>
+    typealias DataSourceSnapshot = NSDiffableDataSourceSnapshot<Section, User>
+
+    //DataSourec & Snapshot
+    private var dataSource: DataSource!
+    private var snapshot = DataSourceSnapshot()
+
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var errorView: UIView!
@@ -57,6 +65,7 @@ class SearchUsersVC: UIViewController {
         setupSearchBar()
         setupCollection()
         setUpViewModel()
+        configureCollectionViewDataSource()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -85,7 +94,8 @@ class SearchUsersVC: UIViewController {
         viewModel.users.bind { [weak self] users in
 
             DispatchQueue.main.async {
-                self?.users = users
+                //self?.users = users
+                self?.applySnapshot(users: users)
                 self?.stopLoadingAnimation()
                 //If a new search then scroll back up to top
                 if !(self?.parameters.contains(where: { (key, _) -> Bool in key == pageKey}) ?? false) {
@@ -127,7 +137,7 @@ class SearchUsersVC: UIViewController {
         self.collectionView.register(userCellNib, forCellWithReuseIdentifier: UserListCell.reuseIdentifier)
         self.collectionView.register(userCellGridNib, forCellWithReuseIdentifier: UserGridCell.reuseIdentifier)
         self.collectionView.delegate = self
-        self.collectionView.dataSource = self
+        //self.collectionView.dataSource = self
 
         //Pull to refresh
         self.collectionView.refreshControl = refreshControl
@@ -289,85 +299,69 @@ class SearchUsersVC: UIViewController {
         }
     }
 }
-extension SearchUsersVC: UICollectionViewDataSource {
+//extension SearchUsersVC: UICollectionViewDataSource {
 
     // MARK: UICollectionViewDataSource
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
+//    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        return 1
+//    }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return users.count
-    }
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return users.count
+//    }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//    func collectionView(_ collectionView: UICollectionView,
+//                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//
+//        let user = self.users[indexPath.row]
+//
+//        if isListView {
+//
+//            if let listCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserListCell.reuseIdentifier,
+//                                                                 for: indexPath) as? UserListCell {
+//                // Configure the List cell
+//                DispatchQueue.main.async {
+//                    listCell.configure(with: user)
+//                }
+//
+//                // Set editing mode on cells
+//                listCell.isInEditingMode = isEditing
+//
+//                return listCell
+//            }
+//
+//        } else {
+//
+//            if let gridCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserGridCell.reuseIdentifier,
+//                                                                 for: indexPath) as? UserGridCell {
+//                // Configure the Grid cell
+//                DispatchQueue.main.async {
+//                    gridCell.configure(with: user)
+//                }
+//
+//                // Set editing mode on cells
+//                gridCell.isInEditingMode = isEditing
+//
+//                return gridCell
+//            }
+//
+//        }
+//
+//        //Fallback
+//        return UICollectionViewCell()
+//    }
 
-        let user = self.users[indexPath.row]
+//    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath,
+//                        to destinationIndexPath: IndexPath) {
+//
+//        moveUser(at: sourceIndexPath.row, to: destinationIndexPath.row)
+//    }
 
-        if isListView {
-
-            if let listCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserListCell.reuseIdentifier,
-                                                                 for: indexPath) as? UserListCell {
-                // Configure the List cell
-                DispatchQueue.main.async {
-                    listCell.configure(with: user)
-                }
-
-                // Set editing mode on cells
-                listCell.isInEditingMode = isEditing
-
-                return listCell
-            }
-
-        } else {
-
-            if let gridCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserGridCell.reuseIdentifier,
-                                                                 for: indexPath) as? UserGridCell {
-                // Configure the Grid cell
-                DispatchQueue.main.async {
-                    gridCell.configure(with: user)
-                }
-
-                // Set editing mode on cells
-                gridCell.isInEditingMode = isEditing
-
-                return gridCell
-            }
-
-        }
-
-        //Fallback
-        return UICollectionViewCell()
-    }
-
-    // MARK: Pagination - Request for next page made here when last row detected
-
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath) {
-
-        // Pagination
-        if collectionView.isLast(for: indexPath) {
-            print("🔥 Reached last item in collection")
-
-            if parameters.contains(where: { (key, _) -> Bool in key == pageKey}) {
-                //Pagination available
-                viewModel.loadUsers(parameters)
-            }
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath,
-                        to destinationIndexPath: IndexPath) {
-
-        moveUser(at: sourceIndexPath.row, to: destinationIndexPath.row)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-}
+//    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+//        return true
+//    }
+//}
 extension SearchUsersVC: UICollectionViewDelegate {
 
     // MARK: - UICollectionViewDelegate
@@ -401,6 +395,22 @@ extension SearchUsersVC: UICollectionViewDelegate {
         if let selectedCells = collectionView.indexPathsForSelectedItems {
             let enableButton = selectedCells.count > 0 && isEditing
             deleteButton.isEnabled = enableButton
+        }
+    }
+
+    // MARK: Pagination - Request for next page made here when last row detected
+
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+
+        // Pagination
+        if collectionView.isLast(for: indexPath) {
+            print("🔥 Reached last item in collection")
+
+            if parameters.contains(where: { (key, _) -> Bool in key == pageKey}) {
+                //Pagination available
+                viewModel.loadUsers(parameters)
+            }
         }
     }
 }
@@ -530,5 +540,35 @@ extension SearchUsersVC {
                 self.collectionView.refreshControl?.endRefreshing()
             }
         }
+    }
+}
+extension SearchUsersVC {
+    // MARK: - CollectionView Set Up
+    enum Section {
+           case main
+    }
+
+    // Diffable Data Source
+    private func configureCollectionViewDataSource() {
+
+        dataSource = DataSource(collectionView: collectionView,
+                                cellProvider: { (collectionView, indexPath, user) -> UserGridCell? in
+
+                                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
+                                        UserGridCell.reuseIdentifier, for: indexPath) as? UserGridCell
+
+                                    cell?.configure(with: user)
+
+                                    return cell
+        })
+    }
+
+    // Snapshot
+    private func applySnapshot(users: [User]) {
+
+        snapshot = DataSourceSnapshot()
+        snapshot.appendSections([Section.main])
+        snapshot.appendItems(users)
+        dataSource.apply(snapshot)
     }
 }

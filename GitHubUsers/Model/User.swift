@@ -9,7 +9,8 @@
 
 import Foundation
 
-struct User {
+struct User: Hashable {
+    var uuid = UUID()
     var id: Int
     var login: String
     var avatarUrl: String
