@@ -11,13 +11,13 @@ import SwiftUI
 import UIKit
 import Lottie
 
+// DataSource & DataSourceSnapshot typealias
+typealias DataSource = CustomDiffableDataSource
+typealias DataSourceSnapshot = NSDiffableDataSourceSnapshot<CollectionSection, User>
+
 class SearchUsersVC: UIViewController {
 
     private let viewModel = SearchUsersViewModel()
-
-    // DataSource & DataSourceSnapshot typealias
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, User>
-    typealias DataSourceSnapshot = NSDiffableDataSourceSnapshot<Section, User>
 
     //DataSourec & Snapshot
     private var dataSource: DataSource!
@@ -286,51 +286,14 @@ class SearchUsersVC: UIViewController {
                 collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view!))
             case .ended:
                 collectionView.endInteractiveMovement()
-                //update the model
-
-                //call dateSource.collectionView(..moveItemAt:..)
-
-                //run your dataSource.apply
+                //Now that move has completed apply...
+                let reorderedItems = dataSource.getReorderedItems()
+                applySnapshot(users: reorderedItems, withAnimation: false)
             default:
                 collectionView.cancelInteractiveMovement()
             }
         }
     }
-
-//    func moveUser(at sourceIndex: Int, to destinationIndex: Int) {
-//
-//        hideSearchKeyboard()
-//
-//        guard sourceIndex != destinationIndex else { return }
-//
-//        let user = users[sourceIndex]
-//        users.remove(at: sourceIndex)
-//        users.insert(user, at: destinationIndex)
-//
-//        DispatchQueue.main.async {
-//            PersistencyService.shared.updateUsers(users: self.users)
-//        }
-//    }
-
-//        func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath,
-//                            to destinationIndexPath: IndexPath) {
-//    
-//            moveUser(at: sourceIndexPath.row, to: destinationIndexPath.row)
-//        }
-//
-//        func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-//            return true
-//        }
-
-//    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath,
-//                        to destinationIndexPath: IndexPath) {
-//
-//        moveUser(at: sourceIndexPath.row, to: destinationIndexPath.row)
-//    }
-
-//    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-//        return true
-//    }
 }
 extension SearchUsersVC: UICollectionViewDelegate {
 
@@ -516,9 +479,6 @@ extension SearchUsersVC {
 }
 extension SearchUsersVC {
     // MARK: - CollectionView Set Up
-    enum Section {
-           case main
-    }
 
     // Diffable Data Source
     private func configureGridCollectionViewDataSource() {
@@ -553,7 +513,7 @@ extension SearchUsersVC {
     private func applySnapshot(users: [User], withAnimation: Bool) {
 
         snapshot = DataSourceSnapshot()
-        snapshot.appendSections([Section.main])
+        snapshot.appendSections([CollectionSection.main])
         snapshot.appendItems(users)
         dataSource.apply(snapshot, animatingDifferences: withAnimation)
 

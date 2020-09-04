@@ -31,6 +31,7 @@
 		8C656F732492311A003D8723 /* UserGridCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C656F712492311A003D8723 /* UserGridCell.xib */; };
 		8C656F742492311A003D8723 /* UserGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C656F722492311A003D8723 /* UserGridCell.swift */; };
 		8C656F762492406C003D8723 /* SearchUsersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C656F752492406C003D8723 /* SearchUsersVC.swift */; };
+		8C66E11B2502A62F00597F5B /* CustomDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C66E11A2502A62F00597F5B /* CustomDiffableDataSource.swift */; };
 		8C6DCDF124F7D53B00D09581 /* SearchUsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DCDF024F7D53B00D09581 /* SearchUsersViewModel.swift */; };
 		8C6DCDF324F7D55100D09581 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DCDF224F7D55100D09581 /* Box.swift */; };
 		8C6DCDFC24FD016500D09581 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DCDFB24FD016500D09581 /* LoginViewController.swift */; };
@@ -74,6 +75,7 @@
 		8C656F712492311A003D8723 /* UserGridCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserGridCell.xib; sourceTree = "<group>"; };
 		8C656F722492311A003D8723 /* UserGridCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserGridCell.swift; sourceTree = "<group>"; };
 		8C656F752492406C003D8723 /* SearchUsersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersVC.swift; sourceTree = "<group>"; };
+		8C66E11A2502A62F00597F5B /* CustomDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDiffableDataSource.swift; sourceTree = "<group>"; };
 		8C6DCDF024F7D53B00D09581 /* SearchUsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersViewModel.swift; sourceTree = "<group>"; };
 		8C6DCDF224F7D55100D09581 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		8C6DCDFA24FD00C900D09581 /* GitHubUsers.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GitHubUsers.entitlements; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 		8C640F26248E8DC4003EA22C = {
 			isa = PBXGroup;
 			children = (
+				8C66E11A2502A62F00597F5B /* CustomDiffableDataSource.swift */,
 				8C640F31248E8DC4003EA22C /* GitHubUsers */,
 				8C640F30248E8DC4003EA22C /* Products */,
 				D86B8A4A88203116E155FD94 /* Pods */,
@@ -420,6 +423,7 @@
 				8C640F3D248E8DC4003EA22C /* GitHubUsers.xcdatamodeld in Sources */,
 				8C640F74249000D5003EA22C /* HTTPNetworkError.swift in Sources */,
 				8C640F52248E9E36003EA22C /* User.swift in Sources */,
+				8C66E11B2502A62F00597F5B /* CustomDiffableDataSource.swift in Sources */,
 				8C6DCDFE24FD2C7C00D09581 /* KeychainItem.swift in Sources */,
 				8C640F75249000D5003EA22C /* HTTPNetworkResponse.swift in Sources */,
 				8CA62A572490CDEE00455B9F /* UserService.swift in Sources */,
