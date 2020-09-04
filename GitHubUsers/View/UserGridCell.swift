@@ -66,6 +66,7 @@ class UserGridCell: UICollectionViewCell, SelfConfiguringCell {
     }
 
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.checkmarkLabel.text = ""
         self.userName.text = ""
         self.isInEditingMode = false

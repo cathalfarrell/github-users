@@ -228,18 +228,11 @@ class SearchUsersVC: UIViewController {
 
         self.collectionView.allowsMultipleSelection = editing
 
-        let indexPaths = collectionView.indexPathsForVisibleItems
-        for indexPath in indexPaths {
-            if let cell = collectionView.cellForItem(at: indexPath) as? UserListCell {
-                cell.isInEditingMode = editing
-            } else if let cell = collectionView.cellForItem(at: indexPath) as? UserGridCell {
-                cell.isInEditingMode = editing
-            }
-        }
-
         if !editing {
             deleteButton.isEnabled = false
         }
+
+        collectionView.reloadData()
     }
 
     @objc func deleteItem() {
@@ -322,6 +315,9 @@ extension SearchUsersVC: UICollectionViewDataSource {
                     listCell.configure(with: user)
                 }
 
+                // Set editing mode on cells
+                listCell.isInEditingMode = isEditing
+
                 return listCell
             }
 
@@ -333,6 +329,9 @@ extension SearchUsersVC: UICollectionViewDataSource {
                 DispatchQueue.main.async {
                     gridCell.configure(with: user)
                 }
+
+                // Set editing mode on cells
+                gridCell.isInEditingMode = isEditing
 
                 return gridCell
             }
@@ -348,6 +347,7 @@ extension SearchUsersVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
 
+        // Pagination
         if collectionView.isLast(for: indexPath) {
             print("🔥 Reached last item in collection")
 
