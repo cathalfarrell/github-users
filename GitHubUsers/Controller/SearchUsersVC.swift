@@ -32,8 +32,6 @@ class SearchUsersVC: UIViewController {
 
     private let refreshControl = UIRefreshControl()
 
-    private var users = [User]()
-
     private var isListView = true
     private var toggleButton = UIBarButtonItem()
 
@@ -94,7 +92,6 @@ class SearchUsersVC: UIViewController {
         viewModel.users.bind { [weak self] users in
 
             DispatchQueue.main.async {
-                self?.users = users
                 self?.applySnapshot(users: users)
                 self?.stopLoadingAnimation()
                 //If a new search then scroll back up to top
@@ -137,7 +134,6 @@ class SearchUsersVC: UIViewController {
         self.collectionView.register(userCellNib, forCellWithReuseIdentifier: UserListCell.reuseIdentifier)
         self.collectionView.register(userCellGridNib, forCellWithReuseIdentifier: UserGridCell.reuseIdentifier)
         self.collectionView.delegate = self
-        //self.collectionView.dataSource = self
 
         //Pull to refresh
         self.collectionView.refreshControl = refreshControl
@@ -149,7 +145,7 @@ class SearchUsersVC: UIViewController {
 
         //Set up Edit button & Delete Button
         deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self,
-                                       action: #selector(deleteItem))
+                                       action: #selector(deleteItems))
         navigationItem.leftBarButtonItems = [deleteButton, editButtonItem]
         deleteButton.isEnabled = false
 
@@ -245,20 +241,22 @@ class SearchUsersVC: UIViewController {
         collectionView.reloadData()
     }
 
-    @objc func deleteItem() {
+    @objc func deleteItems() {
 
         hideSearchKeyboard()
 
         if let selectedCells = collectionView.indexPathsForSelectedItems {
             let items = selectedCells.map { $0.item }.sorted().reversed()
+
+            var usersToDelete = [User]()
+
             for item in items {
-                users.remove(at: item)
+                let userToDelete = snapshot.itemIdentifiers[item]
+                usersToDelete.append(userToDelete)
             }
 
-            DispatchQueue.main.async {
-                self.applySnapshot(users: self.users)
-                PersistencyService.shared.updateUsers(users: self.users)
-            }
+            snapshot.deleteItems(usersToDelete)
+            applySnapshot(users: self.snapshot.itemIdentifiers)
         }
     }
 
@@ -278,26 +276,31 @@ class SearchUsersVC: UIViewController {
                 collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view!))
             case .ended:
                 collectionView.endInteractiveMovement()
+                //update the model
+
+                //call dateSource.collectionView(..moveItemAt:..)
+
+                //run your dataSource.apply
             default:
                 collectionView.cancelInteractiveMovement()
             }
         }
     }
 
-    func moveUser(at sourceIndex: Int, to destinationIndex: Int) {
-
-        hideSearchKeyboard()
-
-        guard sourceIndex != destinationIndex else { return }
-
-        let user = users[sourceIndex]
-        users.remove(at: sourceIndex)
-        users.insert(user, at: destinationIndex)
-
-        DispatchQueue.main.async {
-            PersistencyService.shared.updateUsers(users: self.users)
-        }
-    }
+//    func moveUser(at sourceIndex: Int, to destinationIndex: Int) {
+//
+//        hideSearchKeyboard()
+//
+//        guard sourceIndex != destinationIndex else { return }
+//
+//        let user = users[sourceIndex]
+//        users.remove(at: sourceIndex)
+//        users.insert(user, at: destinationIndex)
+//
+//        DispatchQueue.main.async {
+//            PersistencyService.shared.updateUsers(users: self.users)
+//        }
+//    }
 
 //        func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath,
 //                            to destinationIndexPath: IndexPath) {
@@ -582,6 +585,8 @@ extension SearchUsersVC {
         snapshot = DataSourceSnapshot()
         snapshot.appendSections([Section.main])
         snapshot.appendItems(users)
-        dataSource.apply(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: true)
+
+        PersistencyService.shared.updateUsers(users: users)
     }
 }
