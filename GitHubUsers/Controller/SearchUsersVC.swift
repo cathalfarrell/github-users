@@ -137,11 +137,7 @@ class SearchUsersVC: UIViewController {
         self.collectionView.refreshControl = refreshControl
         self.refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
 
-        if isListView {
-            configureListCollectionViewDataSource()
-        } else {
-            configureGridCollectionViewDataSource()
-        }
+        configureCollectionViewDataSource(forList: isListView)
     }
 
     fileprivate func setupNavigationBar() {
@@ -203,11 +199,7 @@ class SearchUsersVC: UIViewController {
 
         clearSelectedCells() // when we switch layouts its better
 
-        if isListView {
-            configureListCollectionViewDataSource()
-        } else {
-            configureGridCollectionViewDataSource()
-        }
+        configureCollectionViewDataSource(forList: isListView)
 
         DispatchQueue.main.async {
             self.navigationItem.setRightBarButton(self.toggleButton, animated: true)
@@ -481,33 +473,32 @@ extension SearchUsersVC {
     // MARK: - CollectionView Set Up
 
     // Diffable Data Source
-    private func configureGridCollectionViewDataSource() {
+    private func configureCollectionViewDataSource(forList: Bool) {
 
-        dataSource = DataSource(collectionView: collectionView,
-                                cellProvider: { (collectionView, indexPath, user) -> UserGridCell? in
+        if forList {
+            dataSource = DataSource(collectionView: collectionView,
+                                    cellProvider: { (collectionView, indexPath, user) -> UserListCell? in
 
-                                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
-                                        UserGridCell.reuseIdentifier, for: indexPath) as? UserGridCell
+                                        let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
+                                            UserListCell.reuseIdentifier, for: indexPath) as? UserListCell
 
-                                    cell?.configure(with: user)
-                                    cell?.isInEditingMode = self.isEditing
-                                    return cell
-        })
+                                        cell?.configure(with: user)
+                                        cell?.isInEditingMode = self.isEditing
+                                        return cell
+            })
+        } else {
+            dataSource = DataSource(collectionView: collectionView,
+                                    cellProvider: { (collectionView, indexPath, user) -> UserGridCell? in
+
+                                        let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
+                                            UserGridCell.reuseIdentifier, for: indexPath) as? UserGridCell
+
+                                        cell?.configure(with: user)
+                                        cell?.isInEditingMode = self.isEditing
+                                        return cell
+            })
+        }
     }
-
-    private func configureListCollectionViewDataSource() {
-
-          dataSource = DataSource(collectionView: collectionView,
-                                  cellProvider: { (collectionView, indexPath, user) -> UserListCell? in
-
-                                      let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
-                                          UserListCell.reuseIdentifier, for: indexPath) as? UserListCell
-
-                                      cell?.configure(with: user)
-                                      cell?.isInEditingMode = self.isEditing
-                                      return cell
-          })
-      }
 
     // Snapshot
     private func applySnapshot(users: [User], withAnimation: Bool) {
