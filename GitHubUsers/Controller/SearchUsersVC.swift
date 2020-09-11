@@ -470,33 +470,37 @@ extension SearchUsersVC {
     }
 }
 extension SearchUsersVC {
+
     // MARK: - CollectionView Set Up
+
+    // Configure Cells
+    func configure<T: SelfConfiguringCell>(_ cellType: T.Type, with user: User, for indexPath: IndexPath) -> T {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellType.reuseIdentifier,
+                                                            for: indexPath) as? T else {
+            fatalError("Unable to dequeue \(cellType)")
+        }
+
+        cell.configure(with: user)
+
+        return cell
+    }
 
     // Diffable Data Source
     private func configureCollectionViewDataSource(forList: Bool) {
 
-        if forList {
-            dataSource = DataSource(collectionView: collectionView,
-                                    cellProvider: { (collectionView, indexPath, user) -> UserListCell? in
+        dataSource = DataSource(collectionView: collectionView) { _, indexPath, user in
 
-                                        let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
-                                            UserListCell.reuseIdentifier, for: indexPath) as? UserListCell
+            switch forList {
+            case true:
+                let cell = self.configure(UserListCell.self, with: user, for: indexPath)
+                cell.isInEditingMode = self.isEditing
+                return cell
 
-                                        cell?.configure(with: user)
-                                        cell?.isInEditingMode = self.isEditing
-                                        return cell
-            })
-        } else {
-            dataSource = DataSource(collectionView: collectionView,
-                                    cellProvider: { (collectionView, indexPath, user) -> UserGridCell? in
-
-                                        let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
-                                            UserGridCell.reuseIdentifier, for: indexPath) as? UserGridCell
-
-                                        cell?.configure(with: user)
-                                        cell?.isInEditingMode = self.isEditing
-                                        return cell
-            })
+            default:
+                let cell = self.configure(UserGridCell.self, with: user, for: indexPath)
+                cell.isInEditingMode = self.isEditing
+                return cell
+            }
         }
     }
 
