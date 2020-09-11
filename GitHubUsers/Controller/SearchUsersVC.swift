@@ -133,6 +133,9 @@ class SearchUsersVC: UIViewController {
         self.collectionView.register(userCellGridNib, forCellWithReuseIdentifier: UserGridCell.reuseIdentifier)
         self.collectionView.delegate = self
 
+        //Layout - Compositional
+        self.collectionView.collectionViewLayout = createCompositionalLayout()
+
         //Pull to refresh
         self.collectionView.refreshControl = refreshControl
         self.refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
@@ -200,12 +203,12 @@ class SearchUsersVC: UIViewController {
         clearSelectedCells() // when we switch layouts its better
 
         configureCollectionViewDataSource(forList: isListView)
+        collectionView.collectionViewLayout = createCompositionalLayout()
 
         DispatchQueue.main.async {
             self.navigationItem.setRightBarButton(self.toggleButton, animated: true)
+            self.applySnapshot(users: self.snapshot.itemIdentifiers, withAnimation: false)
         }
-
-        applySnapshot(users: snapshot.itemIdentifiers, withAnimation: false)
     }
 
     func clearSelectedCells() {
@@ -239,8 +242,6 @@ class SearchUsersVC: UIViewController {
         if !editing {
             deleteButton.isEnabled = false
         }
-
-        collectionView.reloadData()
     }
 
     @objc func deleteItems() {
@@ -339,34 +340,6 @@ extension SearchUsersVC: UICollectionViewDelegate {
                 viewModel.loadUsers(parameters)
             }
         }
-    }
-}
-extension SearchUsersVC: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = view.frame.width
-        if isListView {
-            return CGSize(width: width - 15, height: 80)
-        } else {
-            return CGSize(width: (width - 15)/2, height: (width - 15)/2)
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
 }
 extension SearchUsersVC {
@@ -513,5 +486,66 @@ extension SearchUsersVC {
         dataSource.apply(snapshot, animatingDifferences: withAnimation)
 
         PersistencyService.shared.updateUsers(users: users)
+    }
+}
+extension SearchUsersVC {
+
+    // MARK: - Compostional Layout
+
+    func createCompositionalLayout() -> UICollectionViewLayout {
+
+        let layout = UICollectionViewCompositionalLayout { _, _ in
+
+            switch self.isListView {
+            case true:
+                return self.createListLayout()
+            default:
+                return self.createGridLayout()
+            }
+        }
+
+        return layout
+    }
+
+    func createListLayout() -> NSCollectionLayoutSection {
+
+        let rowHeight: CGFloat = 80
+
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .absolute(rowHeight))
+        let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+        layoutItem.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8)
+
+        let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                     heightDimension: .absolute(rowHeight))
+        let layoutGroup = NSCollectionLayoutGroup.vertical(layoutSize: layoutGroupSize, subitems: [layoutItem])
+
+        let layoutSection = NSCollectionLayoutSection(group: layoutGroup)
+        // Makes it a vertical list - stops horizontal scrolling
+        layoutSection.orthogonalScrollingBehavior = .none
+        return layoutSection
+    }
+
+    func createGridLayout() -> NSCollectionLayoutSection {
+
+        let numberOfColumns: CGFloat = 2
+
+        // Item
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/numberOfColumns),
+                                              heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
+
+        // Group
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .fractionalWidth(1/numberOfColumns))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        // Makes it a vertical list - stops horizontal scrolling
+        section.orthogonalScrollingBehavior = .none
+
+        return section
     }
 }
