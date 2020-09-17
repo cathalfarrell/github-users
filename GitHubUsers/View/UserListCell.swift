@@ -52,7 +52,8 @@ class UserListCell: UICollectionViewCell, SelfConfiguringCell {
                 .scaleFactor(UIScreen.main.scale),
                 .transition(.fade(1)),
                 .cacheOriginalImage
-            ]) { result in
+            ],
+            completionHandler: { result in
                 //For Debug Purposes
                 switch result {
                 case .success(let value):
@@ -60,8 +61,7 @@ class UserListCell: UICollectionViewCell, SelfConfiguringCell {
                 case .failure(let error):
                     print("🛑 KF Image Task Job failed: \(error.localizedDescription)")
                 }
-
-        }
+            })
 
         userName.text = user.login
     }
