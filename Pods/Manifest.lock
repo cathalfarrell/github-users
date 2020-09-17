@@ -1,12 +1,12 @@
 PODS:
   - Alamofire (5.2.2)
-  - Kingfisher (5.14.0):
-    - Kingfisher/Core (= 5.14.0)
-  - Kingfisher/Core (5.14.0)
-  - Kingfisher/SwiftUI (5.14.0):
+  - Kingfisher (5.15.1):
+    - Kingfisher/Core (= 5.15.1)
+  - Kingfisher/Core (5.15.1)
+  - Kingfisher/SwiftUI (5.15.1):
     - Kingfisher/Core
-  - lottie-ios (3.1.6)
-  - SwiftLint (0.39.1)
+  - lottie-ios (3.1.8)
+  - SwiftLint (0.40.2)
 
 DEPENDENCIES:
   - Alamofire
@@ -24,10 +24,10 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
-  Kingfisher: 7b64389a43139c903ec434788344c288217c792d
-  lottie-ios: 85ce835dd8c53e02509f20729fc7d6a4e6645a0a
-  SwiftLint: 55e96a4a4d537d4a3156859fc1c54bd24851a046
+  Kingfisher: 3260a05e78a17fdbeb2f14dd8e66ffc768491231
+  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
+  SwiftLint: 1216c910d27c2633ade33b4f071bb6b930982e62
 
-PODFILE CHECKSUM: 4be1136644e949c5b8600df5d6b0bf0a8db118e1
+PODFILE CHECKSUM: 4169e79ea28240bf3f19ed2e0f63b6421feeee79
 
 COCOAPODS: 1.9.0
